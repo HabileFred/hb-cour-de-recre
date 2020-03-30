@@ -1,0 +1,74 @@
+
+.bidul-o-tron {
+  position: absolute;
+  width: 1280px;
+  height: 800px;
+  border: 2px solid black;
+  display: flex;
+  flex-flow: column;
+  align-self: center;
+  background:  white url('./img/fond_biduleotron.png') no-repeat;
+  color: black;
+
+  .machine {
+    position: relative;
+    flex: 1;
+
+    .piece {
+      position: absolute;
+      width: 34px;
+      height: 36px;
+      background: transparent no-repeat center center;
+
+      &.active {
+        // background: blue;
+      }
+
+      &.piece-0 {
+        top: 258px;
+        left: 500px;
+      }
+      &.piece-1 {
+        top: 313px;
+        left: 498px;
+      }
+      &.piece-2 {
+        top: 367px;
+        left: 500px;
+      }
+      &.piece-3 {
+        top: 423px;
+        left: 497px;
+      }
+      &.piece-4 {
+        top: 477px;
+        left: 497px;
+      }
+
+      &.piece-value-0 {
+        background-image: url('./img/pieces/piece-0.png');
+      }
+      &.piece-value-1 {
+        background-image: url('./img/pieces/piece-1.png');
+      }
+      &.piece-value-2 {
+        background-image: url('./img/pieces/piece-2.png');
+      }
+      &.piece-value-3 {
+        background-image: url('./img/pieces/piece-3.png');
+      }
+      &.piece-value-4 {
+        background-image: url('./img/pieces/piece-4.png');
+      }
+      &.piece-value-5 {
+        background-image: url('./img/pieces/piece-5.png');
+      }
+    }
+  }
+
+  .control-panel {
+    background: rgba(255, 255, 0, 0.1);
+    width: 100%;
+    height: 200px;
+  }
+}
