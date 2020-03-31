@@ -36,11 +36,36 @@ export default function configureStore(initialState = {}, history) {
 
   const enhancers = [applyMiddleware(...middlewares)];
 
+  try {
+    const serializedState = localStorage.getItem('state');
+    if (serializedState !== null) {
+      initialState = JSON.parse(serializedState);
+    }
+    
+  } catch (err) {}
+
   const store = createStore(
     createReducer(),
     initialState,
     composeEnhancers(...enhancers),
   );
+
+  const saveStore = () => {
+    try {
+      const serializedState = JSON.stringify(store.getState());
+      localStorage.setItem('state', serializedState);
+    } catch {
+    }
+  };
+
+  let saveStoreTimeout;
+  store.subscribe(() => {
+    if (saveStoreTimeout) {
+      clearTimeout(saveStoreTimeout);
+      saveStoreTimeout = null;
+    }
+    saveStoreTimeout = setTimeout(saveStore, 500);
+  });
 
   // Extensions
   store.runSaga = sagaMiddleware.run;
