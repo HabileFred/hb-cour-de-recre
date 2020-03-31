@@ -2,7 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 import imgFrame from './img/cadre_bidule.png';
-import imgArrow from './img/fleche_bidule.png';
+import imgArrowLeft from './img/fleche_gauche.png';
+import imgArrowRight from './img/fleche_droite.png';
 import imgBtnSubmit from './img/bouton_valider.png';
 import imgBtnCancel from './img/bouton_annuler.png';
 
@@ -28,10 +29,8 @@ const imgBiduleInfos = [
 
 const MachineBiduleContainer = styled.div`
   position: absolute;
-  top: 90px;
+  top: 95px;
   left: 100px;
-  opacity: 0.5;
-  transition: opacity 250ms ease;
   display: flex;
   flex-flow: column;
 
@@ -65,16 +64,18 @@ const MachineBiduleContainer = styled.div`
 
   .arrow {
     position: absolute;
-    background: url(${imgArrow}) no-repeat top left;
     width: 42px;
     height: 46px;
-    left: -30px;
     top: 118px;
 
+    &.left {
+      left: -30px;
+      background: url(${imgArrowLeft}) no-repeat top left;
+    }
     &.right {
-      transform: rotate(180deg);
       left: 180px;
-      }
+      background: url(${imgArrowRight}) no-repeat top left;
+    }
   }
 
   .buttons,
@@ -83,7 +84,18 @@ const MachineBiduleContainer = styled.div`
     width: 195px;
   }
 
+  .ui-element {
+    opacity: 0;
+    transform: scale(0);
+    transition: opacity 250ms ease, transform 250ms ease;
+  }
+  &.focused .ui-element {
+    opacity: 1;
+    transform: scale(1);
+  }
+
   .buttons {
+    margin-top: -10px;
     width: 185px;
     display: flex;
     flew-flow: row no-wrap;
@@ -139,19 +151,15 @@ const MachineBiduleContainer = styled.div`
   .bidule-view.bidule-4 .bidules {
     left: -${166 * 4}px;
   }
-
-  &.focused {
-    opacity: 1;
-  }
 `;
 
 export const MachineBiduleSelector = function({ bidule, pad }) {
   const biduleInfos = bidule.biduleInfos[bidule.index];
   return (
     <MachineBiduleContainer className={`${pad.focus === 'bidule' ? 'focused' : null}`}>
-      <div className="frame"></div>
-      <div className="arrow left"></div>
-      <div className="arrow right"></div>
+      <div className="ui-element frame"></div>
+      <div className="ui-element arrow left"></div>
+      <div className="ui-element arrow right"></div>
       <div className="bidule-info-text">
         <div>Nom de code :</div>
         <code>{biduleInfos.text1}</code>
@@ -166,7 +174,7 @@ export const MachineBiduleSelector = function({ bidule, pad }) {
           <img src={imgBidule5} />
         </div>
       </div>
-      <div className="buttons">
+      <div className="ui-element buttons">
         <img src={imgBtnSubmit} />
         <img src={imgBtnCancel} />
       </div>
