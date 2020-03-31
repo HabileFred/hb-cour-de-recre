@@ -7,61 +7,34 @@
   display: flex;
   flex-flow: column;
   align-self: center;
-  background:  white url('./img/fond_biduleotron.png') no-repeat;
+  background:  white url('./img/machine_squelette.png') no-repeat;
   color: black;
+  z-index: 0;
+
+  h1 {
+    position: absolute;
+    text-transform: uppercase;
+    padding: 0.3em;
+    margin: 0;
+    border-bottom: 5px solid rgb(42,228,123);
+    top: 28px;
+    left: 40px;
+    font-size: 18pt;
+  }
 
   .machine {
     position: relative;
     flex: 1;
 
-    .piece {
+    .fiole {
       position: absolute;
-      width: 34px;
-      height: 36px;
-      background: transparent no-repeat center center;
+      width: 26px;
+      height: 27px;
 
-      &.active {
-        // background: blue;
-      }
-
-      &.piece-0 {
-        top: 258px;
+      &.fiole-1 {
+        background: transparent no-repeat center center url('./img/fioles/fiole-1.gif');
+        top: 558px;
         left: 500px;
-      }
-      &.piece-1 {
-        top: 313px;
-        left: 498px;
-      }
-      &.piece-2 {
-        top: 367px;
-        left: 500px;
-      }
-      &.piece-3 {
-        top: 423px;
-        left: 497px;
-      }
-      &.piece-4 {
-        top: 477px;
-        left: 497px;
-      }
-
-      &.piece-value-0 {
-        background-image: url('./img/pieces/piece-0.png');
-      }
-      &.piece-value-1 {
-        background-image: url('./img/pieces/piece-1.png');
-      }
-      &.piece-value-2 {
-        background-image: url('./img/pieces/piece-2.png');
-      }
-      &.piece-value-3 {
-        background-image: url('./img/pieces/piece-3.png');
-      }
-      &.piece-value-4 {
-        background-image: url('./img/pieces/piece-4.png');
-      }
-      &.piece-value-5 {
-        background-image: url('./img/pieces/piece-5.png');
       }
     }
   }

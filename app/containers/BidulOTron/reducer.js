@@ -4,11 +4,38 @@
  *
  */
 import produce from 'immer';
-import { PAD_UP, PAD_DOWN, PAD_LEFT, PAD_RIGHT, PIPE_ROTATE } from './constants';
+import { PAD_UP, PAD_DOWN, PAD_LEFT, PAD_RIGHT, PIPE_ROTATE, PAD_SUBMIT, PAD_CANCEL } from './constants';
 
 export const initialState = {
   pad: {
-    focus: 'pieces',
+    focus: 'bidule',
+  },
+
+  bidule: {
+    BIDULE_COUNT: 5,
+    index: 0,
+    biduleInfos: [
+      {
+        text1: 'ABCDEFG',
+        text2: '1234567',
+      },
+      {
+        text1: 'ZZZZZZZ',
+        text2: '0998989',
+      },
+      {
+        text1: 'SSDZDDE',
+        text2: '1443549',
+      },
+      {
+        text1: 'ABABABA',
+        text2: '1200009',
+      },
+      {
+        text1: 'TOTOTUT',
+        text2: '7654321',
+      },
+    ],
   },
 
   pieces: {
@@ -18,26 +45,84 @@ export const initialState = {
     desired: [2, 4, 1, 0, 3],
     SOLVED: false,
   },
-  pipes: {
-    current: [
-      0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0,
+  fioles: {
+    // values from 1 to 4 included
+    // 9 is fixed (cannot be rotated)
+    pipes: [
+      1, 1, 9, 1, 1, 1,
+      1, 1, 1, 9, 1, 1,
+      1, 1, 1, 1, 1, 1,
     ],
-    liquide1: {
-      SOLVED: false,
-      solution: { 0: 2, 7: 3 },
-    },
+    gauges: [
+      null,
+      {
+        SOLVED: false,
+        solution: [
+          0, 0, 9, 3, 1, 0,
+          0, 0, 3, 9, 0, 0,
+          0, 3, 1, 0, 0, 0,
+        ]
+      },
+      {
+        SOLVED: false,
+        solution: [
+          3, 0, 9, 0, 0, 0,
+          2, 4, 0, 9, 0, 0,
+          0, 2, 4, 0, 0, 0,
+        ]
+      },
+      {
+        SOLVED: false,
+        solution: [
+          2, 4, 9, 0, 0, 0,
+          0, 2, 4, 9, 0, 0,
+          0, 0, 2, 4, 0, 0,
+        ],
+      },
+      null,
+      null,
+    ],
     SOLVED: false,
   },
 };
 
 function cycleValue(value, inc, min, max) {
+  if (value === null) {
+    value = 0;
+  }
   value += inc;
   const range = (max - min + 1);
   while (value > max) value -= range;
   while (value < min) value += range;
   return value;
+}
+
+function betweenValue(value, inc, min, max) {
+  value += inc;
+  if (value < min) value = min;
+  if (value > max) value = max;
+  return value;
+}
+
+function checkGauge(gauge, pipes) {
+  if (gauge && !gauge.SOLVED) {
+    for (let i = 0; i < gauge.solution.length; i++) {
+      if (gauge.solution[i] && gauge.solution[i] !== pipes[i]) {
+        gauge.SOLVED = false;
+        return false;
+      }
+    }
+    console.log('Gauge solved!');
+    gauge.SOLVED = true;
+  }
+  return true;
+}
+
+function checkGauges(draft) {
+  draft.fioles.SOLVED = draft.fioles.gauges.filter(
+    l => checkGauge(l, draft.fioles.pipes)
+  ).length === draft.fioles.gauges.length;
+  console.log('Fioles: solved=', draft.fioles.SOLVED);
 }
 
 function arraysEqual(a, b) {
@@ -62,6 +147,15 @@ function handlePadLeft(draft) {
       );
       draft.pieces.SOLVED = arraysEqual(draft.pieces.current, draft.pieces.desired);
       break;
+
+    case 'bidule':
+      draft.bidule.index = betweenValue(
+        draft.bidule.index,
+        -1,
+        0,
+        (draft.bidule.BIDULE_COUNT - 1)
+      );
+      break;
   }
 }
 
@@ -76,7 +170,16 @@ function handlePadRight(draft) {
       );
       draft.pieces.SOLVED = arraysEqual(draft.pieces.current, draft.pieces.desired);
       break;
-  }
+
+    case 'bidule':
+        draft.bidule.index = betweenValue(
+          draft.bidule.index,
+          1,
+          0,
+          (draft.bidule.BIDULE_COUNT - 1)
+        );
+        break;
+    }
 }
 
 function handlePadDown(draft) {
@@ -91,6 +194,22 @@ function handlePadUp(draft) {
   switch (draft.pad.focus) {
     case 'pieces':
         draft.pieces.cursor = Math.max(0, draft.pieces.cursor - 1);
+      break;
+  }
+}
+
+function handlePadSubmit(draft) {
+  switch (draft.pad.focus) {
+    case 'bidule':
+      draft.pad.focus = 'pieces';
+      break;
+  }
+}
+
+function handlePadCancel(draft) {
+  switch (draft.pad.focus) {
+    case 'pieces':
+      draft.pad.focus = 'bidule';
       break;
   }
 }
@@ -116,13 +235,24 @@ const BidulOTronReducer = (state = initialState, action) =>
         handlePadRight(draft);
         break;
 
+      case PAD_SUBMIT:
+        handlePadSubmit(draft);
+        break;
+
+      case PAD_CANCEL:
+        handlePadCancel(draft);
+        break;
+
       case PIPE_ROTATE:
-          draft.pipes.current[action.index] = cycleValue(
-            draft.pipes.current[action.index],
+        if (draft.fioles.pipes[action.index] !== 9) {
+          draft.fioles.pipes[action.index] = cycleValue(
+            draft.fioles.pipes[action.index],
             1,
-            0,
-            3,
+            1,
+            4,
           );
+          checkGauges(draft);
+        }
         break;
     }
   });

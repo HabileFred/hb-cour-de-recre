@@ -4,7 +4,7 @@
  *
  */
 
-import { PAD_UP, PAD_DOWN, PAD_LEFT, PAD_RIGHT, PIPE_ROTATE } from './constants';
+import { PAD_UP, PAD_DOWN, PAD_LEFT, PAD_RIGHT, PIPE_ROTATE, PAD_CANCEL, PAD_SUBMIT } from './constants';
 
 export function padUp() {
   return {
@@ -27,6 +27,18 @@ export function padLeft() {
 export function padRight() {
   return {
     type: PAD_RIGHT,
+  };
+}
+
+export function padSubmit() {
+  return {
+    type: PAD_SUBMIT,
+  };
+}
+
+export function padCancel() {
+  return {
+    type: PAD_CANCEL,
   };
 }
 

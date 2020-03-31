@@ -20,8 +20,7 @@ export default function App() {
   return (
     <React.Fragment>
       <Switch>
-        <Route exact path="/" component={HomePage} />
-        <Route exact path="/bidul-o-tron" component={BidulOTron} />
+        <Route exact path="/" component={BidulOTron} />
         <Route component={NotFoundPage} />
       </Switch>
       <GlobalStyle />
