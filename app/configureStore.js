@@ -41,7 +41,6 @@ export default function configureStore(initialState = {}, history) {
     if (serializedState !== null) {
       initialState = JSON.parse(serializedState);
     }
-    
   } catch (err) {}
 
   const store = createStore(
