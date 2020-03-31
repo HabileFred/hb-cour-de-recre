@@ -18,7 +18,7 @@ import reducer from './reducer';
 import messages from './messages';
 
 import './styles.scss';
-import { padUp, padLeft, padRight, padDown, pipeRotate, padSubmit, padCancel } from './actions';
+import { padUp, padLeft, padRight, padDown, pipeRotate, padSubmit, padCancel, pipesCheck } from './actions';
 
 import { MachinePieces } from './parts/Pieces/Pieces';
 import { MachineBiduleSelector } from './parts/Bidule/Bidule';
@@ -91,8 +91,20 @@ function ControlPanel({ dispatch, store }) {
     }
   }
 
+  let pipeCheckTimeout = null;
+
   function rotatePipe(index) {
     dispatch(pipeRotate(index));
+    if (pipeCheckTimeout) {
+      window.clearTimeout(pipeCheckTimeout);
+    }
+    pipeCheckTimeout = window.setTimeout(
+      () => {
+        dispatch(pipesCheck());
+        pipeCheckTimeout = null;
+      },
+      500,
+    );
   }
 
   if (!store.fioles) {
@@ -128,7 +140,7 @@ export function BidulOTron({ dispatch, store }) {
 
   return (
     <div className="bidul-o-tron">
-      <h1>Bidul'O-Tron</h1>
+      <h1 title="Un truc pour fabriquer des bidules.">Bidul'O-Tron</h1>
       <Machine dispatch={dispatch} store={store}></Machine>
       <ControlPanel dispatch={dispatch} store={store}></ControlPanel>
     </div>

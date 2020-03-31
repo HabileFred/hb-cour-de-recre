@@ -4,7 +4,7 @@
  *
  */
 
-import { PAD_UP, PAD_DOWN, PAD_LEFT, PAD_RIGHT, PIPE_ROTATE, PAD_CANCEL, PAD_SUBMIT } from './constants';
+import { PAD_UP, PAD_DOWN, PAD_LEFT, PAD_RIGHT, PIPE_ROTATE, PAD_CANCEL, PAD_SUBMIT, PIPES_CHECK } from './constants';
 
 export function padUp() {
   return {
@@ -46,5 +46,11 @@ export function pipeRotate(index) {
   return {
     type: PIPE_ROTATE,
     index,
+  };
+}
+
+export function pipesCheck() {
+  return {
+    type: PIPES_CHECK,
   };
 }

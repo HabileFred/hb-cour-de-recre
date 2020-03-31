@@ -4,7 +4,7 @@
  *
  */
 import produce from 'immer';
-import { PAD_UP, PAD_DOWN, PAD_LEFT, PAD_RIGHT, PIPE_ROTATE, PAD_SUBMIT, PAD_CANCEL } from './constants';
+import { PAD_UP, PAD_DOWN, PAD_LEFT, PAD_RIGHT, PIPE_ROTATE, PAD_SUBMIT, PAD_CANCEL, PIPES_CHECK } from './constants';
 
 export const initialState = {
   pad: {
@@ -251,10 +251,13 @@ const BidulOTronReducer = (state = initialState, action) =>
             1,
             4,
           );
-          checkGauges(draft);
         }
         break;
-    }
+
+      case PIPES_CHECK:
+        checkGauges(draft);
+        break;
+      }
   });
 
 export default BidulOTronReducer;

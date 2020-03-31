@@ -13,3 +13,4 @@ export const PAD_SUBMIT = 'app/BidulOTron/PAD_SUBMIT';
 export const PAD_CANCEL = 'app/BidulOTron/PAD_CANCEL';
 
 export const PIPE_ROTATE = 'app/BidulOTron/PIPE_ROTATE';
+export const PIPES_CHECK = 'app/BidulOTron/PIPES_CHECK';
