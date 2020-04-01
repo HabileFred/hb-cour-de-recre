@@ -10,6 +10,7 @@ import imgPiece5 from './img/piece_5.png';
 import imgPieceFocus from './img/piece_focus.png';
 
 import imgMachinePiecesFocus from './img/machine_focus.png';
+import imgMachineArrows from './img/piece_fleches.png';
 
 export const Piece = styled.div`
   position: absolute;
@@ -18,19 +19,19 @@ export const Piece = styled.div`
   background: transparent no-repeat center center;
 
   &.piece-0 {
-    top: 38px;
-    left: 57px;
+    top: 36px;
+    left: 54px;
   }
   &.piece-1 {
-    top: 93px;
-    left: 55px;
+    top: 91px;
+    left: 54px;
   }
   &.piece-2 {
     top: 147px;
-    left: 57px;
+    left: 54px;
   }
   &.piece-3 {
-    top: 203px;
+    top: 201px;
     left: 54px;
   }
   &.piece-4 {
@@ -83,15 +84,31 @@ const MachinePiecesContainer = styled.div`
   opacity: 0.5;
   transition: opacity 250ms ease;
 
+  .arrows {
+    position: absolute;
+    width: 160px;
+    height: 338px;
+    opacity: 0;
+    transition: opacity 250ms ease, transform 250ms ease;
+    background: transparent no-repeat center center url(${imgMachineArrows});
+    transform: scale(0);
+  }
+
   &.focused {
     background: url(${imgMachinePiecesFocus}) no-repeat top left;
     opacity: 1;
+
+    .arrows {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
 `;
 
 export const MachinePieces = function({ pad, pieces }) {
   return (
     <MachinePiecesContainer className={`${pad.focus === 'pieces' ? 'focused' : null}`}>
+      <div className="arrows"></div>
       {pieces.current.map((v, i) => (
         <Piece key={`p${i}`} className={`piece-${i} piece-value-${v} ${pieces.cursor === i ? 'active' : ''}`} />
       ))}

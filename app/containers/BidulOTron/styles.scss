@@ -26,18 +26,6 @@
   .machine {
     position: relative;
     flex: 1;
-
-    .fiole {
-      position: absolute;
-      width: 26px;
-      height: 27px;
-
-      &.fiole-1 {
-        background: transparent no-repeat center center url('./img/fioles/fiole-1.gif');
-        top: 558px;
-        left: 500px;
-      }
-    }
   }
 
   .control-panel {
