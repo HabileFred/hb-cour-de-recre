@@ -14,3 +14,7 @@ export const PAD_CANCEL = 'app/BidulOTron/PAD_CANCEL';
 
 export const PIPE_ROTATE = 'app/BidulOTron/PIPE_ROTATE';
 export const PIPES_CHECK = 'app/BidulOTron/PIPES_CHECK';
+
+export const BUTTON_PRESSED = 'app/BidulOTron/BUTTON_PRESSED';
+
+export const BINARY_INPUT = 'app/BidulOTron/BINARY_INPUT';

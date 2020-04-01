@@ -4,7 +4,7 @@
  *
  */
 
-import { PAD_UP, PAD_DOWN, PAD_LEFT, PAD_RIGHT, PIPE_ROTATE, PAD_CANCEL, PAD_SUBMIT, PIPES_CHECK } from './constants';
+import { PAD_UP, PAD_DOWN, PAD_LEFT, PAD_RIGHT, PIPE_ROTATE, PAD_CANCEL, PAD_SUBMIT, PIPES_CHECK, BUTTON_PRESSED, BINARY_INPUT } from './constants';
 
 export function padUp() {
   return {
@@ -52,5 +52,19 @@ export function pipeRotate(index) {
 export function pipesCheck() {
   return {
     type: PIPES_CHECK,
+  };
+}
+
+export function buttonPressed(button) {
+  return {
+    type: BUTTON_PRESSED,
+    button,
+  };
+}
+
+export function binaryInput(value) {
+  return {
+    type: BINARY_INPUT,
+    value,
   };
 }

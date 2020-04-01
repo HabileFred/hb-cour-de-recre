@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import withFocus from '../../withFocus';
+
 import imgFiole1 from './img/fiole_1.gif';
 import imgFiole2 from './img/fiole_2.gif';
 import imgFiole3 from './img/fiole_3.gif';
@@ -16,6 +18,7 @@ import imgGaugeEmpty from './img/jauge.png';
 import imgGauge1 from './img/jauge_2.gif';
 import imgGauge2 from './img/jauge_3.gif';
 import imgGauge3 from './img/jauge_4.gif';
+import imgSymbols from './img/symboles.png';
 
 const imgGaugesFilled = [
   null,
@@ -24,7 +27,12 @@ const imgGaugesFilled = [
   imgGauge3,
 ];
 
-export const Fiole = styled.div`
+const Fioles = styled.div`
+  opacity: ${props => props.focused ? 1 : 0.5};
+  transition: opacity 250ms ease;
+`;
+
+const Fiole = styled.div`
   position: absolute;
   background: transparent no-repeat center center;
 
@@ -74,16 +82,11 @@ export const Fiole = styled.div`
 
 const MachineFiolesContainer = styled.div`
   position: absolute;
-  top: 316px;
+  top: 275px;
   left: 583px;
   width: 145px;
   height: 210px;
-  opacity: 0.5;
-  transition: opacity 250ms ease;
 
-  &.focused {
-    opacity: 1;
-  }
   &.focused::before {
     content: " ";
     position: absolute;
@@ -117,7 +120,6 @@ const Pipe = styled.div`
   }
 `;
 
-
 const Gauges = styled.div`
   display: grid;
   grid-template-columns: repeat(6,19.3px);
@@ -126,6 +128,8 @@ const Gauges = styled.div`
   position: absolute;
   top: 160px;
   left: 20px;
+  opacity: ${props => props.focused ? 1 : 0.5};
+  transition: opacity 250ms ease;
 `;
 
 const Gauge = styled.div`
@@ -141,27 +145,32 @@ const GaugeFilled = styled(Gauge)`
   background: url('${props => imgGaugesFilled[props.index]}') no-repeat center center;
 `;
 
-export const MachineFioles = function({ pad, fioles }) {
+const MachineFioles = function({ focused, fioles }) {
   return (
-    <MachineFiolesContainer className={`${pad.focus === 'pieces' ? 'focused' : null}`}>
-      <Fiole className="fiole-0" />
-      <Fiole className="fiole-1" />
-      <Fiole className="fiole-2" />
-      <Fiole className="fiole-3" />
-      <Fiole className="fiole-4" />
-      <Fiole className="fiole-5" />
+    <MachineFiolesContainer className={`${focused ? 'focused' : ''}`}>
+      <Fioles focused={focused}>
+        <Fiole className="fiole-0" />
+        <Fiole className="fiole-1" />
+        <Fiole className="fiole-2" />
+        <Fiole className="fiole-3" />
+        <Fiole className="fiole-4" />
+        <Fiole className="fiole-5" />
+      </Fioles>
       <Pipes>
         {fioles.pipes.map((p, i) => (
           <Pipe key={`p${i}`} className={p === 9 ? 'fixed' : ''} rotation={p === 9 ? 1 : p} />
         ))}
       </Pipes>
-      <Gauges>
+      <Gauges focused={focused}>
         {fioles.gauges.map((g, i) => {
           return g && g.SOLVED
             ? (<GaugeFilled key={`g${i}`} index={i} />)
             : (<GaugeEmpty key={`g${i}`}/>)
           })}
       </Gauges>
+      <img src={imgSymbols} style={{ position: 'absolute', bottom: '6px', left: '13px' }} />
     </MachineFiolesContainer>
   );
 }
+
+export default withFocus(MachineFioles);

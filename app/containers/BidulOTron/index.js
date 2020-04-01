@@ -10,23 +10,28 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 import { useInjectReducer } from 'utils/injectReducer';
 import makeSelectBidulOTron from './selectors';
 import reducer from './reducer';
 import messages from './messages';
 
-import withSounds from '../../components/withSounds';
-import sndBip from './sounds/10691.mp3';
+import withSounds from './withSounds';
+import sndOpenBidule from './sounds/ouverture_bidule.mp3';
 
-import { padUp, padLeft, padRight, padDown, pipeRotate, padSubmit, padCancel, pipesCheck } from './actions';
+import { padUp, padLeft, padRight, padDown, pipeRotate, padSubmit, padCancel, pipesCheck, buttonPressed } from './actions';
 
-import { MachinePieces } from './parts/Pieces/Pieces';
-import { MachineBiduleSelector } from './parts/Bidule/Bidule';
-import { MachineFioles } from './parts/Fioles/Fioles';
+import MachinePieces from './parts/Pieces/Pieces';
+import MachineBiduleSelector from './parts/Bidule/Bidule';
+import MachineFioles from './parts/Fioles/Fioles';
+import MachineLights from './parts/Lights/Lights';
+import MachineBinary from './parts/Binaire/Binaire';
+import ControlPanel from './parts/ControlPanel/ControlPanel';
 
 import imgBackground from './img/machine_squelette.png';
+import imgCacheBidule from './img/cache_bidule.png';
+import imgPancarte from './img/pancarte.png';
 
 const BidulOTronContainer = styled.div`
   position: absolute;
@@ -36,21 +41,9 @@ const BidulOTronContainer = styled.div`
   display: flex;
   flex-flow: column;
   align-self: center;
-  background:  white url('${imgBackground}') no-repeat;
+  background: white url('${imgBackground}') no-repeat;
   color: black;
   z-index: 0;
-
-  h1 {
-    position: absolute;
-    text-transform: uppercase;
-    padding: 0.3em;
-    margin: 0;
-    border-bottom: 5px solid rgb(42,228,123);
-    top: 28px;
-    left: 40px;
-    font-size: 18pt;
-    transform: skew(2deg, 3deg);
-  }
 
   .machine {
     position: relative;
@@ -65,128 +58,110 @@ const BidulOTronContainer = styled.div`
 }
 `;
 
-function Machine({ dispatch, store }) {
+const openCacheBiduleAnimation = keyframes`
+  from {
+    transform: translateY(0);
+  }
+  5% {
+    transform: translateY(10px);
+  }
+  85% {
+    transform: translateY(-83%);
+  }
+  95% {
+    transform: translateY(-77%);
+  }
+  to {
+    transform: translateY(-80%);
+  }
+`;
+
+const CacheBiduleContainer = styled.div`
+  position: absolute;
+  left: 954px;
+  top: 236px;
+  width: 190px;
+  height: 215px;
+  background: no-repeat top left url('${imgCacheBidule}');
+
+  &.opened {
+    animation: 1700ms ease-out ${openCacheBiduleAnimation};
+    animation-fill-mode: forwards;
+  }
+`;
+
+function CacheBidule({ opened, playSound }) {
+
+  useEffect(() => {
+    if (opened) {
+      playSound('openBidule');
+    }
+  }, [opened]);
+  
   return (
-    <div className="machine">
-      <MachineBiduleSelector pad={store.pad} bidule={store.bidule} />
-      <MachinePieces pad={store.pad} pieces={store.pieces} />
-      <MachineFioles pad={store.pad} fioles={store.fioles} />
-    </div>
+    <CacheBiduleContainer className={opened ? 'opened' : ''}>
+    </CacheBiduleContainer>
   );
 }
 
-/**
- *
- */
-function ControlPanel({ dispatch, store, playSound }) {
-  useEffect(() => {
-    document.title = "Bidul'o-tron | Cour de récré | Habile Bill";
+const rotateX = keyframes`
+  from {
+    transform: rotateX(20deg);
+    transform-origin: bottom center;
+  }
+  50% {
+    transform: rotateX(0deg);
+    transform-origin: bottom center;
+  }
+  to {
+    transform: rotateX(-20deg);
+    transform-origin: bottom center;
+  }
+`;
 
-    document.onkeyup = function (e) {
-      switch (e.keyCode) {
-        case 37:
-          e.stopPropagation();
-          dispatch(padLeft());
-          break;
-        case 38:
-          e.stopPropagation();
-          dispatch(padUp());
-          break;
-        case 39:
-          e.stopPropagation();
-          dispatch(padRight());
-          break;
-        case 40:
-          e.stopPropagation();
-          dispatch(padDown());
-          break;
-      }
-      return false;
-    };
+const Pancarte = styled.div`
+  position: absolute;
+  left: 442px;
+  top: 90px;
+  height: 89px;
+  width: 164px;
+  animation: ${rotateX} 3s linear infinite;
+`;
+
+function MachineContainer({ dispatch, store, playSound, registerSound }) {
+
+  useEffect(() => {
+    registerSound('openBidule', sndOpenBidule);
   });
 
-  /**
-   * @param {String} key
-   */
-  function padClicked(key) {
-    switch (key) {
-      case 'UP':
-        dispatch(padUp());
-        break;
-      case 'DOWN':
-        dispatch(padDown());
-        break;
-      case 'LEFT':
-          playSound('bip');
-          dispatch(padLeft());
-        break;
-      case 'RIGHT':
-          playSound('bip');
-          dispatch(padRight());
-        break;
-      case 'SUBMIT':
-        dispatch(padSubmit());
-        break;
-      case 'CANCEL':
-        dispatch(padCancel());
-        break;
-    }
-  }
-
-  let pipeCheckTimeout = null;
-
-  function rotatePipe(index) {
-    dispatch(pipeRotate(index));
-    if (pipeCheckTimeout) {
-      window.clearTimeout(pipeCheckTimeout);
-    }
-    pipeCheckTimeout = window.setTimeout(
-      () => {
-        dispatch(pipesCheck());
-        pipeCheckTimeout = null;
-      },
-      500,
-    );
-  }
-
-  if (!store.fioles) {
-    return null;
-  }
   return (
-    <div className="control-panel">
-      <div className="pad">
-        <button type="button" onClick={() => padClicked('UP')}>UP</button>
-        <button type="button" onClick={() => padClicked('DOWN')}>DOWN</button>
-        <button type="button" onClick={() => padClicked('LEFT')}>LEFT</button>
-        <button type="button" onClick={() => padClicked('RIGHT')}>RIGHT</button>
-        {' '}
-        <button type="button" onClick={() => padClicked('SUBMIT')}>ENTER</button>
-        <button type="button" onClick={() => padClicked('CANCEL')}>CANCEL</button>
-      </div>
-      <div className="pipe-buttons" style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 40px)'}}>
-        {[store.fioles.pipes.map((v, i) => (
-          <button key={`pipe-button-${i}`} type="button" onClick={() => rotatePipe(i)}>{i}</button>
-        ))]}
-      </div>
+    <div className="machine">
+      <Pancarte>
+        <img style={{ position: 'absolute' }} src={imgPancarte} />
+      </Pancarte>
+      <MachineBiduleSelector focusId="bidule" pad={store.pad} bidule={store.bidule} />
+      <MachinePieces focusId="pieces" pad={store.pad} pieces={store.pieces} />
+      <MachineFioles focusId="pipes" pad={store.pad} fioles={store.fioles} />
+      <MachineLights focusId="lights" pad={store.pad} lights={store.lights} />
+      <MachineBinary focusId="binary" binary={store.binary} />
+      <CacheBidule opened={store.bidule.SOLVED} playSound={playSound} />
     </div>
   );
 }
 
-export function BidulOTron({ dispatch, store, registerSound, playSound }) {
+const Machine = withSounds(MachineContainer);
+
+export function BidulOTron({ dispatch, store }) {
   useInjectReducer({ key: 'bidulOTron', reducer });
 
   useEffect(() => {
-    document.title = "Bidul'o-tron | Cour de récré | Habile Bill";
-    console.log(sndBip);
-    registerSound('bip', sndBip);
+    document.title = "Bidule-o-tron | Cour de récré | Habile Bill";
   });
 
   return (
     <BidulOTronContainer>
-      <audio src="./sounds/10691.mp3" id="soundBip"></audio>
-      <h1 title="Un truc pour fabriquer des bidules.">Bidul'O-Tron</h1>
       <Machine dispatch={dispatch} store={store}></Machine>
-      <ControlPanel dispatch={dispatch} store={store} playSound={playSound}></ControlPanel>
+      <ControlPanel dispatch={dispatch} store={store}></ControlPanel>
     </BidulOTronContainer>
   );
 }

@@ -24,7 +24,7 @@ const GlobalStyle = createGlobalStyle`
     bottom: 0;
     display: flex;
     flex-flow: column;
-    overflow: hidden;
+    overflow: auto;
   }
 
   p,

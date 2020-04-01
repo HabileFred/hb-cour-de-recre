@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import withFocus from '../../withFocus';
+
 import imgPiece0 from './img/piece_vide.png';
 import imgPiece1 from './img/piece_1.png';
 import imgPiece2 from './img/piece_2.png';
@@ -77,7 +79,7 @@ export const Piece = styled.div`
 
 const MachinePiecesContainer = styled.div`
   position: absolute;
-  top: 210px;
+  top: 169px;
   left: 434px;
   width: 160px;
   height: 338px;
@@ -105,9 +107,9 @@ const MachinePiecesContainer = styled.div`
   }
 `;
 
-export const MachinePieces = function({ pad, pieces }) {
+const MachinePieces = function({ pieces, focused }) {
   return (
-    <MachinePiecesContainer className={`${pad.focus === 'pieces' ? 'focused' : null}`}>
+    <MachinePiecesContainer className={`${focused ? 'focused' : ''}`}>
       <div className="arrows"></div>
       {pieces.current.map((v, i) => (
         <Piece key={`p${i}`} className={`piece-${i} piece-value-${v} ${pieces.cursor === i ? 'active' : ''}`} />
@@ -115,3 +117,5 @@ export const MachinePieces = function({ pad, pieces }) {
     </MachinePiecesContainer>
   );
 }
+
+export default withFocus(MachinePieces);

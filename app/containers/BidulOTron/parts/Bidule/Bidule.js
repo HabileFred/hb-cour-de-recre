@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import withFocus from '../../withFocus';
+
 import imgFrame from './img/cadre_bidule.png';
 import imgArrowLeft from './img/fleche_gauche.png';
 import imgArrowRight from './img/fleche_droite.png';
@@ -13,11 +15,11 @@ import imgBidule3 from './img/bidule-3.png';
 import imgBidule4 from './img/bidule-4.png';
 import imgBidule5 from './img/bidule-5.png';
 
-import imgBiduleInfos1 from './img/bidule-infos-1.png';
-import imgBiduleInfos2 from './img/bidule-infos-2.png';
-import imgBiduleInfos3 from './img/bidule-infos-3.png';
-import imgBiduleInfos4 from './img/bidule-infos-4.png';
-import imgBiduleInfos5 from './img/bidule-infos-5.png';
+import imgBiduleInfos1 from './img/protocol-1.png';
+import imgBiduleInfos2 from './img/protocol-2.png';
+import imgBiduleInfos3 from './img/protocol-3.png';
+import imgBiduleInfos4 from './img/protocol-4.png';
+import imgBiduleInfos5 from './img/protocol-5.png';
 
 const imgBiduleInfos = [
   imgBiduleInfos1,
@@ -29,10 +31,12 @@ const imgBiduleInfos = [
 
 const MachineBiduleContainer = styled.div`
   position: absolute;
-  top: 95px;
-  left: 100px;
+  top: 40px;
+  left: 85px;
+  width: 230px;
   display: flex;
   flex-flow: column;
+  align-items: center;
 
   @keyframes grow {
     from {
@@ -48,7 +52,7 @@ const MachineBiduleContainer = styled.div`
 
   .frame {
     position: absolute;
-    left: 0px;
+    left: 17px;
     top: 50px;
     background: url(${imgFrame}) no-repeat top left;
     width: 195px;
@@ -69,19 +73,13 @@ const MachineBiduleContainer = styled.div`
     top: 118px;
 
     &.left {
-      left: -30px;
+      left: -12px;
       background: url(${imgArrowLeft}) no-repeat top left;
     }
     &.right {
-      left: 180px;
+      left: 197px;
       background: url(${imgArrowRight}) no-repeat top left;
     }
-  }
-
-  .buttons,
-  .bidule-info-text,
-  .bidule-info-img {
-    width: 195px;
   }
 
   .ui-element {
@@ -96,7 +94,6 @@ const MachineBiduleContainer = styled.div`
 
   .buttons {
     margin-top: -10px;
-    width: 185px;
     display: flex;
     flew-flow: row no-wrap;
     justify-content: center;
@@ -107,6 +104,7 @@ const MachineBiduleContainer = styled.div`
     font-weight: bold;
     text-transform: uppercase;
     line-height: 130%;
+    transform: skew(1deg, 2deg);
 
     code {
       letter-spacing: 0.2em;
@@ -116,11 +114,12 @@ const MachineBiduleContainer = styled.div`
   }
 
   .bidule-info-img {
+    flex-shrink: 0;
   }
 
   .bidule-view {
     position: relative;
-    margin-left: 15px;
+    //margin-left: 15px;
     width: 166px;
     height: 167px;
     overflow: hidden;
@@ -153,10 +152,10 @@ const MachineBiduleContainer = styled.div`
   }
 `;
 
-export const MachineBiduleSelector = function({ bidule, pad }) {
+const MachineBiduleSelector = function({ bidule, focused }) {
   const biduleInfos = bidule.biduleInfos[bidule.index];
   return (
-    <MachineBiduleContainer className={`${pad.focus === 'bidule' ? 'focused' : null}`}>
+    <MachineBiduleContainer className={`${focused ? 'focused' : ''}`}>
       <div className="ui-element frame"></div>
       <div className="ui-element arrow left"></div>
       <div className="ui-element arrow right"></div>
@@ -178,7 +177,12 @@ export const MachineBiduleSelector = function({ bidule, pad }) {
         <img src={imgBtnSubmit} />
         <img src={imgBtnCancel} />
       </div>
-      <img className="bidule-info-img" src={imgBiduleInfos[bidule.index]} />
+      <div className="bidule-info-img">
+        <img src={imgBiduleInfos[bidule.index]} />
+      </div>
     </MachineBiduleContainer>
   );
 }
+
+
+export default withFocus(MachineBiduleSelector);

@@ -14,8 +14,11 @@ function withSounds(WrappedComponent) {
     sounds[name] = new Howl({ src: [srcFile] });
   }
 
-  const playSound = (name) => {
+  const playSound = (name, volume) => {
     if (sounds[name]) {
+      if (volume !== undefined) {
+        sounds[name].volume(volume);
+      }
       sounds[name].play();
     }
   };

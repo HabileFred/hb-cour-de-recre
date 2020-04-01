@@ -4,11 +4,11 @@
  *
  */
 import produce from 'immer';
-import { PAD_UP, PAD_DOWN, PAD_LEFT, PAD_RIGHT, PIPE_ROTATE, PAD_SUBMIT, PAD_CANCEL, PIPES_CHECK } from './constants';
+import { PAD_UP, PAD_DOWN, PAD_LEFT, PAD_RIGHT, PIPE_ROTATE, PAD_SUBMIT, PAD_CANCEL, PIPES_CHECK, ONOFF_TOGGLE, BUTTON_PRESSED, BINARY_INPUT } from './constants';
 
 export const initialState = {
   pad: {
-    focus: 'bidule',
+    focused: ['bidule'],
   },
 
   bidule: {
@@ -36,6 +36,7 @@ export const initialState = {
         text2: '7654321',
       },
     ],
+    SOLVED: false,
   },
 
   pieces: {
@@ -45,12 +46,13 @@ export const initialState = {
     desired: [2, 4, 1, 0, 3],
     SOLVED: false,
   },
+
   fioles: {
     // values from 1 to 4 included
     // 9 is fixed (cannot be rotated)
     pipes: [
       1, 1, 9, 1, 1, 1,
-      1, 1, 1, 9, 1, 1,
+      1, 1, 1, 9, 1, 9,
       1, 1, 1, 1, 1, 1,
     ],
     gauges: [
@@ -59,7 +61,7 @@ export const initialState = {
         SOLVED: false,
         solution: [
           0, 0, 9, 3, 1, 0,
-          0, 0, 3, 9, 0, 0,
+          0, 0, 3, 9, 0, 9,
           0, 3, 1, 0, 0, 0,
         ]
       },
@@ -67,7 +69,7 @@ export const initialState = {
         SOLVED: false,
         solution: [
           3, 0, 9, 0, 0, 0,
-          2, 4, 0, 9, 0, 0,
+          2, 4, 0, 9, 0, 9,
           0, 2, 4, 0, 0, 0,
         ]
       },
@@ -75,7 +77,7 @@ export const initialState = {
         SOLVED: false,
         solution: [
           2, 4, 9, 0, 0, 0,
-          0, 2, 4, 9, 0, 0,
+          0, 2, 4, 9, 0, 9,
           0, 0, 2, 4, 0, 0,
         ],
       },
@@ -83,6 +85,30 @@ export const initialState = {
       null,
     ],
     SOLVED: false,
+  },
+
+  lights: {
+    red: false,
+    green: false,
+    blue: false,
+    yellow: false,
+    purple: false,
+    SOLVED: false,
+  },
+
+  binary: {
+    SOLVED: false,
+    index: 0,
+    values: [
+      '',
+      '',
+      '',
+    ],
+    solution: [
+      '0001111',
+      '1100010',
+      '0011000',
+    ]
   },
 };
 
@@ -112,7 +138,6 @@ function checkGauge(gauge, pipes) {
         return false;
       }
     }
-    console.log('Gauge solved!');
     gauge.SOLVED = true;
   }
   return true;
@@ -136,82 +161,147 @@ function arraysEqual(a, b) {
   return true;
 }
 
-function handlePadLeft(draft) {
-  switch (draft.pad.focus) {
-    case 'pieces':
-      draft.pieces.current[draft.pieces.cursor] = cycleValue(
-        draft.pieces.current[draft.pieces.cursor],
-        -1,
-        0,
-        draft.pieces.MAX_VALUE,
-      );
-      draft.pieces.SOLVED = arraysEqual(draft.pieces.current, draft.pieces.desired);
-      break;
+function hasFocus(draft, focusId) {
+  return draft.pad.focused.indexOf(focusId) !== -1;
+}
 
-    case 'bidule':
-      draft.bidule.index = betweenValue(
-        draft.bidule.index,
-        -1,
-        0,
-        (draft.bidule.BIDULE_COUNT - 1)
-      );
-      break;
+function setFocus(draft, newFocusId, oldFocusId)  {
+  const set = new Set(draft.pad.focused);
+  if (oldFocusId) {
+    if (Array.isArray(oldFocusId)) {
+      oldFocusId.forEach(f => set.delete(f));
+    } else {
+      set.delete(oldFocusId);
+    }
+  }
+  if (Array.isArray(newFocusId)) {
+    newFocusId.forEach(f => set.add(f));
+  } else {
+    set.add(newFocusId);
+  }
+  draft.pad.focused = [...set];
+}
+
+function handlePadLeft(draft) {
+  if (hasFocus(draft, 'pieces')) {
+    draft.pieces.current[draft.pieces.cursor] = cycleValue(
+      draft.pieces.current[draft.pieces.cursor],
+      -1,
+      0,
+      draft.pieces.MAX_VALUE,
+    );
+    draft.pieces.SOLVED = arraysEqual(draft.pieces.current, draft.pieces.desired);
+  } else if (hasFocus(draft, 'bidule')) {
+    draft.bidule.index = betweenValue(
+      draft.bidule.index,
+      -1,
+      0,
+      (draft.bidule.BIDULE_COUNT - 1)
+    );
   }
 }
 
 function handlePadRight(draft) {
-  switch (draft.pad.focus) {
-    case 'pieces':
-      draft.pieces.current[draft.pieces.cursor] = cycleValue(
-        draft.pieces.current[draft.pieces.cursor],
+  if (hasFocus(draft, 'pieces')) {
+    draft.pieces.current[draft.pieces.cursor] = cycleValue(
+      draft.pieces.current[draft.pieces.cursor],
+      1,
+      0,
+      draft.pieces.MAX_VALUE,
+    );
+    draft.pieces.SOLVED = arraysEqual(draft.pieces.current, draft.pieces.desired);
+  } else if (hasFocus(draft, 'bidule')) {
+      draft.bidule.index = betweenValue(
+        draft.bidule.index,
         1,
         0,
-        draft.pieces.MAX_VALUE,
+        (draft.bidule.BIDULE_COUNT - 1)
       );
-      draft.pieces.SOLVED = arraysEqual(draft.pieces.current, draft.pieces.desired);
-      break;
-
-    case 'bidule':
-        draft.bidule.index = betweenValue(
-          draft.bidule.index,
-          1,
-          0,
-          (draft.bidule.BIDULE_COUNT - 1)
-        );
-        break;
     }
 }
 
 function handlePadDown(draft) {
-  switch (draft.pad.focus) {
-    case 'pieces':
-      draft.pieces.cursor = Math.min(draft.pieces.desired.length - 1, draft.pieces.cursor + 1);
-      break;
+  if (hasFocus(draft, 'pieces')) {
+    draft.pieces.cursor = Math.min(draft.pieces.desired.length - 1, draft.pieces.cursor + 1);
   }
 }
 
 function handlePadUp(draft) {
-  switch (draft.pad.focus) {
-    case 'pieces':
-        draft.pieces.cursor = Math.max(0, draft.pieces.cursor - 1);
-      break;
+  if (hasFocus(draft, 'pieces')) {
+    draft.pieces.cursor = Math.max(0, draft.pieces.cursor - 1);
   }
 }
 
+/**
+ * Pad button 'submit' has been pressed.
+ */
 function handlePadSubmit(draft) {
-  switch (draft.pad.focus) {
-    case 'bidule':
-      draft.pad.focus = 'pieces';
+  if (hasFocus(draft, 'bidule')) {
+    setFocus(draft, ['pieces', 'pipes'], 'bidule');
+    //draft.bidule.SOLVED = true; // FIXME
+  }
+}
+
+/**
+ * Pad button 'cancel' has been pressed.
+ */
+function handlePadCancel(draft) {
+  if (hasFocus(draft, 'pieces')) {
+    setFocus(draft, 'bidule', ['pieces', 'pipes']);
+    //draft.bidule.SOLVED = false; // FIXME
+  }
+}
+
+/**
+ * @param {*} draft
+ * @param {*} colors
+ */
+function lightsToggle(draft, colors) {
+  colors.forEach(c => draft.lights[c] = !draft.lights[c]);
+}
+
+/**
+ * A button has been pressed.
+ * @param {Object} draft
+ * @param {String} button
+ */
+function handleButtonPressed(draft, button) {
+  switch (button) {
+    case 'G':
+      lightsToggle(draft, ['red', 'blue']);
+      break;
+    case 'H':
+        lightsToggle(draft, ['blue', 'green']);
+      break;
+    case 'J':
+        lightsToggle(draft, ['blue', 'red', 'green']);
+      break;
+    case 'K':
+        lightsToggle(draft, ['red', 'yellow', 'purple']);
+      break;
+    case 'L':
+        lightsToggle(draft, ['purple', 'green']);
+      break;
+    case 'M':
+        lightsToggle(draft, ['purple', 'yellow']);
       break;
   }
 }
 
-function handlePadCancel(draft) {
-  switch (draft.pad.focus) {
-    case 'pieces':
-      draft.pad.focus = 'bidule';
-      break;
+/**
+ *
+ * @param {*} draft
+ * @param {*} value
+ */
+function handleBinaryInput(draft, value) {
+  const idx = draft.binary.index;
+  let v = draft.binary.values[idx];
+  if (v.length === 7) {
+    v = '';
+  } else {
+    v += String(value);
   }
+  draft.binary.values[idx] = v;
 }
 
 /* eslint-disable default-case, no-param-reassign */
@@ -257,7 +347,15 @@ const BidulOTronReducer = (state = initialState, action) =>
       case PIPES_CHECK:
         checkGauges(draft);
         break;
-      }
+
+      case BUTTON_PRESSED:
+        handleButtonPressed(draft, action.button);
+        break;
+
+      case BINARY_INPUT:
+        handleBinaryInput(draft, action.value);
+        break;
+    }
   });
 
 export default BidulOTronReducer;

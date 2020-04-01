@@ -36,12 +36,18 @@ export default function configureStore(initialState = {}, history) {
 
   const enhancers = [applyMiddleware(...middlewares)];
 
-  try {
-    const serializedState = localStorage.getItem('state');
-    if (serializedState !== null) {
-      initialState = JSON.parse(serializedState);
-    }
-  } catch (err) {}
+  /*
+  FIXME
+  const isProduction = process.env.NODE_ENV === 'production';
+  if (isProduction) {
+    try {
+      const serializedState = localStorage.getItem('state');
+      if (serializedState !== null) {
+        initialState = JSON.parse(serializedState);
+      }
+    } catch (err) {}
+  }
+  */
 
   const store = createStore(
     createReducer(),
@@ -49,22 +55,28 @@ export default function configureStore(initialState = {}, history) {
     composeEnhancers(...enhancers),
   );
 
-  const saveStore = () => {
-    try {
-      const serializedState = JSON.stringify(store.getState());
-      localStorage.setItem('state', serializedState);
-    } catch {
-    }
-  };
+  /*
+  FIXME
+  if (isProduction) {
+      const saveStore = () => {
+      try {
+        const serializedState = JSON.stringify(store.getState());
+        localStorage.setItem('state', serializedState);
+      } catch {
+      }
+    };
 
-  let saveStoreTimeout;
-  store.subscribe(() => {
-    if (saveStoreTimeout) {
-      clearTimeout(saveStoreTimeout);
-      saveStoreTimeout = null;
-    }
-    saveStoreTimeout = setTimeout(saveStore, 500);
-  });
+    let saveStoreTimeout;
+    store.subscribe(() => {
+      // Throttle ;)
+      if (saveStoreTimeout) {
+        clearTimeout(saveStoreTimeout);
+        saveStoreTimeout = null;
+      }
+      saveStoreTimeout = setTimeout(saveStore, 500);
+    });
+  }
+  */
 
   // Extensions
   store.runSaga = sagaMiddleware.run;
