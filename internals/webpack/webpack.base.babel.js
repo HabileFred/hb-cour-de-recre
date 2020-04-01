@@ -108,6 +108,10 @@ module.exports = options => ({
           },
         },
       },
+      {
+        test: /\.mp3$/,
+        loader: 'file-loader',
+      },
     ],
   },
   plugins: options.plugins.concat([

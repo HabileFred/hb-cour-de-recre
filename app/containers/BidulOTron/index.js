@@ -17,13 +17,53 @@ import makeSelectBidulOTron from './selectors';
 import reducer from './reducer';
 import messages from './messages';
 
-import './styles.scss';
+import withSounds from '../../components/withSounds';
+import sndBip from './sounds/10691.mp3';
+
 import { padUp, padLeft, padRight, padDown, pipeRotate, padSubmit, padCancel, pipesCheck } from './actions';
 
 import { MachinePieces } from './parts/Pieces/Pieces';
 import { MachineBiduleSelector } from './parts/Bidule/Bidule';
 import { MachineFioles } from './parts/Fioles/Fioles';
 
+import imgBackground from './img/machine_squelette.png';
+
+const BidulOTronContainer = styled.div`
+  position: absolute;
+  width: 1280px;
+  height: 800px;
+  border: 2px solid black;
+  display: flex;
+  flex-flow: column;
+  align-self: center;
+  background:  white url('${imgBackground}') no-repeat;
+  color: black;
+  z-index: 0;
+
+  h1 {
+    position: absolute;
+    text-transform: uppercase;
+    padding: 0.3em;
+    margin: 0;
+    border-bottom: 5px solid rgb(42,228,123);
+    top: 28px;
+    left: 40px;
+    font-size: 18pt;
+    transform: skew(2deg, 3deg);
+  }
+
+  .machine {
+    position: relative;
+    flex: 1;
+  }
+
+  .control-panel {
+    background: rgba(255, 255, 0, 0.1);
+    width: 100%;
+    height: 200px;
+  }
+}
+`;
 
 function Machine({ dispatch, store }) {
   return (
@@ -38,7 +78,7 @@ function Machine({ dispatch, store }) {
 /**
  *
  */
-function ControlPanel({ dispatch, store }) {
+function ControlPanel({ dispatch, store, playSound }) {
   useEffect(() => {
     document.title = "Bidul'o-tron | Cour de récré | Habile Bill";
 
@@ -77,10 +117,12 @@ function ControlPanel({ dispatch, store }) {
         dispatch(padDown());
         break;
       case 'LEFT':
-        dispatch(padLeft());
+          playSound('bip');
+          dispatch(padLeft());
         break;
       case 'RIGHT':
-        dispatch(padRight());
+          playSound('bip');
+          dispatch(padRight());
         break;
       case 'SUBMIT':
         dispatch(padSubmit());
@@ -130,20 +172,22 @@ function ControlPanel({ dispatch, store }) {
   );
 }
 
-
-export function BidulOTron({ dispatch, store }) {
+export function BidulOTron({ dispatch, store, registerSound, playSound }) {
   useInjectReducer({ key: 'bidulOTron', reducer });
 
   useEffect(() => {
     document.title = "Bidul'o-tron | Cour de récré | Habile Bill";
+    console.log(sndBip);
+    registerSound('bip', sndBip);
   });
 
   return (
-    <div className="bidul-o-tron">
+    <BidulOTronContainer>
+      <audio src="./sounds/10691.mp3" id="soundBip"></audio>
       <h1 title="Un truc pour fabriquer des bidules.">Bidul'O-Tron</h1>
       <Machine dispatch={dispatch} store={store}></Machine>
-      <ControlPanel dispatch={dispatch} store={store}></ControlPanel>
-    </div>
+      <ControlPanel dispatch={dispatch} store={store} playSound={playSound}></ControlPanel>
+    </BidulOTronContainer>
   );
 }
 
@@ -166,4 +210,7 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-export default compose(withConnect)(BidulOTron);
+export default compose(
+  withConnect,
+  withSounds
+)(BidulOTron);
