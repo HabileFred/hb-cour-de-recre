@@ -112,6 +112,17 @@ export const initialState = {
   },
 };
 
+function arraysEqual(a, b) {
+  if (a === b) return true;
+  if (a == null || b == null) return false;
+  if (a.length != b.length) return false;
+
+  for (var i = 0; i < a.length; ++i) {
+    if (a[i] !== b[i]) return false;
+  }
+  return true;
+}
+
 function cycleValue(value, inc, min, max) {
   if (value === null) {
     value = 0;
@@ -128,37 +139,6 @@ function betweenValue(value, inc, min, max) {
   if (value < min) value = min;
   if (value > max) value = max;
   return value;
-}
-
-function checkGauge(gauge, pipes) {
-  if (gauge && !gauge.SOLVED) {
-    for (let i = 0; i < gauge.solution.length; i++) {
-      if (gauge.solution[i] && gauge.solution[i] !== pipes[i]) {
-        gauge.SOLVED = false;
-        return false;
-      }
-    }
-    gauge.SOLVED = true;
-  }
-  return true;
-}
-
-function checkGauges(draft) {
-  draft.fioles.SOLVED = draft.fioles.gauges.filter(
-    l => checkGauge(l, draft.fioles.pipes)
-  ).length === draft.fioles.gauges.length;
-  console.log('Fioles: solved=', draft.fioles.SOLVED);
-}
-
-function arraysEqual(a, b) {
-  if (a === b) return true;
-  if (a == null || b == null) return false;
-  if (a.length != b.length) return false;
-
-  for (var i = 0; i < a.length; ++i) {
-    if (a[i] !== b[i]) return false;
-  }
-  return true;
 }
 
 function hasFocus(draft, focusId) {
@@ -180,6 +160,25 @@ function setFocus(draft, newFocusId, oldFocusId)  {
     set.add(newFocusId);
   }
   draft.pad.focused = [...set];
+}
+
+function checkGauge(gauge, pipes) {
+  if (gauge && !gauge.SOLVED) {
+    for (let i = 0; i < gauge.solution.length; i++) {
+      if (gauge.solution[i] && gauge.solution[i] !== pipes[i]) {
+        gauge.SOLVED = false;
+        return false;
+      }
+    }
+    gauge.SOLVED = true;
+  }
+  return true;
+}
+
+function checkGauges(draft) {
+  draft.fioles.SOLVED = draft.fioles.gauges.filter(
+    l => checkGauge(l, draft.fioles.pipes)
+  ).length === draft.fioles.gauges.length;
 }
 
 function handlePadLeft(draft) {
@@ -266,25 +265,27 @@ function lightsToggle(draft, colors) {
  * @param {String} button
  */
 function handleButtonPressed(draft, button) {
-  switch (button) {
-    case 'G':
-      lightsToggle(draft, ['red', 'blue']);
-      break;
-    case 'H':
-        lightsToggle(draft, ['blue', 'green']);
-      break;
-    case 'J':
-        lightsToggle(draft, ['blue', 'red', 'green']);
-      break;
-    case 'K':
-        lightsToggle(draft, ['red', 'yellow', 'purple']);
-      break;
-    case 'L':
-        lightsToggle(draft, ['purple', 'green']);
-      break;
-    case 'M':
-        lightsToggle(draft, ['purple', 'yellow']);
-      break;
+  if (hasFocus(draft, 'lights')) {
+    switch (button) {
+      case 'G':
+        lightsToggle(draft, ['red', 'blue']);
+        break;
+      case 'H':
+          lightsToggle(draft, ['blue', 'green']);
+        break;
+      case 'J':
+          lightsToggle(draft, ['blue', 'red', 'green']);
+        break;
+      case 'K':
+          lightsToggle(draft, ['red', 'yellow', 'purple']);
+        break;
+      case 'L':
+          lightsToggle(draft, ['purple', 'green']);
+        break;
+      case 'M':
+          lightsToggle(draft, ['purple', 'yellow']);
+        break;
+    }
   }
 }
 
@@ -334,13 +335,15 @@ const BidulOTronReducer = (state = initialState, action) =>
         break;
 
       case PIPE_ROTATE:
-        if (draft.fioles.pipes[action.index] !== 9) {
-          draft.fioles.pipes[action.index] = cycleValue(
-            draft.fioles.pipes[action.index],
-            1,
-            1,
-            4,
-          );
+        if (hasFocus(draft, 'pipes')) {
+          if (draft.fioles.pipes[action.index] !== 9) {
+            draft.fioles.pipes[action.index] = cycleValue(
+              draft.fioles.pipes[action.index],
+              1,
+              1,
+              4,
+            );
+          }
         }
         break;
 
