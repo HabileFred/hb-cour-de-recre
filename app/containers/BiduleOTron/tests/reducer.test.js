@@ -1,9 +1,9 @@
 // import produce from 'immer';
-import BidulOTronReducer from '../reducer';
+import BiduleOTronReducer from '../reducer';
 // import { someAction } from '../actions';
 
 /* eslint-disable default-case, no-param-reassign */
-describe('BidulOTronReducer', () => {
+describe('BiduleOTronReducer', () => {
   let state;
   beforeEach(() => {
     state = {
@@ -13,7 +13,7 @@ describe('BidulOTronReducer', () => {
 
   it('returns the initial state', () => {
     const expectedResult = state;
-    expect(BidulOTronReducer(undefined, {})).toEqual(expectedResult);
+    expect(BiduleOTronReducer(undefined, {})).toEqual(expectedResult);
   });
 
   /**

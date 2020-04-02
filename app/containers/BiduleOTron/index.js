@@ -1,6 +1,6 @@
 /**
  *
- * BidulOTron
+ * BiduleOTron
  *
  */
 
@@ -13,7 +13,7 @@ import { compose } from 'redux';
 import styled, { keyframes } from 'styled-components';
 
 import { useInjectReducer } from 'utils/injectReducer';
-import makeSelectBidulOTron from './selectors';
+import makeSelectBiduleOTron from './selectors';
 import reducer from './reducer';
 import messages from './messages';
 
@@ -33,7 +33,7 @@ import imgBackground from './img/machine_squelette.png';
 import imgCacheBidule from './img/cache_bidule.png';
 import imgPancarte from './img/pancarte.png';
 
-const BidulOTronContainer = styled.div`
+const BiduleOTronContainer = styled.div`
   position: absolute;
   width: 1280px;
   height: 800px;
@@ -151,7 +151,7 @@ function MachineContainer({ dispatch, store, playSound, registerSound }) {
 
 const Machine = withSounds(MachineContainer);
 
-export function BidulOTron({ dispatch, store }) {
+export function BiduleOTron({ dispatch, store }) {
   useInjectReducer({ key: 'bidulOTron', reducer });
 
   useEffect(() => {
@@ -159,19 +159,19 @@ export function BidulOTron({ dispatch, store }) {
   });
 
   return (
-    <BidulOTronContainer>
+    <BiduleOTronContainer>
       <Machine dispatch={dispatch} store={store}></Machine>
       <ControlPanel dispatch={dispatch} store={store}></ControlPanel>
-    </BidulOTronContainer>
+    </BiduleOTronContainer>
   );
 }
 
-BidulOTron.propTypes = {
+BiduleOTron.propTypes = {
   dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
-  store: makeSelectBidulOTron(),
+  store: makeSelectBiduleOTron(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -188,4 +188,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   withSounds
-)(BidulOTron);
+)(BiduleOTron);

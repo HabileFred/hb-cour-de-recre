@@ -11,7 +11,7 @@ import imgOnYellow from './img/led_jaune.png';
 import imgOnPurple from './img/led_violette.png';
 import imgmachineOnOffFocus from './img/on_off_focus.png';
 
-const MachineLightsContainer = styled.div`
+const MachineLightbulbsContainer = styled.div`
   position: absolute;
   top: 217px;
   left: 855px;
@@ -32,7 +32,10 @@ const MachineLightsContainer = styled.div`
   }
 `;
 
-const Lights = styled.div`
+/**
+ * Groups all the Lightbulbs.
+ */
+const Lightbulbs = styled.div`
   display: grid;
   grid-template-columns: 26px 3px;
   grid-gap: 0;
@@ -40,7 +43,10 @@ const Lights = styled.div`
   margin: 14px 16px;
 `;
 
-export const Light = styled.div`
+/**
+ * A single Lightbulb representation.
+ */
+export const Lightbulb = styled.div`
   width: 20px;
   height: 20px;
   background: transparent no-repeat center center url('${imgOff}');
@@ -62,23 +68,25 @@ export const Light = styled.div`
   }
 `;
 
-const MachineLights = function({ focused, lights }) {
+const colors = ['blue', 'red', 'green', 'yellow', 'purple'];
+
+/**
+ * The Machine with the Lightbulbs.
+ * @param {Object} props
+ */
+const MachineLightbulbs = function({ focused, lights }) {
   return (
-    <MachineLightsContainer className={`${focused ? 'focused' : ''}`}>
-      <Lights>
-        <Light className={`blue ${lights.blue ? 'on' : 'off'}`} />
-        <Light className={`blue ${lights.blue ? 'on' : 'off'}`} />
-        <Light className={`green ${lights.green ? 'on' : 'off'}`} />
-        <Light className={`green ${lights.green ? 'on' : 'off'}`} />
-        <Light className={`red ${lights.red ? 'on' : 'off'}`} />
-        <Light className={`red ${lights.red ? 'on' : 'off'}`} />
-        <Light className={`yellow ${lights.yellow ? 'on' : 'off'}`} />
-        <Light className={`yellow ${lights.yellow ? 'on' : 'off'}`} />
-        <Light className={`purple ${lights.purple ? 'on' : 'off'}`} />
-        <Light className={`purple ${lights.purple ? 'on' : 'off'}`} />
-      </Lights>
-    </MachineLightsContainer>
+    <MachineLightbulbsContainer className={`${focused ? 'focused' : ''}`}>
+      <Lightbulbs>
+        {colors.map(color => (
+          <React.Fragment>
+            <Lightbulb key={`${color}1`} className={`${color} ${lights[color] ? 'on' : 'off'}`} />
+            <Lightbulb key={`${color}2`} className={`${color} ${lights[color] ? 'on' : 'off'}`} />
+          </React.Fragment>
+        ))}
+      </Lightbulbs>
+    </MachineLightbulbsContainer>
   );
 }
 
-export default withFocus(MachineLights);
+export default withFocus(MachineLightbulbs);

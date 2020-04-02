@@ -1,6 +1,6 @@
 /*
  *
- * BidulOTron actions
+ * BiduleOTron actions
  *
  */
 

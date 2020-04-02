@@ -1,6 +1,6 @@
 /**
  *
- * Asynchronously loads the component for BidulOTron
+ * Asynchronously loads the component for BiduleOTron
  *
  */
 

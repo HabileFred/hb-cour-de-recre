@@ -8,7 +8,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import makeSelectBidulOTron from '../selectors';
+import makeSelectBiduleOTron from '../selectors';
 
 function withFocus(WrappedComponent) {
   return class extends React.Component {
@@ -22,7 +22,7 @@ function withFocus(WrappedComponent) {
 withFocus.propTypes = {};
 
 const mapStateToProps = createStructuredSelector({
-  store: makeSelectBidulOTron(),
+  store: makeSelectBiduleOTron(),
 });
 
 function mapDispatchToProps(dispatch) {

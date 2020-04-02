@@ -16,7 +16,6 @@ const MachineBinaryContainer = styled.div`
 const MachineBinary = function({ binary, focused }) {
   return (
     <MachineBinaryContainer>
-    {focused ? 'focused' : 'NOT focused'}
     </MachineBinaryContainer>
   );
 };

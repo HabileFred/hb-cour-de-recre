@@ -1,6 +1,6 @@
 /*
  *
- * BidulOTron reducer
+ * BiduleOTron reducer
  *
  */
 import produce from 'immer';
@@ -162,6 +162,11 @@ function setFocus(draft, newFocusId, oldFocusId)  {
   draft.pad.focused = [...set];
 }
 
+/**
+ * Checks if a Gauge is filled or not.
+ * @param {Object} gauge 
+ * @param {Array} pipes 
+ */
 function checkGauge(gauge, pipes) {
   if (gauge && !gauge.SOLVED) {
     for (let i = 0; i < gauge.solution.length; i++) {
@@ -306,7 +311,7 @@ function handleBinaryInput(draft, value) {
 }
 
 /* eslint-disable default-case, no-param-reassign */
-const BidulOTronReducer = (state = initialState, action) =>
+const BiduleOTronReducer = (state = initialState, action) =>
   produce(state, (draft) => {
     switch (action.type) {
 
@@ -361,4 +366,4 @@ const BidulOTronReducer = (state = initialState, action) =>
     }
   });
 
-export default BidulOTronReducer;
+export default BiduleOTronReducer;
