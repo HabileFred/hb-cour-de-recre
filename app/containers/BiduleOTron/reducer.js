@@ -111,6 +111,14 @@ export const initialState = {
       '0011000',
     ]
   },
+
+  fuses: {
+
+  },
+
+  simon: {
+
+  },
 };
 
 function arraysEqual(a, b) {
@@ -241,9 +249,15 @@ function handlePadRight(draft) {
 }
 
 function handlePadDown(draft) {
+  if (hasFocus(draft, 'binary')) {
+    draft.binary.index = cycleValue(draft.binary.index, 1, 0, 2);
+  }
 }
 
 function handlePadUp(draft) {
+  if (hasFocus(draft, 'binary')) {
+    draft.binary.index = cycleValue(draft.binary.index, -1, 0, 2);
+  }
 }
 
 /**
@@ -251,8 +265,8 @@ function handlePadUp(draft) {
  */
 function handlePadSubmit(draft) {
   if (hasFocus(draft, 'bidule')) {
-    setFocus(draft, ['pieces', 'pipes'], 'bidule');
-    //draft.bidule.SOLVED = true; // FIXME
+    // FIXME setFocus(draft, ['pieces', 'pipes'], 'bidule');
+    setFocus(draft, ['fuses', 'simon', 'binary'], 'bidule');
   }
 }
 
@@ -261,8 +275,8 @@ function handlePadSubmit(draft) {
  */
 function handlePadCancel(draft) {
   if (hasFocus(draft, 'pieces')) {
-    setFocus(draft, 'bidule', ['pieces', 'pipes']);
-    //draft.bidule.SOLVED = false; // FIXME
+    // FIXME setFocus(draft, 'bidule', ['pieces', 'pipes']);
+    setFocus(draft, 'bidule', ['fuses', 'simon']);
   }
 }
 
@@ -309,6 +323,13 @@ function handleButtonPressed(draft, button) {
   }
 }
 
+function checkBinary(draft) {
+  draft.binary.SOLVED = arraysEqual(draft.binary.values, draft.binary.solution);
+  if (draft.binary.SOLVED) {
+    setFocus(draft, 'fuses', 'binary');
+  }
+}
+
 /**
  *
  * @param {*} draft
@@ -323,6 +344,7 @@ function handleBinaryInput(draft, value) {
     v += String(value);
   }
   draft.binary.values[idx] = v;
+  checkBinary(draft);
 }
 
 /* eslint-disable default-case, no-param-reassign */

@@ -27,6 +27,8 @@ import MachineBiduleSelector from './parts/Bidule/Bidule';
 import MachinePipes from './parts/Pipes/Pipes';
 import MachineLights from './parts/Lights/Lights';
 import MachineBinary from './parts/Binary/Binary';
+import MachineFuses from './parts/Fuses/Fuses';
+import MachineSimon from './parts/Simon/Simon';
 import ControlPanel from './parts/ControlPanel/ControlPanel';
 
 import imgBackground from './img/machine_squelette.png';
@@ -144,6 +146,8 @@ function MachineContainer({ dispatch, store, playSound, registerSound }) {
       <MachinePipes focusId="pipes" pad={store.pad} fioles={store.fioles} />
       <MachineLights focusId="lights" pad={store.pad} lights={store.lights} />
       <MachineBinary focusId="binary" binary={store.binary} />
+      <MachineFuses focusId="fuses" fuses={store.fuses} />
+      <MachineSimon focusId="simon" simon={store.simon} />
       <CacheBidule opened={store.bidule.SOLVED} playSound={playSound} />
     </div>
   );
