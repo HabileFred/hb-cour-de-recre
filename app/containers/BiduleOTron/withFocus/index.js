@@ -13,8 +13,9 @@ import makeSelectBiduleOTron from '../selectors';
 function withFocus(WrappedComponent) {
   return class extends React.Component {
     render() {
-      const focused = this.props.store ? this.props.store.pad.focused.indexOf(this.props.focusId) !== -1 : false;
-      return <WrappedComponent className={focused ? 'focused' : ''} focused={focused} {...this.props} />;
+      const focused = this.props.store ? this.props.store.focus.indexOf(this.props.focusId) !== -1 : false;
+      const solved = this.props.store && this.props.store[this.props.focusId] ? this.props.store[this.props.focusId].SOLVED : false;
+      return <WrappedComponent className={focused ? 'focused' : ''} solved={solved} focused={focused} {...this.props} />;
     }
   }
 }

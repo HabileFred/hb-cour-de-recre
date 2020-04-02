@@ -80,7 +80,7 @@ const Fiole = styled.div`
   }
 `;
 
-const MachineFiolesContainer = styled.div`
+const MachinePipesContainer = styled.div`
   position: absolute;
   top: 275px;
   left: 583px;
@@ -89,6 +89,7 @@ const MachineFiolesContainer = styled.div`
 
   &.focused::before {
     content: " ";
+    z-index: 1;
     position: absolute;
     width: 151px;
     height: 71px;
@@ -126,7 +127,7 @@ const Gauges = styled.div`
   grid-gap: 0;
   grid-auto-rows: 30px;
   position: absolute;
-  top: 160px;
+  top: 185px;
   left: 20px;
   opacity: ${props => props.focused ? 1 : 0.5};
   transition: opacity 250ms ease;
@@ -145,9 +146,9 @@ const GaugeFilled = styled(Gauge)`
   background: url('${props => imgGaugesFilled[props.index]}') no-repeat center center;
 `;
 
-const MachineFioles = function({ focused, fioles }) {
+const MachinePipes = function({ focused, fioles }) {
   return (
-    <MachineFiolesContainer className={`${focused ? 'focused' : ''}`}>
+    <MachinePipesContainer className={`${focused ? 'focused' : ''}`}>
       <Fioles focused={focused}>
         <Fiole className="fiole-0" />
         <Fiole className="fiole-1" />
@@ -168,9 +169,9 @@ const MachineFioles = function({ focused, fioles }) {
             : (<GaugeEmpty key={`g${i}`}/>)
           })}
       </Gauges>
-      <img src={imgSymbols} style={{ position: 'absolute', bottom: '6px', left: '13px' }} />
-    </MachineFiolesContainer>
+      <img src={imgSymbols} style={{ position: 'absolute', bottom: '22px', left: '11px' }} />
+    </MachinePipesContainer>
   );
 }
 
-export default withFocus(MachineFioles);
+export default withFocus(MachinePipes);

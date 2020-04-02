@@ -24,9 +24,9 @@ import { padUp, padLeft, padRight, padDown, pipeRotate, padSubmit, padCancel, pi
 
 import MachinePieces from './parts/Pieces/Pieces';
 import MachineBiduleSelector from './parts/Bidule/Bidule';
-import MachineFioles from './parts/Fioles/Fioles';
+import MachinePipes from './parts/Pipes/Pipes';
 import MachineLights from './parts/Lights/Lights';
-import MachineBinary from './parts/Binaire/Binaire';
+import MachineBinary from './parts/Binary/Binary';
 import ControlPanel from './parts/ControlPanel/ControlPanel';
 
 import imgBackground from './img/machine_squelette.png';
@@ -141,7 +141,7 @@ function MachineContainer({ dispatch, store, playSound, registerSound }) {
       </Pancarte>
       <MachineBiduleSelector focusId="bidule" pad={store.pad} bidule={store.bidule} />
       <MachinePieces focusId="pieces" pad={store.pad} pieces={store.pieces} />
-      <MachineFioles focusId="pipes" pad={store.pad} fioles={store.fioles} />
+      <MachinePipes focusId="pipes" pad={store.pad} fioles={store.fioles} />
       <MachineLights focusId="lights" pad={store.pad} lights={store.lights} />
       <MachineBinary focusId="binary" binary={store.binary} />
       <CacheBidule opened={store.bidule.SOLVED} playSound={playSound} />

@@ -7,8 +7,9 @@ import produce from 'immer';
 import { PAD_UP, PAD_DOWN, PAD_LEFT, PAD_RIGHT, PIPE_ROTATE, PAD_SUBMIT, PAD_CANCEL, PIPES_CHECK, ONOFF_TOGGLE, BUTTON_PRESSED, BINARY_INPUT } from './constants';
 
 export const initialState = {
+  focus: ['bidule'],
+
   pad: {
-    focused: ['bidule'],
   },
 
   bidule: {
@@ -43,7 +44,7 @@ export const initialState = {
     MAX_VALUE: 5,
     cursor: 0,
     current: [0, 0, 0, 0, 0],
-    desired: [2, 4, 1, 0, 3],
+    desired: [1, 2, 3, 4, 5],
     SOLVED: false,
   },
 
@@ -142,11 +143,11 @@ function betweenValue(value, inc, min, max) {
 }
 
 function hasFocus(draft, focusId) {
-  return draft.pad.focused.indexOf(focusId) !== -1;
+  return draft.focus.indexOf(focusId) !== -1;
 }
 
 function setFocus(draft, newFocusId, oldFocusId)  {
-  const set = new Set(draft.pad.focused);
+  const set = new Set(draft.focus);
   if (oldFocusId) {
     if (Array.isArray(oldFocusId)) {
       oldFocusId.forEach(f => set.delete(f));
@@ -159,7 +160,7 @@ function setFocus(draft, newFocusId, oldFocusId)  {
   } else {
     set.add(newFocusId);
   }
-  draft.pad.focused = [...set];
+  draft.focus = [...set];
 }
 
 /**
@@ -184,6 +185,21 @@ function checkGauges(draft) {
   draft.fioles.SOLVED = draft.fioles.gauges.filter(
     l => checkGauge(l, draft.fioles.pipes)
   ).length === draft.fioles.gauges.length;
+  if (draft.fioles.SOLVED) {
+    setFocus(draft, 'simon', 'lights');
+  }
+}
+
+function checkPiecesSolved(draft) {
+  for (let i = 0; i < draft.pieces.desired.length; i += 1) {
+    const p = draft.pieces.desired[i];
+    if (draft.pieces.current.indexOf(p) === -1) {
+      draft.pieces.SOLVED = false;
+      return;
+    }
+  }
+  draft.pieces.SOLVED = true;
+  setFocus(draft, 'binary', 'pieces');
 }
 
 function handlePadLeft(draft) {
@@ -194,7 +210,7 @@ function handlePadLeft(draft) {
       0,
       draft.pieces.MAX_VALUE,
     );
-    draft.pieces.SOLVED = arraysEqual(draft.pieces.current, draft.pieces.desired);
+    checkPiecesSolved(draft);
   } else if (hasFocus(draft, 'bidule')) {
     draft.bidule.index = betweenValue(
       draft.bidule.index,
@@ -213,7 +229,7 @@ function handlePadRight(draft) {
       0,
       draft.pieces.MAX_VALUE,
     );
-    draft.pieces.SOLVED = arraysEqual(draft.pieces.current, draft.pieces.desired);
+    checkPiecesSolved(draft);
   } else if (hasFocus(draft, 'bidule')) {
       draft.bidule.index = betweenValue(
         draft.bidule.index,
@@ -225,15 +241,9 @@ function handlePadRight(draft) {
 }
 
 function handlePadDown(draft) {
-  if (hasFocus(draft, 'pieces')) {
-    draft.pieces.cursor = Math.min(draft.pieces.desired.length - 1, draft.pieces.cursor + 1);
-  }
 }
 
 function handlePadUp(draft) {
-  if (hasFocus(draft, 'pieces')) {
-    draft.pieces.cursor = Math.max(0, draft.pieces.cursor - 1);
-  }
 }
 
 /**
@@ -290,6 +300,11 @@ function handleButtonPressed(draft, button) {
       case 'M':
           lightsToggle(draft, ['purple', 'yellow']);
         break;
+    }
+  } else if (hasFocus(draft, 'pieces')) {
+    const cursor = 'GHJKL'.indexOf(button);
+    if (cursor !== -1) {
+      draft.pieces.cursor = cursor;
     }
   }
 }

@@ -105,14 +105,21 @@ const MachinePiecesContainer = styled.div`
       transform: scale(1);
     }
   }
+
+  &.solved {
+    opacity: 1;
+  }
 `;
 
-const MachinePieces = function({ pieces, focused }) {
+const MachinePieces = function({ pieces, focused, solved }) {
   return (
-    <MachinePiecesContainer className={`${focused ? 'focused' : ''}`}>
+    <MachinePiecesContainer className={`${focused ? 'focused' : ''} ${solved ? 'solved' : ''}`}>
       <div className="arrows"></div>
       {pieces.current.map((v, i) => (
-        <Piece key={`p${i}`} className={`piece-${i} piece-value-${v} ${pieces.cursor === i ? 'active' : ''}`} />
+        <Piece
+          key={`p${i}`}
+          className={`piece-${i} piece-value-${v} ${!solved && focused && pieces.cursor === i ? 'active' : ''}`}
+        />
       ))}
     </MachinePiecesContainer>
   );

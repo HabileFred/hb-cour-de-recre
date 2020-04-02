@@ -37,10 +37,10 @@ const MachineLightbulbsContainer = styled.div`
  */
 const Lightbulbs = styled.div`
   display: grid;
-  grid-template-columns: 26px 3px;
+  grid-template-columns: 21px 3px;
   grid-gap: 0;
   grid-auto-rows: 19px;
-  margin: 14px 16px;
+  margin: 14px 18px;
 `;
 
 /**
@@ -68,22 +68,31 @@ export const Lightbulb = styled.div`
   }
 `;
 
-const colors = ['blue', 'red', 'green', 'yellow', 'purple'];
-
 /**
  * The Machine with the Lightbulbs.
  * @param {Object} props
  */
 const MachineLightbulbs = function({ focused, lights }) {
+  const cls = {
+    blue: `blue ${lights.blue ? 'on' : 'off'}`,
+    green: `green ${lights.green ? 'on' : 'off'}`,
+    red: `red ${lights.red ? 'on' : 'off'}`,
+    yellow: `yellow ${lights.yellow ? 'on' : 'off'}`,
+    purple: `purple ${lights.purple ? 'on' : 'off'}`,
+  };
   return (
     <MachineLightbulbsContainer className={`${focused ? 'focused' : ''}`}>
       <Lightbulbs>
-        {colors.map(color => (
-          <React.Fragment>
-            <Lightbulb key={`${color}1`} className={`${color} ${lights[color] ? 'on' : 'off'}`} />
-            <Lightbulb key={`${color}2`} className={`${color} ${lights[color] ? 'on' : 'off'}`} />
-          </React.Fragment>
-        ))}
+        <Lightbulb className={cls.yellow} />
+        <Lightbulb className={cls.purple} />
+        <Lightbulb className={cls.green} />
+        <Lightbulb className={cls.red} />
+        <Lightbulb className={cls.blue} />
+        <Lightbulb className={cls.yellow} />
+        <Lightbulb className={cls.purple} />
+        <Lightbulb className={cls.red} />
+        <Lightbulb className={cls.blue} />
+        <Lightbulb className={cls.green} />
       </Lightbulbs>
     </MachineLightbulbsContainer>
   );
