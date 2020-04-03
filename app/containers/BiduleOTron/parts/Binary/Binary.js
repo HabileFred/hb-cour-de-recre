@@ -4,6 +4,7 @@ import withFocus from '../../withFocus';
 
 import imgBinary from './img/binaire.png';
 import imgFocusText from './img/focus_champs.png';
+import imgFocusMachine from './img/focus_binaire.png';
 import imgPastille1 from './img/pastille_1.png';
 import imgPastille1ok from './img/pastille_1_ok.png';
 import imgPastille2 from './img/pastille_2.png';
@@ -16,18 +17,28 @@ import imgDigit1 from './img/1.png';
 
 const MachineBinaryContainer = styled.div`
   position: absolute;
-  top: 107px;
-  left: 606px;
-  width: 100px;
-  height: 160px;
+  top: 102px;
+  left: 597px;
+  width: 113px;
+  height: 176px;
   display: flex;
   flex-flow: column;
   align-items: center;
   opacity: 0;
+  padding-top: 5px;
   transition: opacity 250ms ease;
 
   &.focused {
     opacity: 1;
+  }
+  &.focused::before {
+    content: " ";
+    position: absolute;
+    left 0;
+    top: 0;
+    width: 113px;
+    height: 176px;
+    background: url(${imgFocusMachine}) no-repeat top left;
   }
 
   &.solved {
@@ -39,39 +50,37 @@ const Field = styled.div`
   position: absolute;
   width: 65px;
   height: 28px;
-  left: 31px;
-  font-size: 11px;
+  left: 37px;
   padding: 11px 4px 11px 7px;
-  line-height: 11px;
   display: flex;
   background: ${props => props.focused ? 'no-repeat top left url(\'' + imgFocusText + '\')' : 'none'};
 `;
 const Field1 = styled(Field)`
-  top: 33px;
+  top: 38px;
 `;
 const Field2 = styled(Field)`
-  top: 74px;
+  top: 78px;
 `;
 const Field3 = styled(Field)`
-  top: 115px;
+  top: 119px;
 `;
 
 const Pastille = styled.div`
   position: absolute;
   width: 16px;
   height: 17px;
-  left: 6px;
+  left: 14px;
 `;
 const Pastille1 = styled(Pastille)`
-  top: 33px;
+  top: 38px;
   background: no-repeat top left url('${props => props.solved ? imgPastille1ok : imgPastille1}');
 `;
 const Pastille2 = styled(Pastille)`
-  top: 74px;
+  top: 78px;
   background: no-repeat top left url('${props => props.solved ? imgPastille2ok : imgPastille2}');
 `;
 const Pastille3 = styled(Pastille)`
-  top: 115px;
+  top: 119px;
   background: no-repeat top left url('${props => props.solved ? imgPastille3ok : imgPastille3}');
 `;
 
@@ -86,18 +95,16 @@ const BinaryDigits = function({ value }) {
   return (<React.Fragment>{String(value).split('').map((c,i) => <BinaryDigit key={i} value={c} />)}</React.Fragment>);
 };
 
-const MachineBinary = function({ binary, focused }) {
+const MachineBinary = function({ binary, focused, solved }) {
   return (
-    <MachineBinaryContainer className={`${focused ? 'focused' : ''}`}>
-      <div className="contents">
-        <img src={imgBinary} />
-        <Field1 focused={binary.index === 0}><BinaryDigits value={binary.values[0]} /></Field1>
-        <Field2 focused={binary.index === 1}>{binary.values[1]}</Field2>
-        <Field3 focused={binary.index === 2}>{binary.values[2]}</Field3>
-        <Pastille1 solved={binary.values[0] === binary.solution[0]} />
-        <Pastille2 solved={binary.values[1] === binary.solution[1]} />
-        <Pastille3 solved={binary.values[2] === binary.solution[2]} />
-      </div>
+    <MachineBinaryContainer className={`${focused ? 'focused' : ''} ${solved ? 'solved' : ''}`}>
+      <img src={imgBinary} />
+      <Field1 focused={!solved && binary.index === 0}><BinaryDigits value={binary.values[0]} /></Field1>
+      <Field2 focused={!solved && binary.index === 1}><BinaryDigits value={binary.values[1]} /></Field2>
+      <Field3 focused={!solved && binary.index === 2}><BinaryDigits value={binary.values[2]} /></Field3>
+      <Pastille1 solved={binary.values[0] === binary.solution[0]} />
+      <Pastille2 solved={binary.values[1] === binary.solution[1]} />
+      <Pastille3 solved={binary.values[2] === binary.solution[2]} />
     </MachineBinaryContainer>
   );
 };

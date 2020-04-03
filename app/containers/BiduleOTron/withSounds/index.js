@@ -10,8 +10,11 @@ import { Howl, Howler } from 'howler';
 function withSounds(WrappedComponent) {
   const sounds = {};
 
-  const registerSound = (name, srcFile) => {
-    sounds[name] = new Howl({ src: [srcFile] });
+  const registerSound = (name, srcFile, options) => {
+    sounds[name] = new Howl({
+      src: [srcFile],
+      ...options,
+    });
   }
 
   const playSound = (name, volume) => {

@@ -20,7 +20,8 @@ const MachineLightbulbsContainer = styled.div`
   opacity: 0.5;
   transition: opacity 250ms ease;
 
-  &.focused {
+  &.focused,
+  &.solved {
     opacity: 1;
   }
   &.focused::before {
@@ -72,16 +73,16 @@ export const Lightbulb = styled.div`
  * The Machine with the Lightbulbs.
  * @param {Object} props
  */
-const MachineLightbulbs = function({ focused, lights }) {
+const MachineLightbulbs = function({ focused, solved, lights }) {
   const cls = {
-    blue: `blue ${lights.blue ? 'on' : 'off'}`,
-    green: `green ${lights.green ? 'on' : 'off'}`,
-    red: `red ${lights.red ? 'on' : 'off'}`,
-    yellow: `yellow ${lights.yellow ? 'on' : 'off'}`,
-    purple: `purple ${lights.purple ? 'on' : 'off'}`,
+    blue: `blue ${lights.values.blue ? 'on' : 'off'}`,
+    green: `green ${lights.values.green ? 'on' : 'off'}`,
+    red: `red ${lights.values.red ? 'on' : 'off'}`,
+    yellow: `yellow ${lights.values.yellow ? 'on' : 'off'}`,
+    purple: `purple ${lights.values.purple ? 'on' : 'off'}`,
   };
   return (
-    <MachineLightbulbsContainer className={`${focused ? 'focused' : ''}`}>
+    <MachineLightbulbsContainer className={`${focused ? 'focused' : ''} ${solved ? 'solved' : ''}`}>
       <Lightbulbs>
         <Lightbulb className={cls.yellow} />
         <Lightbulb className={cls.purple} />

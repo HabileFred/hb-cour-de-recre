@@ -146,10 +146,10 @@ const GaugeFilled = styled(Gauge)`
   background: url('${props => imgGaugesFilled[props.index]}') no-repeat center center;
 `;
 
-const MachinePipes = function({ focused, fioles }) {
+const MachinePipes = function({ focused, solved, fioles }) {
   return (
-    <MachinePipesContainer className={`${focused ? 'focused' : ''}`}>
-      <Fioles focused={focused}>
+    <MachinePipesContainer className={`${focused ? 'focused' : ''} ${solved ? 'solved' : ''}`}>
+      <Fioles focused={focused || solved}>
         <Fiole className="fiole-0" />
         <Fiole className="fiole-1" />
         <Fiole className="fiole-2" />

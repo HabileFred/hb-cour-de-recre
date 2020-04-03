@@ -77,7 +77,7 @@ const MachineBiduleContainer = styled.div`
       background: url(${imgArrowLeft}) no-repeat top left;
     }
     &.right {
-      left: 197px;
+      left: 195px;
       background: url(${imgArrowRight}) no-repeat top left;
     }
   }

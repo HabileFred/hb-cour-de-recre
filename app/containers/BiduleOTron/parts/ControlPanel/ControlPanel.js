@@ -5,12 +5,7 @@
  */
 
 import React, { useEffect } from 'react';
-import { compose } from 'redux';
 import styled from 'styled-components';
-
-import withSounds from '../../withSounds';
-import sndButton from './sounds/button-1.mp3';
-import sndCliquet from './sounds/cliquet.mp3';
 
 import {
   padUp,
@@ -24,7 +19,9 @@ import {
   pipesCheck,
 
   buttonPressed,
-  binaryInput
+  binaryInput,
+  fuseToggle,
+  musicToggle
 } from '../../actions';
 
 const ControlPanelContainer = styled.section`
@@ -47,40 +44,70 @@ const buttonPipesLetters = 'AZ ERTQSD F WXCVBN';
 const ButtonGroup6Buttons = styled.section`
   display: grid;
   grid-template-columns: repeat(6, 40px);
+  grid-gap: 2px;
+  grid-auto-rows: 40px;
   position: absolute;
   top: 0;
-  left: 700px;
+  left: 760px;
 `;
 
 const ButtonGroupBinary = styled.section`
   display: grid;
   grid-template-columns: 40px;
+  grid-gap: 2px;
+  grid-auto-rows: 40px;
+  position: absolute;
+  top: 0px;
+  left: 700px;
+`;
+
+const ButtonGroupFuses = styled.section`
+  display: grid;
+  grid-template-columns: 30px;
+  grid-gap: 2px;
+  grid-auto-rows: 30px;
+  position: absolute;
+  top: 0;
+  left: 630px;
+`;
+
+const BoutonGroupArrows = styled.section`
+  display: grid;
+  grid-template-columns: 40px 40px 40px;
+  grid-gap: 2px;
+  grid-auto-rows: 40px;
+  position: absolute;
+  top: 0;
+  left: 130px;
+`;
+
+const BoutonGroupSubmitCancel = styled.section`
+  display: grid;
+  grid-template-columns: 100px;
+  grid-gap: 2px;
+  grid-auto-rows: 30px;
   position: absolute;
   top: 30px;
-  left: 700px;
+  left: 1150px;
 `;
 
 /**
  *
  */
-function ControlPanel({ dispatch, store, registerSound, playSound }) {
-  
+function ControlPanel({ dispatch, store }) {
+
   const onKeyPressed = function (k) {
     switch (k) {
       case 37:
-        playSound('button');
         dispatch(padLeft());
         break;
       case 38:
-        playSound('button');
         dispatch(padUp());
         break;
       case 39:
-        playSound('button');
         dispatch(padRight());
         break;
       case 40:
-        playSound('button');
         dispatch(padDown());
         break;
 
@@ -96,11 +123,6 @@ function ControlPanel({ dispatch, store, registerSound, playSound }) {
   };
 
   useEffect(() => {
-    registerSound('button', sndButton);
-    registerSound('cliquet', sndCliquet);
-
-    document.title = "Bidul'o-tron | Cour de récré | Habile Bill";
-
     document.onkeyup = function (e) {
       onKeyPressed(e.keyCode);
       e.stopPropagation();
@@ -114,19 +136,15 @@ function ControlPanel({ dispatch, store, registerSound, playSound }) {
   function padClicked(key) {
     switch (key) {
       case 'UP':
-        playSound('button');
         dispatch(padUp());
         break;
       case 'DOWN':
-        playSound('button');
         dispatch(padDown());
         break;
       case 'LEFT':
-          playSound('button');
           dispatch(padLeft());
         break;
       case 'RIGHT':
-          playSound('button');
           dispatch(padRight());
         break;
       case 'SUBMIT':
@@ -142,7 +160,6 @@ function ControlPanel({ dispatch, store, registerSound, playSound }) {
 
   function rotatePipe(index) {
     dispatch(pipeRotate(index));
-    playSound('cliquet', 0.2);
     if (pipeCheckTimeout) {
       window.clearTimeout(pipeCheckTimeout);
     }
@@ -163,22 +180,29 @@ function ControlPanel({ dispatch, store, registerSound, playSound }) {
     dispatch(binaryInput(value));
   }
 
-  if (!store.fioles) {
-    return null;
+  function fuseButtonPressed(index) {
+    dispatch(fuseToggle(index));
   }
+
+  const { fuses, sounds } = store;
+
   return (
     <ControlPanelContainer>
-      <div className="pad">
-        <button type="button" onClick={() => padClicked('UP')}>UP</button>
-        <button type="button" onClick={() => padClicked('DOWN')}>DOWN</button>
-        <button type="button" onClick={() => padClicked('LEFT')}>LEFT</button>
-        <button type="button" onClick={() => padClicked('RIGHT')}>RIGHT</button>
-        {' '}
-        <button type="button" onClick={() => padClicked('SUBMIT')}>ENTER</button>
-        <button type="button" onClick={() => padClicked('CANCEL')}>CANCEL</button>
-      </div>
+      <button type="button" onClick={() => dispatch(musicToggle())}>MUSIC {sounds.music ? 'ON' : 'OFF'}</button>
+      <BoutonGroupArrows>
+        <div />
+        <button type="button" onClick={() => padClicked('UP')}>U</button>
+        <div />
+        <button type="button" onClick={() => padClicked('LEFT')}>&lt;</button>
+        <div />
+        <button type="button" onClick={() => padClicked('RIGHT')}>&gt;</button>
+        <div />
+        <button type="button" onClick={() => padClicked('DOWN')}>D</button>
+        <div />
+      </BoutonGroupArrows>
+
       <ButtonGroupPipes>
-        {[store.fioles.pipes.map((v, i) => 
+        {[store.fioles.pipes.map((v, i) =>
           v === 9
           ? (<div key={`pipe-button-${i}`}></div>)
           : (
@@ -199,10 +223,23 @@ function ControlPanel({ dispatch, store, registerSound, playSound }) {
         <button type="button" onClick={() => pressedBinaryButton(0)}>0</button>
         <button type="button" onClick={() => pressedBinaryButton(1)}>1</button>
       </ButtonGroupBinary>
+
+      <ButtonGroupFuses>
+        {fuses.values.map((v, i) => (
+          <button
+            key={`b${i}`}
+            type="button"
+            className={v === 'D' ? 'right' :'left'} onClick={() => fuseButtonPressed(i)}
+          >{v}</button>
+        ))}
+      </ButtonGroupFuses>
+
+      <BoutonGroupSubmitCancel>
+        <button type="button" onClick={() => padClicked('SUBMIT')}>VALIDER</button>
+        <button type="button" onClick={() => padClicked('CANCEL')}>ANNULER</button>
+      </BoutonGroupSubmitCancel>
     </ControlPanelContainer>
   );
 }
 
-export default compose(
-  withSounds
-)(ControlPanel);
+export default ControlPanel;

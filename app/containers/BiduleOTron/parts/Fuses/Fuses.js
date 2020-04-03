@@ -17,6 +17,7 @@ const MachineFusesContainer = styled.div`
   align-items: center;
   opacity: 0;
   transition: opacity 250ms ease;
+  padding-left: 17px;
 
   &.focused {
     opacity: 1;
@@ -28,7 +29,7 @@ const MachineFusesContainer = styled.div`
     top: 0;
     width: 176px;
     height: 68px;
-    background: url(${imgFocus}) no-repeat top left;
+    background: url('${imgFocus}') no-repeat top left;
   }
 
   &.solved {
@@ -36,9 +37,18 @@ const MachineFusesContainer = styled.div`
   }
 `;
 
-const MachineFuses = function({ fuses, focused }) {
+const Fuse = styled.div`
+  width: 35px;
+  height: 31px;
+  background: top left no-repeat url('${props => props.on ? imgOK : imgError}');
+`;
+
+const MachineFuses = function({ fuses, focused, solved }) {
   return (
-    <MachineFusesContainer className={`${focused ? 'focused' : ''}`}>
+    <MachineFusesContainer className={`${focused ? 'focused' : ''} ${solved ? 'solved' : ''}`}>
+      {fuses.feedback.map((on, i) => (
+        <Fuse key={`f${i}`} on={on} />
+      ))}
     </MachineFusesContainer>
   );
 };

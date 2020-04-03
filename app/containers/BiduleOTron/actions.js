@@ -3,8 +3,20 @@
  * BiduleOTron actions
  *
  */
-
-import { PAD_UP, PAD_DOWN, PAD_LEFT, PAD_RIGHT, PIPE_ROTATE, PAD_CANCEL, PAD_SUBMIT, PIPES_CHECK, BUTTON_PRESSED, BINARY_INPUT } from './constants';
+import {
+  PAD_UP,
+  PAD_DOWN,
+  PAD_LEFT,
+  PAD_RIGHT,
+  PAD_CANCEL,
+  PAD_SUBMIT,
+  PIPE_ROTATE,
+  PIPES_CHECK,
+  BUTTON_PRESSED,
+  BINARY_INPUT,
+  FUSE_TOGGLE,
+  MUSIC_TOGGLE,
+} from './constants';
 
 export function padUp() {
   return {
@@ -66,5 +78,18 @@ export function binaryInput(value) {
   return {
     type: BINARY_INPUT,
     value,
+  };
+}
+
+export function fuseToggle(index) {
+  return {
+    type: FUSE_TOGGLE,
+    index,
+  };
+}
+
+export function musicToggle() {
+  return {
+    type: MUSIC_TOGGLE,
   };
 }

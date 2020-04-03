@@ -5,7 +5,7 @@ import { initialState } from './reducer';
  * Direct selector to the BiduleOTron state domain
  */
 
-const selectBiduleOTronDomain = state => state.bidulOTron || initialState;
+const selectBiduleOTronDomain = state => state.biduleOTron || initialState;
 
 /**
  * Other specific selectors

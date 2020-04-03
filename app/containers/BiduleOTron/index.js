@@ -20,30 +20,32 @@ import messages from './messages';
 import withSounds from './withSounds';
 import sndOpenBidule from './sounds/ouverture_bidule.mp3';
 
-import { padUp, padLeft, padRight, padDown, pipeRotate, padSubmit, padCancel, pipesCheck, buttonPressed } from './actions';
-
-import MachinePieces from './parts/Pieces/Pieces';
 import MachineBiduleSelector from './parts/Bidule/Bidule';
+import MachinePieces from './parts/Pieces/Pieces';
 import MachinePipes from './parts/Pipes/Pipes';
 import MachineLights from './parts/Lights/Lights';
 import MachineBinary from './parts/Binary/Binary';
 import MachineFuses from './parts/Fuses/Fuses';
 import MachineSimon from './parts/Simon/Simon';
+import MachineWires from './parts/Wires/Wires';
+import Indicators from './parts/Indicators/Indicators';
+
 import ControlPanel from './parts/ControlPanel/ControlPanel';
 
-import imgBackground from './img/machine_squelette.png';
+import imgBackground from './img/papier_peint.png';
 import imgCacheBidule from './img/cache_bidule.png';
 import imgPancarte from './img/pancarte.png';
+import imgComputer from './img/ordinateur.png';
+import imgMachine from './img/machine_squelette.png';
 
-const BiduleOTronContainer = styled.div`
+const Computer = styled.div`
   position: absolute;
   width: 1280px;
   height: 800px;
-  border: 2px solid black;
   display: flex;
   flex-flow: column;
   align-self: center;
-  background: white url('${imgBackground}') no-repeat;
+  background: url('${imgComputer}') no-repeat;
   color: black;
   z-index: 0;
 
@@ -57,6 +59,19 @@ const BiduleOTronContainer = styled.div`
     width: 100%;
     height: 200px;
   }
+`;
+
+const BiduleOTronContainer = styled.div`
+  background: url('${imgBackground}');
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  overflow: auto;
+  flex-flow: column;
+  align-self: center;
 }
 `;
 
@@ -99,7 +114,7 @@ function CacheBidule({ opened, playSound }) {
       playSound('openBidule');
     }
   }, [opened]);
-  
+
   return (
     <CacheBiduleContainer className={opened ? 'opened' : ''}>
     </CacheBiduleContainer>
@@ -138,16 +153,27 @@ function MachineContainer({ dispatch, store, playSound, registerSound }) {
 
   return (
     <div className="machine">
+      <div style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        pointerEvents: 'none',
+        background: `url('${imgMachine}') top left no-repeat`
+      }} />
       <Pancarte>
         <img style={{ position: 'absolute' }} src={imgPancarte} />
       </Pancarte>
-      <MachineBiduleSelector focusId="bidule" pad={store.pad} bidule={store.bidule} />
-      <MachinePieces focusId="pieces" pad={store.pad} pieces={store.pieces} />
-      <MachinePipes focusId="pipes" pad={store.pad} fioles={store.fioles} />
-      <MachineLights focusId="lights" pad={store.pad} lights={store.lights} />
+      <MachineBiduleSelector focusId="bidule" bidule={store.bidule} />
+      <MachinePieces focusId="pieces" pieces={store.pieces} />
+      <MachinePipes focusId="pipes" fioles={store.fioles} />
+      <MachineLights focusId="lights" lights={store.lights} />
       <MachineBinary focusId="binary" binary={store.binary} />
       <MachineFuses focusId="fuses" fuses={store.fuses} />
       <MachineSimon focusId="simon" simon={store.simon} />
+      <MachineWires focusId="wires" wires={store.wires} />
+      <Indicators store={store} />
       <CacheBidule opened={store.bidule.SOLVED} playSound={playSound} />
     </div>
   );
@@ -156,7 +182,7 @@ function MachineContainer({ dispatch, store, playSound, registerSound }) {
 const Machine = withSounds(MachineContainer);
 
 export function BiduleOTron({ dispatch, store }) {
-  useInjectReducer({ key: 'bidulOTron', reducer });
+  useInjectReducer({ key: 'biduleOTron', reducer });
 
   useEffect(() => {
     document.title = "Bidule-o-tron | Cour de récré | Habile Bill";
@@ -164,8 +190,10 @@ export function BiduleOTron({ dispatch, store }) {
 
   return (
     <BiduleOTronContainer>
-      <Machine dispatch={dispatch} store={store}></Machine>
-      <ControlPanel dispatch={dispatch} store={store}></ControlPanel>
+      <Computer>
+        <Machine dispatch={dispatch} store={store}></Machine>
+        <ControlPanel dispatch={dispatch} store={store}></ControlPanel>
+      </Computer>
     </BiduleOTronContainer>
   );
 }

@@ -29,7 +29,7 @@ export const Piece = styled.div`
     left: 54px;
   }
   &.piece-2 {
-    top: 147px;
+    top: 146px;
     left: 54px;
   }
   &.piece-3 {
@@ -37,7 +37,7 @@ export const Piece = styled.div`
     left: 54px;
   }
   &.piece-4 {
-    top: 257px;
+    top: 256px;
     left: 54px;
   }
 
@@ -58,22 +58,6 @@ export const Piece = styled.div`
   }
   &.piece-value-5 {
     background-image: url(${imgPiece5});
-  }
-
-  &::before {
-    content: " ";
-    position: absolute;
-    left: 0;
-    top: 0;
-    background: transparent no-repeat center center url(${imgPieceFocus});
-    width: 56px;
-    height: 57px;
-    display: none;
-    z-index: -1;
-  }
-
-  &.active::before {
-    display: block;
   }
 `;
 
@@ -111,16 +95,30 @@ const MachinePiecesContainer = styled.div`
   }
 `;
 
+const Cursor = styled.div`
+  position: absolute;
+  background: transparent no-repeat center center url(${imgPieceFocus});
+  width: 56px;
+  height: 57px;
+  z-index: 0;
+  left: 54px;
+  top: ${props => 36 + props.position * 55}px;
+  transition: opacity 250ms ease;
+  opacity: ${props => props.active ? 1 : 0};
+}
+`;
+
 const MachinePieces = function({ pieces, focused, solved }) {
   return (
     <MachinePiecesContainer className={`${focused ? 'focused' : ''} ${solved ? 'solved' : ''}`}>
-      <div className="arrows"></div>
+      <Cursor active={!solved && focused} position={pieces.cursor} />
       {pieces.current.map((v, i) => (
         <Piece
           key={`p${i}`}
-          className={`piece-${i} piece-value-${v} ${!solved && focused && pieces.cursor === i ? 'active' : ''}`}
+          className={`piece-${i} piece-value-${v}`}
         />
       ))}
+      <div className="arrows"></div>
     </MachinePiecesContainer>
   );
 }

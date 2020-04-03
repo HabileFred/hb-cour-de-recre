@@ -4,12 +4,60 @@
  *
  */
 import produce from 'immer';
-import { PAD_UP, PAD_DOWN, PAD_LEFT, PAD_RIGHT, PIPE_ROTATE, PAD_SUBMIT, PAD_CANCEL, PIPES_CHECK, ONOFF_TOGGLE, BUTTON_PRESSED, BINARY_INPUT } from './constants';
+import { Howl, Howler } from 'howler';
+
+import { PAD_UP, PAD_DOWN, PAD_LEFT, PAD_RIGHT, PIPE_ROTATE, PAD_SUBMIT, PAD_CANCEL, PIPES_CHECK, ONOFF_TOGGLE, BUTTON_PRESSED, BINARY_INPUT, FUSE_TOGGLE, MUSIC_TOGGLE } from './constants';
+
+import sndBackgroundMusic from './sounds/monstre_chambre.mp3';
+import sndButtonWrong from './sounds/button_wrong.mp3';
+import sndButtonClick from './sounds/button_click.mp3';
+import sndButtonClick2 from './sounds/button_click_2.mp3';
+import sndPipe from './sounds/cliquet.mp3';
+
+class SoundPlayer {
+  constructor() {
+    this.sounds = {
+      music: new Howl({
+        src: sndBackgroundMusic,
+        loop: true,
+        html5: true,
+      }),
+      wrong: new Howl({
+        src: sndButtonWrong,
+      }),
+      click: new Howl({
+        src: sndButtonClick,
+      }),
+      click2: new Howl({
+        src: sndButtonClick2,
+      }),
+      pipe: new Howl({
+        src: sndPipe,
+      }),
+    };
+  }
+
+  play(name) {
+    if (name in this.sounds) {
+      this.sounds[name].play();
+    }
+  }
+
+  stop(name) {
+    if (name in this.sounds) {
+      this.sounds[name].stop();
+    }
+  }
+}
+
+const soundPlayer = new SoundPlayer();
 
 export const initialState = {
   focus: ['bidule'],
 
-  pad: {
+  sounds: {
+    music: false,
+    sfx: true,
   },
 
   bidule: {
@@ -89,11 +137,20 @@ export const initialState = {
   },
 
   lights: {
-    red: false,
-    green: false,
-    blue: false,
-    yellow: false,
-    purple: false,
+    values: {
+      red: false,
+      green: false,
+      blue: false,
+      yellow: false,
+      purple: false,
+    },
+    solution: {
+      red: false,
+      green: false,
+      blue: true,
+      yellow: true,
+      purple: true,
+    },
     SOLVED: false,
   },
 
@@ -113,14 +170,29 @@ export const initialState = {
   },
 
   fuses: {
-
+    feedback: [false, false, false, false],
+    values: ['D', 'D', 'D', 'D'],
+    solution: ['D', 'G', 'G', 'D'],
+    SOLVED: false,
   },
 
   simon: {
 
   },
+
+  wires: {
+    readiness: {
+      top: false,
+      bottom: false,
+    },
+  }
 };
 
+/**
+ * Checks equality of the values in the given Arrays.
+ * @param {Array} a First array
+ * @param {Array} b Second Array
+ */
 function arraysEqual(a, b) {
   if (a === b) return true;
   if (a == null || b == null) return false;
@@ -132,6 +204,37 @@ function arraysEqual(a, b) {
   return true;
 }
 
+/**
+ * Checks equality of the values in the given Objects.
+ * @param {Object} a First Object
+ * @param {Object} b Second Object
+ */
+function objectsEqual(a, b) {
+  // Create arrays of property names
+  const aProps = Object.getOwnPropertyNames(a);
+  const bProps = Object.getOwnPropertyNames(b);
+  // If number of properties is different, objects are not equivalent
+  if (aProps.length != bProps.length) {
+    return false;
+  }
+  for (var i = 0; i < aProps.length; i++) {
+    const propName = aProps[i];
+   // If values of same property are not equal, objects are not equivalent
+    if (a[propName] !== b[propName]) {
+        return false;
+    }
+  }
+  // If we made it this far, objects are considered equivalent
+  return true;
+}
+
+/**
+ * Increments/decrements `value` by `inc`, applying a 'rotate' to ensure it stays between `min` and `max`.
+ * @param {int} value 
+ * @param {*} inc 
+ * @param {*} min 
+ * @param {*} max 
+ */
 function cycleValue(value, inc, min, max) {
   if (value === null) {
     value = 0;
@@ -143,6 +246,13 @@ function cycleValue(value, inc, min, max) {
   return value;
 }
 
+/**
+ * Increments/decrements `value` by `inc` and ensures it stays between `min` and `max`.
+ * @param {int} value 
+ * @param {*} inc 
+ * @param {*} min 
+ * @param {*} max 
+ */
 function betweenValue(value, inc, min, max) {
   value += inc;
   if (value < min) value = min;
@@ -150,10 +260,21 @@ function betweenValue(value, inc, min, max) {
   return value;
 }
 
+/**
+ * Checks whether the element with ID `focusId` has the focus or not.
+ * @param {Object} draft The Store.
+ * @param {*} focusId ID of the element to check.
+ */
 function hasFocus(draft, focusId) {
   return draft.focus.indexOf(focusId) !== -1;
 }
 
+/**
+ * Changes machines focus.
+ * @param {Object} draft The Store.
+ * @param {Array} newFocusId IDs of elements to give focus to.
+ * @param {Array} oldFocusId IDs of elements to remove focus from.
+ */
 function setFocus(draft, newFocusId, oldFocusId)  {
   const set = new Set(draft.focus);
   if (oldFocusId) {
@@ -163,10 +284,12 @@ function setFocus(draft, newFocusId, oldFocusId)  {
       set.delete(oldFocusId);
     }
   }
-  if (Array.isArray(newFocusId)) {
-    newFocusId.forEach(f => set.add(f));
-  } else {
-    set.add(newFocusId);
+  if (newFocusId) {
+    if (Array.isArray(newFocusId)) {
+      newFocusId.forEach(f => set.add(f));
+    } else {
+      set.add(newFocusId);
+    }
   }
   draft.focus = [...set];
 }
@@ -194,7 +317,7 @@ function checkGauges(draft) {
     l => checkGauge(l, draft.fioles.pipes)
   ).length === draft.fioles.gauges.length;
   if (draft.fioles.SOLVED) {
-    setFocus(draft, 'simon', 'lights');
+    setFocus(draft, 'lights', 'pipes');
   }
 }
 
@@ -212,6 +335,7 @@ function checkPiecesSolved(draft) {
 
 function handlePadLeft(draft) {
   if (hasFocus(draft, 'pieces')) {
+    soundPlayer.play('click');
     draft.pieces.current[draft.pieces.cursor] = cycleValue(
       draft.pieces.current[draft.pieces.cursor],
       -1,
@@ -220,12 +344,20 @@ function handlePadLeft(draft) {
     );
     checkPiecesSolved(draft);
   } else if (hasFocus(draft, 'bidule')) {
-    draft.bidule.index = betweenValue(
+    const v = betweenValue(
       draft.bidule.index,
       -1,
       0,
       (draft.bidule.BIDULE_COUNT - 1)
     );
+    if (v !== draft.bidule.index) {
+      draft.bidule.index = v;
+      soundPlayer.play('click');
+    } else {
+      soundPlayer.play('wrong');
+    }
+  } else {
+    soundPlayer.play('wrong');
   }
 }
 
@@ -237,26 +369,41 @@ function handlePadRight(draft) {
       0,
       draft.pieces.MAX_VALUE,
     );
+    soundPlayer.play('click');
     checkPiecesSolved(draft);
   } else if (hasFocus(draft, 'bidule')) {
-      draft.bidule.index = betweenValue(
-        draft.bidule.index,
-        1,
-        0,
-        (draft.bidule.BIDULE_COUNT - 1)
-      );
+    const v = betweenValue(
+      draft.bidule.index,
+      1,
+      0,
+      (draft.bidule.BIDULE_COUNT - 1)
+    );
+    if (v !== draft.bidule.index) {
+      draft.bidule.index = v;
+      soundPlayer.play('click');
+    } else {
+      soundPlayer.play('wrong');
     }
+  } else {
+    soundPlayer.play('wrong');
+  }
 }
 
 function handlePadDown(draft) {
   if (hasFocus(draft, 'binary')) {
+    soundPlayer.play('click');
     draft.binary.index = cycleValue(draft.binary.index, 1, 0, 2);
+  } else {
+    soundPlayer.play('wrong');
   }
 }
 
 function handlePadUp(draft) {
   if (hasFocus(draft, 'binary')) {
+    soundPlayer.play('click');
     draft.binary.index = cycleValue(draft.binary.index, -1, 0, 2);
+  } else {
+    soundPlayer.play('wrong');
   }
 }
 
@@ -265,8 +412,10 @@ function handlePadUp(draft) {
  */
 function handlePadSubmit(draft) {
   if (hasFocus(draft, 'bidule')) {
-    // FIXME setFocus(draft, ['pieces', 'pipes'], 'bidule');
-    setFocus(draft, ['fuses', 'simon', 'binary'], 'bidule');
+    setFocus(draft, ['pieces', 'pipes'], 'bidule');
+    //setFocus(draft, ['fuses', 'lights', 'binary'], 'bidule');
+  } else if (hasFocus(draft, 'fuses')) {
+    checkFuses(draft);
   }
 }
 
@@ -275,9 +424,18 @@ function handlePadSubmit(draft) {
  */
 function handlePadCancel(draft) {
   if (hasFocus(draft, 'pieces')) {
-    // FIXME setFocus(draft, 'bidule', ['pieces', 'pipes']);
-    setFocus(draft, 'bidule', ['fuses', 'simon']);
+    setFocus(draft, 'bidule', ['pieces', 'pipes']);
+    // DEV setFocus(draft, 'bidule', ['fuses', 'simon']);
   }
+}
+
+function checkLights(draft) {
+  draft.lights.SOLVED = objectsEqual(draft.lights.values, draft.lights.solution);
+  draft.wires.readiness.bottom = draft.lights.SOLVED;
+  if (draft.lights.SOLVED) {
+    setFocus(draft, null, 'lights');
+  }
+  checkWiresReadiness(draft);
 }
 
 /**
@@ -285,7 +443,8 @@ function handlePadCancel(draft) {
  * @param {*} colors
  */
 function lightsToggle(draft, colors) {
-  colors.forEach(c => draft.lights[c] = !draft.lights[c]);
+  colors.forEach(c => draft.lights.values[c] = !draft.lights.values[c]);
+  checkLights(draft);
 }
 
 /**
@@ -318,7 +477,12 @@ function handleButtonPressed(draft, button) {
   } else if (hasFocus(draft, 'pieces')) {
     const cursor = 'GHJKL'.indexOf(button);
     if (cursor !== -1) {
-      draft.pieces.cursor = cursor;
+      if (cursor !== draft.pieces.cursor) {
+        soundPlayer.play('click2');
+        draft.pieces.cursor = cursor;
+      }
+    } else {
+      soundPlayer.play('wrong');
     }
   }
 }
@@ -345,6 +509,37 @@ function handleBinaryInput(draft, value) {
   }
   draft.binary.values[idx] = v;
   checkBinary(draft);
+}
+
+function checkWiresReadiness(draft) {
+  if (draft.fuses.SOLVED && draft.wires.SOLVED) {
+    setFocus(draft, 'wires', ['fuses', 'lights']);
+  }
+}
+
+function checkFuses(draft) {
+  draft.fuses.feedback = [false, false, false, false];
+  let fbIndex = 0;
+  draft.fuses.solution.forEach((v, i) => {
+    if (draft.fuses.values[i] === v) {
+      draft.fuses.feedback[fbIndex] = true;
+      fbIndex += 1;
+    }
+  });
+  draft.fuses.SOLVED = fbIndex === draft.fuses.solution.length;
+  draft.wires.readiness.top = draft.fuses.SOLVED;
+  if (draft.fuses.SOLVED) {
+    setFocus(draft, null, 'fuses');
+  }
+  checkWiresReadiness(draft);
+}
+
+function handleFuseToggle(draft, index) {
+  if (index < draft.fuses.values.length) {
+    let c = draft.fuses.values[index];
+    c = (c === 'D') ? 'G' : 'D';
+    draft.fuses.values[index] = c;
+  }
 }
 
 /* eslint-disable default-case, no-param-reassign */
@@ -379,6 +574,7 @@ const BiduleOTronReducer = (state = initialState, action) =>
       case PIPE_ROTATE:
         if (hasFocus(draft, 'pipes')) {
           if (draft.fioles.pipes[action.index] !== 9) {
+            soundPlayer.play('pipe');
             draft.fioles.pipes[action.index] = cycleValue(
               draft.fioles.pipes[action.index],
               1,
@@ -386,6 +582,8 @@ const BiduleOTronReducer = (state = initialState, action) =>
               4,
             );
           }
+        } else {
+          soundPlayer.play('wrong');
         }
         break;
 
@@ -399,6 +597,19 @@ const BiduleOTronReducer = (state = initialState, action) =>
 
       case BINARY_INPUT:
         handleBinaryInput(draft, action.value);
+        break;
+
+      case FUSE_TOGGLE:
+        handleFuseToggle(draft, action.index);
+        break;
+
+      case MUSIC_TOGGLE:
+        draft.sounds.music = !draft.sounds.music;
+        if (draft.sounds.music) {
+          soundPlayer.play('music');
+        } else {
+          soundPlayer.stop('music');
+        }
         break;
     }
   });
