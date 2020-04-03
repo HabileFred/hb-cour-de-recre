@@ -67,9 +67,9 @@ const Indicators = function({ store }) {
   return (
     <IndicatorsContainer>
       {storeKeys.map((k, i) => (
-        <React.Fragment>
-          <IndicatorOff key={`k${i}`} index={i} />
-          {store[k].SOLVED ? <IndicatorOn key={`k${i}`} index={i} /> : null}
+        <React.Fragment key={`k${i}`}>
+          <IndicatorOff index={i} />
+          {store[k].SOLVED ? <IndicatorOn index={i} /> : null}
         </React.Fragment>
       ))}
     </IndicatorsContainer>

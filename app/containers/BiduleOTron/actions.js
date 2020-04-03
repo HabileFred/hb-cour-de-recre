@@ -16,6 +16,7 @@ import {
   BINARY_INPUT,
   FUSE_TOGGLE,
   MUSIC_TOGGLE,
+  SFX_TOGGLE,
 } from './constants';
 
 export function padUp() {
@@ -91,5 +92,11 @@ export function fuseToggle(index) {
 export function musicToggle() {
   return {
     type: MUSIC_TOGGLE,
+  };
+}
+
+export function sfxToggle() {
+  return {
+    type: SFX_TOGGLE,
   };
 }

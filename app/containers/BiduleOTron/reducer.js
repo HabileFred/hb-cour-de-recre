@@ -6,51 +6,9 @@
 import produce from 'immer';
 import { Howl, Howler } from 'howler';
 
-import { PAD_UP, PAD_DOWN, PAD_LEFT, PAD_RIGHT, PIPE_ROTATE, PAD_SUBMIT, PAD_CANCEL, PIPES_CHECK, ONOFF_TOGGLE, BUTTON_PRESSED, BINARY_INPUT, FUSE_TOGGLE, MUSIC_TOGGLE } from './constants';
+import { PAD_UP, PAD_DOWN, PAD_LEFT, PAD_RIGHT, PIPE_ROTATE, PAD_SUBMIT, PAD_CANCEL, PIPES_CHECK, ONOFF_TOGGLE, BUTTON_PRESSED, BINARY_INPUT, FUSE_TOGGLE, MUSIC_TOGGLE, SFX_TOGGLE } from './constants';
 
-import sndBackgroundMusic from './sounds/monstre_chambre.mp3';
-import sndButtonWrong from './sounds/button_wrong.mp3';
-import sndButtonClick from './sounds/button_click.mp3';
-import sndButtonClick2 from './sounds/button_click_2.mp3';
-import sndPipe from './sounds/cliquet.mp3';
-
-class SoundPlayer {
-  constructor() {
-    this.sounds = {
-      music: new Howl({
-        src: sndBackgroundMusic,
-        loop: true,
-        html5: true,
-      }),
-      wrong: new Howl({
-        src: sndButtonWrong,
-      }),
-      click: new Howl({
-        src: sndButtonClick,
-      }),
-      click2: new Howl({
-        src: sndButtonClick2,
-      }),
-      pipe: new Howl({
-        src: sndPipe,
-      }),
-    };
-  }
-
-  play(name) {
-    if (name in this.sounds) {
-      this.sounds[name].play();
-    }
-  }
-
-  stop(name) {
-    if (name in this.sounds) {
-      this.sounds[name].stop();
-    }
-  }
-}
-
-const soundPlayer = new SoundPlayer();
+import { SFX } from './SoundManager';
 
 export const initialState = {
   focus: ['bidule'],
@@ -335,7 +293,7 @@ function checkPiecesSolved(draft) {
 
 function handlePadLeft(draft) {
   if (hasFocus(draft, 'pieces')) {
-    soundPlayer.play('click');
+    SFX.click();
     draft.pieces.current[draft.pieces.cursor] = cycleValue(
       draft.pieces.current[draft.pieces.cursor],
       -1,
@@ -352,12 +310,12 @@ function handlePadLeft(draft) {
     );
     if (v !== draft.bidule.index) {
       draft.bidule.index = v;
-      soundPlayer.play('click');
+      SFX.click();
     } else {
-      soundPlayer.play('wrong');
+      SFX.wrong();
     }
   } else {
-    soundPlayer.play('wrong');
+    SFX.wrong();
   }
 }
 
@@ -369,7 +327,7 @@ function handlePadRight(draft) {
       0,
       draft.pieces.MAX_VALUE,
     );
-    soundPlayer.play('click');
+    SFX.click();
     checkPiecesSolved(draft);
   } else if (hasFocus(draft, 'bidule')) {
     const v = betweenValue(
@@ -380,30 +338,30 @@ function handlePadRight(draft) {
     );
     if (v !== draft.bidule.index) {
       draft.bidule.index = v;
-      soundPlayer.play('click');
+      SFX.click();
     } else {
-      soundPlayer.play('wrong');
+      SFX.wrong();
     }
   } else {
-    soundPlayer.play('wrong');
+    SFX.wrong();
   }
 }
 
 function handlePadDown(draft) {
   if (hasFocus(draft, 'binary')) {
-    soundPlayer.play('click');
+    SFX.click();
     draft.binary.index = cycleValue(draft.binary.index, 1, 0, 2);
   } else {
-    soundPlayer.play('wrong');
+    SFX.wrong();
   }
 }
 
 function handlePadUp(draft) {
   if (hasFocus(draft, 'binary')) {
-    soundPlayer.play('click');
+    SFX.click();
     draft.binary.index = cycleValue(draft.binary.index, -1, 0, 2);
   } else {
-    soundPlayer.play('wrong');
+    SFX.wrong();
   }
 }
 
@@ -478,11 +436,11 @@ function handleButtonPressed(draft, button) {
     const cursor = 'GHJKL'.indexOf(button);
     if (cursor !== -1) {
       if (cursor !== draft.pieces.cursor) {
-        soundPlayer.play('click2');
+        SFX.click(2);
         draft.pieces.cursor = cursor;
       }
     } else {
-      soundPlayer.play('wrong');
+      SFX.wrong();
     }
   }
 }
@@ -574,7 +532,7 @@ const BiduleOTronReducer = (state = initialState, action) =>
       case PIPE_ROTATE:
         if (hasFocus(draft, 'pipes')) {
           if (draft.fioles.pipes[action.index] !== 9) {
-            soundPlayer.play('pipe');
+            SFX.tool();
             draft.fioles.pipes[action.index] = cycleValue(
               draft.fioles.pipes[action.index],
               1,
@@ -583,7 +541,7 @@ const BiduleOTronReducer = (state = initialState, action) =>
             );
           }
         } else {
-          soundPlayer.play('wrong');
+          SFX.wrong();
         }
         break;
 
@@ -605,11 +563,12 @@ const BiduleOTronReducer = (state = initialState, action) =>
 
       case MUSIC_TOGGLE:
         draft.sounds.music = !draft.sounds.music;
-        if (draft.sounds.music) {
-          soundPlayer.play('music');
-        } else {
-          soundPlayer.stop('music');
-        }
+        SFX.music(draft.sounds.music);
+        break;
+
+      case SFX_TOGGLE:
+        draft.sounds.sfx = !draft.sounds.sfx;
+        SFX.enableSFX(draft.sounds.sfx);
         break;
     }
   });

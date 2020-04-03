@@ -41,7 +41,7 @@ import imgMachine from './img/machine_squelette.png';
 const Computer = styled.div`
   position: absolute;
   width: 1280px;
-  height: 800px;
+  height: 750px;
   display: flex;
   flex-flow: column;
   align-self: center;
