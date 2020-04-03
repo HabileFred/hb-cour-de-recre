@@ -13,10 +13,12 @@ import {
   PIPE_ROTATE,
   PIPES_CHECK,
   BUTTON_PRESSED,
-  BINARY_INPUT,
+  KEYPAD_INPUT,
   FUSE_TOGGLE,
   MUSIC_TOGGLE,
   SFX_TOGGLE,
+  WIRE_SELECT_TOP_SOCKET,
+  WIRE_SELECT_BOTTOM_SOCKET,
 } from './constants';
 
 export function padUp() {
@@ -75,9 +77,9 @@ export function buttonPressed(button) {
   };
 }
 
-export function binaryInput(value) {
+export function keypadInput(value) {
   return {
-    type: BINARY_INPUT,
+    type: KEYPAD_INPUT,
     value,
   };
 }
@@ -98,5 +100,19 @@ export function musicToggle() {
 export function sfxToggle() {
   return {
     type: SFX_TOGGLE,
+  };
+}
+
+export function wireSelectTopSocket(index) {
+  return {
+    type: WIRE_SELECT_TOP_SOCKET,
+    index,
+  };
+}
+
+export function wireSelectBottomSocket(index) {
+  return {
+    type: WIRE_SELECT_BOTTOM_SOCKET,
+    index,
   };
 }

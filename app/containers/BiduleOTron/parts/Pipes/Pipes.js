@@ -146,7 +146,7 @@ const GaugeFilled = styled(Gauge)`
   background: url('${props => imgGaugesFilled[props.index]}') no-repeat center center;
 `;
 
-const MachinePipes = function({ focused, solved, fioles }) {
+const MachinePipes = function({ focused, solved, pipes }) {
   return (
     <MachinePipesContainer className={`${focused ? 'focused' : ''} ${solved ? 'solved' : ''}`}>
       <Fioles focused={focused || solved}>
@@ -158,12 +158,12 @@ const MachinePipes = function({ focused, solved, fioles }) {
         <Fiole className="fiole-5" />
       </Fioles>
       <Pipes>
-        {fioles.pipes.map((p, i) => (
+        {pipes.pipes.map((p, i) => (
           <Pipe key={`p${i}`} className={p === 9 ? 'fixed' : ''} rotation={p === 9 ? 1 : p} />
         ))}
       </Pipes>
       <Gauges focused={focused}>
-        {fioles.gauges.map((g, i) => {
+        {pipes.gauges.map((g, i) => {
           return g && g.SOLVED
             ? (<GaugeFilled key={`g${i}`} index={i} />)
             : (<GaugeEmpty key={`g${i}`}/>)

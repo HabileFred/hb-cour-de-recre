@@ -4,6 +4,8 @@ import sndButtonWrong from './sounds/button_wrong.mp3';
 import sndButtonClick from './sounds/button_click.mp3';
 import sndButtonClick2 from './sounds/button_click_2.mp3';
 import sndTool from './sounds/cliquet.mp3';
+import sndOpenBidule from './sounds/ouverture_bidule.mp3';
+import sndElectricity from './sounds/electricity.mp3';
 
 class SoundManager {
   constructor() {
@@ -29,6 +31,14 @@ class SoundManager {
       }),
       tool: new Howl({
         src: sndTool,
+        autoplay: false,
+      }),
+      biduleBuilt: new Howl({
+        src: sndOpenBidule,
+        autoplay: false,
+      }),
+      electricity: new Howl({
+        src: sndElectricity,
         autoplay: false,
       }),
     };
@@ -59,6 +69,8 @@ export const SFX = {
   click: (n = '') => soundManager.play(`click${n}`),
   wrong: () => soundManager.play('wrong'),
   tool: () => soundManager.play('tool'),
+  biduleBuilt: () => soundManager.play('biduleBuilt'),
+  electricity: () => soundManager.play('electricity'),
   music: (on = true) => {
     if (on) {
       soundManager.play('music');

@@ -17,10 +17,7 @@ import makeSelectBiduleOTron from './selectors';
 import reducer from './reducer';
 import messages from './messages';
 
-import withSounds from './withSounds';
-import sndOpenBidule from './sounds/ouverture_bidule.mp3';
-
-import MachineBiduleSelector from './parts/Bidule/Bidule';
+import MachineBidule from './parts/Bidule/Bidule';
 import MachinePieces from './parts/Pieces/Pieces';
 import MachinePipes from './parts/Pipes/Pipes';
 import MachineLights from './parts/Lights/Lights';
@@ -107,17 +104,9 @@ const CacheBiduleContainer = styled.div`
   }
 `;
 
-function CacheBidule({ opened, playSound }) {
-
-  useEffect(() => {
-    if (opened) {
-      playSound('openBidule');
-    }
-  }, [opened]);
-
+function CacheBidule({ opened }) {
   return (
-    <CacheBiduleContainer className={opened ? 'opened' : ''}>
-    </CacheBiduleContainer>
+    <CacheBiduleContainer className={opened ? 'opened' : ''} />
   );
 }
 
@@ -145,12 +134,7 @@ const Pancarte = styled.div`
   animation: ${rotateX} 3s linear infinite;
 `;
 
-function MachineContainer({ dispatch, store, playSound, registerSound }) {
-
-  useEffect(() => {
-    registerSound('openBidule', sndOpenBidule);
-  });
-
+function Machine({ store }) {
   return (
     <div className="machine">
       <div style={{
@@ -165,21 +149,19 @@ function MachineContainer({ dispatch, store, playSound, registerSound }) {
       <Pancarte>
         <img style={{ position: 'absolute' }} src={imgPancarte} />
       </Pancarte>
-      <MachineBiduleSelector focusId="bidule" bidule={store.bidule} />
+      <MachineBidule focusId="bidule" bidule={store.bidule} />
       <MachinePieces focusId="pieces" pieces={store.pieces} />
-      <MachinePipes focusId="pipes" fioles={store.fioles} />
+      <MachinePipes focusId="pipes" pipes={store.pipes} />
       <MachineLights focusId="lights" lights={store.lights} />
       <MachineBinary focusId="binary" binary={store.binary} />
       <MachineFuses focusId="fuses" fuses={store.fuses} />
       <MachineSimon focusId="simon" simon={store.simon} />
       <MachineWires focusId="wires" wires={store.wires} />
       <Indicators store={store} />
-      <CacheBidule opened={store.bidule.SOLVED} playSound={playSound} />
+      <CacheBidule opened={store.bidule.SOLVED} />
     </div>
   );
 }
-
-const Machine = withSounds(MachineContainer);
 
 export function BiduleOTron({ dispatch, store }) {
   useInjectReducer({ key: 'biduleOTron', reducer });
@@ -217,7 +199,4 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-export default compose(
-  withConnect,
-  withSounds
-)(BiduleOTron);
+export default compose(withConnect)(BiduleOTron);

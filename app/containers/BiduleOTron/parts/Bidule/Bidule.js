@@ -152,7 +152,7 @@ const MachineBiduleContainer = styled.div`
   }
 `;
 
-const MachineBiduleSelector = function({ bidule, focused }) {
+const MachineBidule = function({ bidule, focused }) {
   const biduleInfos = bidule.biduleInfos[bidule.index];
   return (
     <MachineBiduleContainer className={`${focused ? 'focused' : ''}`}>
@@ -178,11 +178,14 @@ const MachineBiduleSelector = function({ bidule, focused }) {
         <img src={imgBtnCancel} />
       </div>
       <div className="bidule-info-img">
-        <img src={imgBiduleInfos[bidule.index]} />
+        {bidule.submitted
+        ? (<img src={imgBiduleInfos[bidule.index]} />)
+        : null
+        }
       </div>
     </MachineBiduleContainer>
   );
 }
 
 
-export default withFocus(MachineBiduleSelector);
+export default withFocus(MachineBidule);

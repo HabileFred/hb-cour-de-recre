@@ -2,14 +2,18 @@ import React from 'react';
 import styled from 'styled-components';
 import withFocus from '../../withFocus';
 
-import imgWire1 from './img/cable_1.png';
-import imgWire2 from './img/cable_2.png';
-import imgWire3 from './img/cable_3.png';
+import imgWire11 from './img/cable_11.png';
+import imgWire24 from './img/cable_24.png';
+import imgWire32 from './img/cable_32.png';
 
 import imgFocusTop from './img/focus_branchement_haut.png';
 import imgFocusBottom from './img/focus_branchement_bas.png';
 
-const imgWires = [imgWire1, imgWire2, imgWire3];
+const imgWires = {
+  11: imgWire11,
+  24: imgWire24,
+  32: imgWire32
+};
 
 const MachineWiresContainer = styled.div`
   position: absolute;
@@ -20,9 +24,10 @@ const MachineWiresContainer = styled.div`
 `;
 
 const Wire = styled.div`
+  position: absolute;
   width: 154px;
   height: 44px;
-  background: top left no-repeat url('${props => imgWires[props.index]}');
+  background: top left no-repeat url('${props => imgWires[props.wireId]}');
 `;
 
 const FocusConnector = styled.div`
@@ -49,6 +54,9 @@ const MachineWires = function({ wires, focused, solved }) {
     <MachineWiresContainer className={`${focused ? 'focused' : ''} ${solved ? 'solved' : ''}`}>
       <FocusConnectorTop ready={wires.readiness.top} />
       <FocusConnectorBottom ready={wires.readiness.bottom} />
+      {wires.values.map((wireId, i) => (
+        <Wire key={wireId} wireId={wireId} />
+      ))}
     </MachineWiresContainer>
   );
 };

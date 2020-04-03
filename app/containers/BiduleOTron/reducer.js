@@ -6,7 +6,7 @@
 import produce from 'immer';
 import { Howl, Howler } from 'howler';
 
-import { PAD_UP, PAD_DOWN, PAD_LEFT, PAD_RIGHT, PIPE_ROTATE, PAD_SUBMIT, PAD_CANCEL, PIPES_CHECK, ONOFF_TOGGLE, BUTTON_PRESSED, BINARY_INPUT, FUSE_TOGGLE, MUSIC_TOGGLE, SFX_TOGGLE } from './constants';
+import { PAD_UP, PAD_DOWN, PAD_LEFT, PAD_RIGHT, PIPE_ROTATE, PAD_SUBMIT, PAD_CANCEL, PIPES_CHECK, ONOFF_TOGGLE, BUTTON_PRESSED, KEYPAD_INPUT, FUSE_TOGGLE, MUSIC_TOGGLE, SFX_TOGGLE, WIRE_SELECT_BOTTOM_SOCKET, WIRE_SELECT_TOP_SOCKET } from './constants';
 
 import { SFX } from './SoundManager';
 
@@ -19,8 +19,10 @@ export const initialState = {
   },
 
   bidule: {
+    nextFocus: ['pieces', 'pipes'],
     BIDULE_COUNT: 5,
     index: 0,
+    submitted: false,
     biduleInfos: [
       {
         text1: 'ABCDEFG',
@@ -47,6 +49,7 @@ export const initialState = {
   },
 
   pieces: {
+    nextFocus: 'binary',
     MAX_VALUE: 5,
     cursor: 0,
     current: [0, 0, 0, 0, 0],
@@ -54,7 +57,8 @@ export const initialState = {
     SOLVED: false,
   },
 
-  fioles: {
+  pipes: {
+    nextFocus: 'lights', // FIXME simon
     // values from 1 to 4 included
     // 9 is fixed (cannot be rotated)
     pipes: [
@@ -95,6 +99,7 @@ export const initialState = {
   },
 
   lights: {
+    nextFocus: null,
     values: {
       red: false,
       green: false,
@@ -113,6 +118,7 @@ export const initialState = {
   },
 
   binary: {
+    nextFocus: 'fuses',
     SOLVED: false,
     index: 0,
     values: [
@@ -132,10 +138,11 @@ export const initialState = {
     values: ['D', 'D', 'D', 'D'],
     solution: ['D', 'G', 'G', 'D'],
     SOLVED: false,
+    nextFocus: null,
   },
 
   simon: {
-
+    nextFocus: 'lights',
   },
 
   wires: {
@@ -143,6 +150,13 @@ export const initialState = {
       top: false,
       bottom: false,
     },
+    sockets: {
+      top: 0,
+      bottom: 0,
+    },
+    values: [],
+    solution: ['32', '24', '11'],
+    SOLVED: false,
   }
 };
 
@@ -158,6 +172,24 @@ function arraysEqual(a, b) {
 
   for (var i = 0; i < a.length; ++i) {
     if (a[i] !== b[i]) return false;
+  }
+  return true;
+}
+
+/**
+ * Checks that the given Arrays contain the exact same values.
+ * @param {Array} a First array
+ * @param {Array} b Second Array
+ */
+function arraysContainSameValues(a, b) {
+  if (a === b) return true;
+  if (a == null || b == null) return false;
+  if (a.length != b.length) return false;
+
+  for (var i = 0; i < a.length; ++i) {
+    if (b.indexOf(a[i]) === -1) {
+      return false;
+    }
   }
   return true;
 }
@@ -252,6 +284,18 @@ function setFocus(draft, newFocusId, oldFocusId)  {
   draft.focus = [...set];
 }
 
+function replaceFocus(draft, newFocusId)  {
+  const set = new Set();
+  if (newFocusId) {
+    if (Array.isArray(newFocusId)) {
+      newFocusId.forEach(f => set.add(f));
+    } else {
+      set.add(newFocusId);
+    }
+  }
+  draft.focus = [...set];
+}
+
 /**
  * Checks if a Gauge is filled or not.
  * @param {Object} gauge 
@@ -271,11 +315,11 @@ function checkGauge(gauge, pipes) {
 }
 
 function checkGauges(draft) {
-  draft.fioles.SOLVED = draft.fioles.gauges.filter(
-    l => checkGauge(l, draft.fioles.pipes)
-  ).length === draft.fioles.gauges.length;
-  if (draft.fioles.SOLVED) {
-    setFocus(draft, 'lights', 'pipes');
+  draft.pipes.SOLVED = draft.pipes.gauges.filter(
+    l => checkGauge(l, draft.pipes.pipes)
+  ).length === draft.pipes.gauges.length;
+  if (draft.pipes.SOLVED) {
+    setFocus(draft, draft.pipes.nextFocus, 'pipes');
   }
 }
 
@@ -310,6 +354,7 @@ function handlePadLeft(draft) {
     );
     if (v !== draft.bidule.index) {
       draft.bidule.index = v;
+      draft.bidule.submitted = false;
       SFX.click();
     } else {
       SFX.wrong();
@@ -338,6 +383,7 @@ function handlePadRight(draft) {
     );
     if (v !== draft.bidule.index) {
       draft.bidule.index = v;
+      draft.bidule.submitted = false;
       SFX.click();
     } else {
       SFX.wrong();
@@ -370,8 +416,12 @@ function handlePadUp(draft) {
  */
 function handlePadSubmit(draft) {
   if (hasFocus(draft, 'bidule')) {
-    setFocus(draft, ['pieces', 'pipes'], 'bidule');
-    //setFocus(draft, ['fuses', 'lights', 'binary'], 'bidule');
+    if (!draft.bidule.submitted) {
+      draft.bidule.submitted = true;
+    } else {
+      setFocus(draft, ['pieces', 'pipes'], 'bidule');
+      //setFocus(draft, ['fuses', 'lights', 'binary'], 'bidule');
+    }
   } else if (hasFocus(draft, 'fuses')) {
     checkFuses(draft);
   }
@@ -381,19 +431,30 @@ function handlePadSubmit(draft) {
  * Pad button 'cancel' has been pressed.
  */
 function handlePadCancel(draft) {
-  if (hasFocus(draft, 'pieces')) {
-    setFocus(draft, 'bidule', ['pieces', 'pipes']);
-    // DEV setFocus(draft, 'bidule', ['fuses', 'simon']);
+  draft.bidule.submitted = false;
+  draft.bidule.SOLVED = false;
+  draft.fuses.SOLVED = false;
+  draft.wires.SOLVED = false;
+  draft.lights.SOLVED = false;
+  draft.binary.SOLVED = false;
+  draft.pieces.SOLVED = false;
+  draft.pipes.SOLVED = false;
+  if (! hasFocus(draft, 'bidule')) {
+    replaceFocus(draft, 'bidule');
   }
+}
+
+function postCheckLights(draft) {
+  draft.wires.readiness.bottom = draft.lights.SOLVED;
+  if (draft.lights.SOLVED) {
+    setFocus(draft, draft.lights.nextFocus, 'lights');
+  }
+  checkWiresReadiness(draft);
 }
 
 function checkLights(draft) {
   draft.lights.SOLVED = objectsEqual(draft.lights.values, draft.lights.solution);
-  draft.wires.readiness.bottom = draft.lights.SOLVED;
-  if (draft.lights.SOLVED) {
-    setFocus(draft, null, 'lights');
-  }
-  checkWiresReadiness(draft);
+  postCheckLights(draft);
 }
 
 /**
@@ -408,9 +469,10 @@ function lightsToggle(draft, colors) {
 /**
  * A button has been pressed.
  * @param {Object} draft
- * @param {String} button
+ * @param {String} letter
  */
-function handleButtonPressed(draft, button) {
+function handleButtonPressed(draft, letter) {
+  const button = letter.toUpperCase();
   if (hasFocus(draft, 'lights')) {
     switch (button) {
       case 'G':
@@ -432,7 +494,9 @@ function handleButtonPressed(draft, button) {
           lightsToggle(draft, ['purple', 'yellow']);
         break;
     }
-  } else if (hasFocus(draft, 'pieces')) {
+  }
+
+  if (hasFocus(draft, 'pieces')) {
     const cursor = 'GHJKL'.indexOf(button);
     if (cursor !== -1) {
       if (cursor !== draft.pieces.cursor) {
@@ -443,12 +507,16 @@ function handleButtonPressed(draft, button) {
       SFX.wrong();
     }
   }
+
+  if (!hasFocus(draft, 'pieces') && !hasFocus(draft, 'lights')) {
+    SFX.wrong();
+  }
 }
 
 function checkBinary(draft) {
   draft.binary.SOLVED = arraysEqual(draft.binary.values, draft.binary.solution);
   if (draft.binary.SOLVED) {
-    setFocus(draft, 'fuses', 'binary');
+    setFocus(draft, draft.binary.nextFocus, 'binary');
   }
 }
 
@@ -457,20 +525,62 @@ function checkBinary(draft) {
  * @param {*} draft
  * @param {*} value
  */
-function handleBinaryInput(draft, value) {
-  const idx = draft.binary.index;
-  let v = draft.binary.values[idx];
-  if (v.length === 7) {
-    v = '';
+function handleKeypadInput(draft, value) {
+  if (hasFocus(draft, 'binary')) {
+    if (value === 0 || value === 1) {
+      SFX.click();
+      const idx = draft.binary.index;
+      let v = draft.binary.values[idx];
+      if (v.length >= 7) {
+        v = '';
+      } else {
+        v += String(value);
+      }
+      draft.binary.values[idx] = v;
+      checkBinary(draft);
+    } else {
+      SFX.wrong();
+    }
   } else {
-    v += String(value);
+    SFX.wrong();
+
+    // This is a cheat code for me :P
+    if (hasFocus(draft, 'lights')) {
+      if (!draft.lights.cheatCode || value === 'depart') {
+        draft.lights.cheatCode = '';
+      }
+      if (value !== 'depart') {
+        if (draft.lights.cheatCode.length >= 9) {
+          draft.lights.cheatCode = '';
+        } else {
+          draft.lights.cheatCode += String(value);
+        }
+        if (draft.lights.cheatCode === '10121979') {
+          draft.lights.SOLVED = true;
+          postCheckLights(draft);
+        }
+      }
+    } else if (hasFocus(draft, 'pipes')) {
+      if (!draft.pipes.cheatCode || value === 'depart') {
+        draft.pipes.cheatCode = '';
+      }
+      if (value !== 'depart') {
+        if (draft.pipes.cheatCode.length >= 9) {
+          draft.pipes.cheatCode = '';
+        } else {
+          draft.pipes.cheatCode += String(value);
+        }
+        if (draft.pipes.cheatCode === '22021993') {
+          draft.pipes.SOLVED = true;
+          setFocus(draft, draft.pipes.nextFocus, 'pipes');
+        }
+      }
+    }
   }
-  draft.binary.values[idx] = v;
-  checkBinary(draft);
 }
 
 function checkWiresReadiness(draft) {
-  if (draft.fuses.SOLVED && draft.wires.SOLVED) {
+  if (draft.fuses.SOLVED && draft.lights.SOLVED) {
     setFocus(draft, 'wires', ['fuses', 'lights']);
   }
 }
@@ -487,7 +597,7 @@ function checkFuses(draft) {
   draft.fuses.SOLVED = fbIndex === draft.fuses.solution.length;
   draft.wires.readiness.top = draft.fuses.SOLVED;
   if (draft.fuses.SOLVED) {
-    setFocus(draft, null, 'fuses');
+    setFocus(draft, draft.fuses.nextFocus, 'fuses');
   }
   checkWiresReadiness(draft);
 }
@@ -497,6 +607,60 @@ function handleFuseToggle(draft, index) {
     let c = draft.fuses.values[index];
     c = (c === 'D') ? 'G' : 'D';
     draft.fuses.values[index] = c;
+  }
+}
+
+/**
+ * 
+ * @param {Object} draft The Store.
+ * @param {String} which 'top' or 'bottom'
+ * @param {int} index 
+ */
+function handleSocketSelection(draft, which, index) {
+  if (hasFocus(draft, 'wires')) {
+    // On cherche si un fil a déjà été branché sur cette prise.
+    const i = draft.wires.values.findIndex(
+      v => which === 'top' ? (v[0] === String(index)) : (v[1] === String(index))
+    );
+    // Si oui, on retire ce fil.
+    if (i !== -1) {
+      draft.wires.values.splice(i, 1);
+      SFX.wrong();
+    }
+
+    // Si un fil a été retiré ou si la prise était déjà sélectionnée,
+    // on désélectionne la prise.
+    if (i !== -1 || draft.wires.sockets[which] === index) {
+      draft.wires.sockets[which] = 0;
+    } else {
+      // Sinon, on sélectionne la prise.
+      draft.wires.sockets[which] = index;
+    }
+
+    // Si deux prises sont sélectionnées...
+    if (draft.wires.sockets.top && draft.wires.sockets.bottom) {
+      // Calcul de l'identifiant du fil branché.
+      const v = `${draft.wires.sockets.top}${draft.wires.sockets.bottom}`;
+      // Si fil attendu, on le place dans les fils correctement branchés (values).
+      if (draft.wires.solution.indexOf(v) !== -1 && draft.wires.values.indexOf(v) === -1) {
+        draft.wires.values.push(v);
+        // Résolu si 3 fils correctement branchés.
+        draft.wires.SOLVED = draft.wires.values.length === 3;
+        if (draft.wires.SOLVED) {
+          draft.bidule.SOLVED = true;
+          SFX.biduleBuilt();
+        } else {
+          SFX.electricity();
+        }
+      }
+      // Dès que deux prises ont été sélectionnées,
+      // et que les vérifications ont été faites,
+      // on peut désélectionner les deux prises.
+      draft.wires.sockets.top = 0;
+      draft.wires.sockets.bottom = 0;
+    }
+  } else {
+    SFX.wrong();
   }
 }
 
@@ -531,10 +695,10 @@ const BiduleOTronReducer = (state = initialState, action) =>
 
       case PIPE_ROTATE:
         if (hasFocus(draft, 'pipes')) {
-          if (draft.fioles.pipes[action.index] !== 9) {
+          if (draft.pipes.pipes[action.index] !== 9) {
             SFX.tool();
-            draft.fioles.pipes[action.index] = cycleValue(
-              draft.fioles.pipes[action.index],
+            draft.pipes.pipes[action.index] = cycleValue(
+              draft.pipes.pipes[action.index],
               1,
               1,
               4,
@@ -553,8 +717,8 @@ const BiduleOTronReducer = (state = initialState, action) =>
         handleButtonPressed(draft, action.button);
         break;
 
-      case BINARY_INPUT:
-        handleBinaryInput(draft, action.value);
+      case KEYPAD_INPUT:
+        handleKeypadInput(draft, action.value);
         break;
 
       case FUSE_TOGGLE:
@@ -569,6 +733,14 @@ const BiduleOTronReducer = (state = initialState, action) =>
       case SFX_TOGGLE:
         draft.sounds.sfx = !draft.sounds.sfx;
         SFX.enableSFX(draft.sounds.sfx);
+        break;
+
+      case WIRE_SELECT_TOP_SOCKET:
+        handleSocketSelection(draft, 'top', action.index);
+        break;
+
+      case WIRE_SELECT_BOTTOM_SOCKET:
+        handleSocketSelection(draft, 'bottom', action.index);
         break;
     }
   });

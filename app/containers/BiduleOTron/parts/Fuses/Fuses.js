@@ -47,7 +47,7 @@ const MachineFuses = function({ fuses, focused, solved }) {
   return (
     <MachineFusesContainer className={`${focused ? 'focused' : ''} ${solved ? 'solved' : ''}`}>
       {fuses.feedback.map((on, i) => (
-        <Fuse key={`f${i}`} on={on} />
+        <Fuse key={`f${i}`} on={on}/>
       ))}
     </MachineFusesContainer>
   );

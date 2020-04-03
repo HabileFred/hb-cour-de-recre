@@ -61,7 +61,7 @@ const IndicatorOn = styled.div`
   background: center center no-repeat url('${imgOn}');
 `;
 
-const storeKeys = ['pieces', 'fioles', 'binary', 'simon', 'fuses', 'lights', 'wires'];
+const storeKeys = ['pieces', 'pipes', 'binary', 'simon', 'fuses', 'lights', 'wires'];
 
 const Indicators = function({ store }) {
   return (
