@@ -21,23 +21,24 @@ import {
   buttonPressed,
   binaryInput,
   fuseToggle,
-  musicToggle
+  musicToggle,
+  sfxToggle
 } from '../../actions';
 
 const ControlPanelContainer = styled.section`
   position: relative;
   width: 100%;
-  height: 200px;
+  height: 230px;
 `;
 
 const ButtonGroupPipes = styled.section`
   display: grid;
-  grid-template-columns: repeat(6, 30px);
+  grid-template-columns: repeat(6, 40px);
   grid-gap: 2px;
-  grid-auto-rows: 30px;
+  grid-auto-rows: 40px;
   position: absolute;
-  top: 0;
-  left: 400px;
+  bottom: 10px;
+  left: 200px;
 `;
 const buttonPipesLetters = 'AZ ERTQSD F WXCVBN';
 
@@ -47,8 +48,8 @@ const ButtonGroup6Buttons = styled.section`
   grid-gap: 2px;
   grid-auto-rows: 40px;
   position: absolute;
-  top: 0;
-  left: 760px;
+  bottom: 10px;
+  left: 660px;
 `;
 
 const ButtonGroupBinary = styled.section`
@@ -77,8 +78,8 @@ const BoutonGroupArrows = styled.section`
   grid-gap: 2px;
   grid-auto-rows: 40px;
   position: absolute;
-  top: 0;
-  left: 130px;
+  bottom: 10px;
+  left: 40px;
 `;
 
 const BoutonGroupSubmitCancel = styled.section`
@@ -87,8 +88,18 @@ const BoutonGroupSubmitCancel = styled.section`
   grid-gap: 2px;
   grid-auto-rows: 30px;
   position: absolute;
-  top: 30px;
+  bottom: 10px;
   left: 1150px;
+`;
+
+const BoutonGroupSounds = styled.section`
+  display: grid;
+  grid-template-columns: 50px 50px;
+  grid-gap: 2px;
+  grid-auto-rows: 40px;
+  position: absolute;
+  bottom: 146px;
+  left: 349px;
 `;
 
 /**
@@ -188,7 +199,11 @@ function ControlPanel({ dispatch, store }) {
 
   return (
     <ControlPanelContainer>
-      <button type="button" onClick={() => dispatch(musicToggle())}>MUSIC {sounds.music ? 'ON' : 'OFF'}</button>
+      <BoutonGroupSounds>
+        <button type="button" onClick={() => dispatch(musicToggle())}>{sounds.music ? 'ON' : 'OFF'}</button>
+        <button type="button" onClick={() => dispatch(sfxToggle())}>{sounds.sfx ? 'ON' : 'OFF'}</button>
+      </BoutonGroupSounds>
+
       <BoutonGroupArrows>
         <div />
         <button type="button" onClick={() => padClicked('UP')}>U</button>
