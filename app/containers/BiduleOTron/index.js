@@ -12,15 +12,17 @@ import { compose } from 'redux';
 import styled from 'styled-components';
 
 import { useInjectReducer } from 'utils/injectReducer';
-import { makeSelectBiduleOTron } from './selectors';
+import { makeSelectBiduleOTron, makeSelectNav } from './selectors';
 import reducer from './reducers/reducer';
 
 import Machine from './screens/Machine/Machine';
 import Home from './screens/Home/Home';
+import Loading from './screens/Loading/Loading';
 import ControlPanel from './ControlPanel/ControlPanel';
 
 import imgBackground from './img/papier_peint.png';
 import imgComputer from './img/ordinateur.png';
+import imgMouseCursor from './img/cursor.png';
 
 const Computer = styled.div`
   position: absolute;
@@ -32,6 +34,10 @@ const Computer = styled.div`
   background: url('${imgComputer}') no-repeat;
   color: black;
   z-index: 0;
+
+  button {
+    cursor: url('${imgMouseCursor}') 10 2, auto;
+  }
 
   .machine {
     position: relative;
@@ -59,17 +65,20 @@ const BiduleOTronContainer = styled.div`
 }
 `;
 
-export function BiduleOTron({ store }) {
+export function BiduleOTron({ nav }) {
   useInjectReducer({ key: 'biduleOTron', reducer });
 
   useEffect(() => {
     document.title = "Bidule-o-tron | Cour de récré | Habile Bill";
   });
 
-  let screen = null;
-  switch (store.nav.screen) {
+  let screen;
+  switch (nav.screen) {
     case 'machine':
       screen = (<Machine />);
+      break;
+    case 'loading':
+      screen = (<Loading />);
       break;
     default:
       screen = (<Home />);
@@ -90,7 +99,7 @@ BiduleOTron.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  store: makeSelectBiduleOTron(),
+  nav: makeSelectNav(),
 });
 
 function mapDispatchToProps(dispatch) {

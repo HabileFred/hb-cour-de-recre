@@ -1,25 +1,30 @@
-/*
- *
- * BiduleOTron reducer
- *
- */
-
 import { initialState } from './initialState';
 import { getDraft } from './draft';
 
 class Focus {
   constructor() {
     initialState.nav = {
-      screen: 'machine',
-      focus: ['bidule'],
+      screen: 'home',
+      focus: ['password'],
       workflow: {
-        bidule: ['pieces', 'pipes'],
-        pieces: 'binary',
-        pipes: 'lights', // simon
-        simon: 'lights',
-        binary: 'fuses',
-        lights: null,
-        fuses: null,
+        home: {
+          $start: 'password',
+          password: '@machine', // FIXME '@loading'
+        },
+        loading: {
+          $start: 'loading',
+          loading: '@machine',
+        },
+        machine: {
+          $start: 'bidule',
+          bidule: ['pieces', 'pipes'],
+          pieces: 'binary',
+          pipes: 'lights', // FIXME 'simon'
+          simon: 'lights',
+          binary: 'fuses',
+          lights: null,
+          fuses: null,
+        }
       }
     };
   }
@@ -30,10 +35,10 @@ class Focus {
    */
   is(focusId) {
     const draft = getDraft();
-    const p = focusId.indexOf('.');
+    const p = focusId.indexOf('@');
     if (p !== -1) {
-      return focusId.substring(0, p) === draft.nav.screen
-        && draft.nav.focus.indexOf(focusId.substring(p + 1)) !== -1
+      return focusId.substring(p + 1) === draft.nav.screen
+        && draft.nav.focus.indexOf(focusId.substring(0, p)) !== -1
       ;
     }
     return draft.nav.focus.indexOf(focusId) !== -1;
@@ -68,12 +73,22 @@ class Focus {
     return {
       next: () => {
         const draft = getDraft();
-        this.set(draft.nav.workflow[current], current);
+        const n = draft.nav.workflow[draft.nav.screen][current];
+        if (typeof n === 'string' && n.charAt(0) === '@') {
+          this.setScreen(n.substring(1));
+        } else {
+          this.set(n, current);
+        }
       }
     };
   }
 
-  replace(newFocusId)  {
+  next() {
+    const draft = getDraft();
+    this.from(draft.nav.focus[0]).next();
+  }
+
+  replace(newFocusId) {
     const draft = getDraft();
     const set = new Set();
     if (newFocusId) {
@@ -84,6 +99,12 @@ class Focus {
       }
     }
     draft.nav.focus = [...set];
+  }
+
+  setScreen(screen) {
+    const draft = getDraft();
+    draft.nav.screen = screen;
+    this.replace(draft.nav.workflow[screen].$start);
   }
 }
 

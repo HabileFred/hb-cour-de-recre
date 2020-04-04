@@ -13,7 +13,8 @@ import {
   FUSE_TOGGLE,
   MUSIC_TOGGLE, SFX_TOGGLE,
   WIRE_SELECT_BOTTOM_SOCKET, WIRE_SELECT_TOP_SOCKET,
-  SET_SCREEN
+  SET_SCREEN,
+  FOCUS_NEXT
 } from '../constants';
 
 import { SFX } from '../SoundManager';
@@ -31,6 +32,7 @@ import { piecesReducer } from './reducer.pieces';
 import { pipesReducer } from './reducer.pipes';
 import { simonReducer } from './reducer.simon';
 import { wiresReducer } from './reducer.wires';
+import { homeReducer } from './reducer.home';
 import { setWorkingDraft } from './draft';
 
 function checkWiresReadiness() {
@@ -54,7 +56,7 @@ function handlePadCancel() {
   draft.binary.SOLVED = false;
   draft.pieces.SOLVED = false;
   draft.pipes.SOLVED = false;
-  if (! focus.is('machine.bidule')) {
+  if (! focus.is('bidule@machine')) {
     focus.replace('bidule');
   }
 }
@@ -66,7 +68,7 @@ const BiduleOTronReducer = (state = initialState, action) =>
     switch (action.type) {
 
       case PAD_UP:
-        if (focus.is('machine.binary')) {
+        if (focus.is('binary@machine')) {
           binaryReducer.handlePadUp();
         } else {
           SFX.wrong();
@@ -74,7 +76,7 @@ const BiduleOTronReducer = (state = initialState, action) =>
         break;
 
       case PAD_DOWN:
-        if (focus.is('machine.binary')) {
+        if (focus.is('binary@machine')) {
           binaryReducer.handlePadDown();
         } else {
           SFX.wrong();
@@ -82,9 +84,9 @@ const BiduleOTronReducer = (state = initialState, action) =>
         break;
 
       case PAD_LEFT:
-        if (focus.is('machine.pieces')) {
+        if (focus.is('pieces@machine')) {
           piecesReducer.handlePadLeft();
-        } else if (focus.is('machine.bidule')) {
+        } else if (focus.is('bidule@machine')) {
           biduleReducer.handlePadLeft();
         } else {
           SFX.wrong();
@@ -92,9 +94,9 @@ const BiduleOTronReducer = (state = initialState, action) =>
         break;
 
       case PAD_RIGHT:
-        if (focus.is('machine.pieces')) {
+        if (focus.is('pieces@machine')) {
           piecesReducer.handlePadRight();
-        } else if (focus.is('machine.bidule')) {
+        } else if (focus.is('bidule@machine')) {
           biduleReducer.handlePadRight();
         } else {
           SFX.wrong();
@@ -102,9 +104,11 @@ const BiduleOTronReducer = (state = initialState, action) =>
         break;
 
       case PAD_SUBMIT:
-        if (focus.is('machine.bidule')) {
+        if (focus.is('password@home')) {
+          homeReducer.handlePadSubmit();
+        } else if (focus.is('bidule@machine')) {
           biduleReducer.handlePadSubmit();
-        } else if (focus.is('machine.fuses')) {
+        } else if (focus.is('fuses@machine')) {
           fusesReducer.checkFuses();
           checkWiresReadiness();
         }
@@ -115,7 +119,7 @@ const BiduleOTronReducer = (state = initialState, action) =>
         break;
 
       case PIPE_ROTATE:
-        if (focus.is('machine.pipes')) {
+        if (focus.is('pipes@machine')) {
           pipesReducer.rotatePipe(action.index);
         } else {
           SFX.wrong();
@@ -127,35 +131,37 @@ const BiduleOTronReducer = (state = initialState, action) =>
         break;
 
       case BUTTON_PRESSED:
-        if (focus.is('machine.lights')) {
+        if (focus.is('lights@machine')) {
           lightsReducer.handleButtonPressed(action.button);
           checkWiresReadiness();
         }
-        if (focus.is('machine.pieces')) {
+        if (focus.is('pieces@machine')) {
           piecesReducer.handleButtonPressed(action.button);
         }
-        if (!focus.is('machine.pieces') && !focus.is('machine.lights')) {
+        if (!focus.is('pieces@machine') && !focus.is('lights@machine')) {
           SFX.wrong();
         }
         break;
 
       case KEYPAD_INPUT:
-        if (focus.is('machine.binary')) {
+        if (focus.is('password@home')) {
+          homeReducer.handleKeypadInput(action.value);
+        } else if (focus.is('binary@machine')) {
           binaryReducer.handleKeypadInput(action.value);
         } else {
           // Tell the player this is wrong but...
           SFX.wrong();
           // ... there is a cheat code for me :P
-          if (focus.is('machine.lights')) {
+          if (focus.is('lights@machine')) {
             lightsReducer.handleKeypadInput(action.value);
-          } else if (focus.is('machine.pipes')) {
+          } else if (focus.is('pipes@machine')) {
             pipesReducer.handleKeypadInput(action.value);
           }
         }
         break;
 
       case FUSE_TOGGLE:
-        if (focus.is('machine.fuses')) {
+        if (focus.is('fuses@machine')) {
           fusesReducer.handleFuseToggle(action.index);
         } else {
           SFX.wrong();
@@ -173,7 +179,7 @@ const BiduleOTronReducer = (state = initialState, action) =>
         break;
 
       case WIRE_SELECT_TOP_SOCKET:
-        if (focus.is('machine.wires')) {
+        if (focus.is('wires@machine')) {
           wiresReducer.handleSocketSelection('top', action.index);
         } else {
           SFX.wrong();
@@ -181,7 +187,7 @@ const BiduleOTronReducer = (state = initialState, action) =>
         break;
 
       case WIRE_SELECT_BOTTOM_SOCKET:
-          if (focus.is('machine.wires')) {
+          if (focus.is('wires@machine')) {
             wiresReducer.handleSocketSelection('bottom', action.index);
           } else {
             SFX.wrong();
@@ -189,7 +195,11 @@ const BiduleOTronReducer = (state = initialState, action) =>
         break;
 
       case SET_SCREEN:
-        draft.nav.screen = action.screen;
+        focus.setScreen(action.screen);
+        break;
+
+      case FOCUS_NEXT:
+        focus.next();
         break;
     }
   });

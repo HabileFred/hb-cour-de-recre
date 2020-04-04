@@ -20,6 +20,7 @@ import {
   WIRE_SELECT_TOP_SOCKET,
   WIRE_SELECT_BOTTOM_SOCKET,
   SET_SCREEN,
+  FOCUS_NEXT,
 } from './constants';
 
 export function padUp() {
@@ -122,5 +123,11 @@ export function setScreen(screen) {
   return {
     type: SET_SCREEN,
     screen,
+  };
+}
+
+export function focusNext() {
+  return {
+    type: FOCUS_NEXT,
   };
 }

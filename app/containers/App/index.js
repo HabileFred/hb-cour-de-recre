@@ -23,7 +23,6 @@ export default function App() {
         <Route exact path="/" component={BiduleOTron} />
         <Route component={NotFoundPage} />
       </Switch>
-      <GlobalStyle />
     </React.Fragment>
   );
 }

@@ -84,7 +84,6 @@ export class ReducerBidule {
     const draft = getDraft();
     if (!draft.bidule.submitted) {
       draft.bidule.submitted = true;
-    } else {
       focus.from('bidule').next();
     }
   }

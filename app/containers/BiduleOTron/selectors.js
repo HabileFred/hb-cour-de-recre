@@ -74,3 +74,15 @@ export const makeSelectSounds = () =>
     selectBiduleOTronDomain,
     substate => substate.sounds,
   );
+
+export const makeSelectHome = () =>
+  createSelector(
+    selectBiduleOTronDomain,
+    substate => substate.home,
+  );
+
+export const makeSelectNav = () =>
+  createSelector(
+    selectBiduleOTronDomain,
+    substate => substate.nav,
+  );

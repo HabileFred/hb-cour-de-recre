@@ -96,7 +96,15 @@ const Pancarte = styled.div`
 
 function Machine({ store, bidule, pieces, pipes, lights, binary, fuses, simon, wires }) {
   return (
-    <div className="machine">
+    <div style={{
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '550px',
+      cursor: 'not-allowed',
+      background: `url('${imgMachine}') top left no-repeat`
+    }}>
       <div style={{
         position: 'absolute',
         top: 0,
@@ -104,21 +112,22 @@ function Machine({ store, bidule, pieces, pipes, lights, binary, fuses, simon, w
         width: '100%',
         height: '100%',
         pointerEvents: 'none',
-        background: `url('${imgMachine}') top left no-repeat`
-      }} />
-      <Pancarte>
-        <img style={{ position: 'absolute' }} src={imgPancarte} />
-      </Pancarte>
-      <MachineBidule focusId="bidule" bidule={bidule} />
-      <MachinePieces focusId="pieces" pieces={pieces} />
-      <MachinePipes focusId="pipes" pipes={pipes} />
-      <MachineLights focusId="lights" lights={lights} />
-      <MachineBinary focusId="binary" binary={binary} />
-      <MachineFuses focusId="fuses" fuses={fuses} />
-      <MachineSimon focusId="simon" simon={simon} />
-      <MachineWires focusId="wires" wires={wires} />
-      <Indicators store={store} />
-      <CacheBidule opened={bidule.SOLVED} />
+      }}>
+        <Pancarte>
+          <img style={{ position: 'absolute' }} src={imgPancarte} />
+        </Pancarte>
+        <MachineBidule focusId="bidule" bidule={bidule} />
+        <MachinePieces focusId="pieces" pieces={pieces} />
+        <MachinePipes focusId="pipes" pipes={pipes} />
+        <MachineLights focusId="lights" lights={lights} />
+        <MachineBinary focusId="binary" binary={binary} />
+        <MachineFuses focusId="fuses" fuses={fuses} />
+        <MachineSimon focusId="simon" simon={simon} />
+        <MachineWires focusId="wires" wires={wires} />
+        <Indicators store={store} />
+        <CacheBidule opened={bidule.SOLVED} />
+
+      </div>
     </div>
   );
 }
