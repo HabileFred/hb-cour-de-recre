@@ -24,5 +24,7 @@ export const FUSES_CHECK = 'app/BiduleOTron/FUSES_CHECK';
 export const WIRE_SELECT_TOP_SOCKET = 'app/BiduleOTron/WIRE_SELECT_TOP_SOCKET';
 export const WIRE_SELECT_BOTTOM_SOCKET = 'app/BiduleOTron/WIRE_SELECT_BOTTOM_SOCKET';
 
+export const SET_SCREEN = 'app/BiduleOTron/SET_SCREEN';
+
 export const MUSIC_TOGGLE = 'app/BiduleOTron/MUSIC_TOGGLE';
 export const SFX_TOGGLE = 'app/BiduleOTron/SFX_TOGGLE';

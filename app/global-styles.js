@@ -20,6 +20,10 @@ const GlobalStyle = createGlobalStyle`
     flex-flow: column;
   }
 
+  button {
+    cursor: pointer;
+  }
+
   p,
   label {
     font-family: Georgia, Times, 'Times New Roman', serif;

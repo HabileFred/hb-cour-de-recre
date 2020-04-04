@@ -1,4 +1,5 @@
 
+import { Howl } from 'howler';
 import sndBackgroundMusic from './sounds/monstre_chambre.mp3';
 import sndButtonWrong from './sounds/button_wrong.mp3';
 import sndButtonClick from './sounds/button_click.mp3';
@@ -6,6 +7,7 @@ import sndButtonClick2 from './sounds/button_click_2.mp3';
 import sndTool from './sounds/cliquet.mp3';
 import sndOpenBidule from './sounds/ouverture_bidule.mp3';
 import sndElectricity from './sounds/electricity.mp3';
+import sndToggleSwitch from './sounds/toggle_switch.mp3';
 
 class SoundManager {
   constructor() {
@@ -16,6 +18,7 @@ class SoundManager {
         autoplay: false,
         loop: true,
         html5: true,
+        mute: true,
       }),
       wrong: new Howl({
         src: sndButtonWrong,
@@ -41,6 +44,10 @@ class SoundManager {
         src: sndElectricity,
         autoplay: false,
       }),
+      toggleSwitch: new Howl({
+        src: sndToggleSwitch,
+        autoplay: false,
+      }),
     };
   }
 
@@ -50,6 +57,7 @@ class SoundManager {
 
   play(name) {
     if (name === 'music' || (this.sfxEnabled && name in this.sounds)) {
+      this.sounds[name].mute(false);
       this.sounds[name].play();
     }
   }
@@ -71,6 +79,7 @@ export const SFX = {
   tool: () => soundManager.play('tool'),
   biduleBuilt: () => soundManager.play('biduleBuilt'),
   electricity: () => soundManager.play('electricity'),
+  toggleSwitch: () => soundManager.play('toggleSwitch'),
   music: (on = true) => {
     if (on) {
       soundManager.play('music');

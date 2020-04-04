@@ -8,12 +8,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import makeSelectBiduleOTron from '../selectors';
+import { makeSelectBiduleOTron } from '../selectors';
 
 function withFocus(WrappedComponent) {
   return class extends React.Component {
     render() {
-      const focused = this.props.store ? this.props.store.focus.indexOf(this.props.focusId) !== -1 : false;
+      const focused = this.props.store ? this.props.store.nav.focus.indexOf(this.props.focusId) !== -1 : false;
       const solved = this.props.store && this.props.store[this.props.focusId] ? this.props.store[this.props.focusId].SOLVED : false;
       return <WrappedComponent className={focused ? 'focused' : ''} solved={solved} focused={focused} {...this.props} />;
     }

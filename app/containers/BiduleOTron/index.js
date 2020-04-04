@@ -7,33 +7,20 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 
 import { useInjectReducer } from 'utils/injectReducer';
-import makeSelectBiduleOTron from './selectors';
-import reducer from './reducer';
-import messages from './messages';
+import { makeSelectBiduleOTron } from './selectors';
+import reducer from './reducers/reducer';
 
-import MachineBidule from './parts/Bidule/Bidule';
-import MachinePieces from './parts/Pieces/Pieces';
-import MachinePipes from './parts/Pipes/Pipes';
-import MachineLights from './parts/Lights/Lights';
-import MachineBinary from './parts/Binary/Binary';
-import MachineFuses from './parts/Fuses/Fuses';
-import MachineSimon from './parts/Simon/Simon';
-import MachineWires from './parts/Wires/Wires';
-import Indicators from './parts/Indicators/Indicators';
-
-import ControlPanel from './parts/ControlPanel/ControlPanel';
+import Machine from './screens/Machine/Machine';
+import Home from './screens/Home/Home';
+import ControlPanel from './ControlPanel/ControlPanel';
 
 import imgBackground from './img/papier_peint.png';
-import imgCacheBidule from './img/cache_bidule.png';
-import imgPancarte from './img/pancarte.png';
 import imgComputer from './img/ordinateur.png';
-import imgMachine from './img/machine_squelette.png';
 
 const Computer = styled.div`
   position: absolute;
@@ -72,109 +59,27 @@ const BiduleOTronContainer = styled.div`
 }
 `;
 
-const openCacheBiduleAnimation = keyframes`
-  from {
-    transform: translateY(0);
-  }
-  5% {
-    transform: translateY(10px);
-  }
-  85% {
-    transform: translateY(-83%);
-  }
-  95% {
-    transform: translateY(-77%);
-  }
-  to {
-    transform: translateY(-80%);
-  }
-`;
-
-const CacheBiduleContainer = styled.div`
-  position: absolute;
-  left: 954px;
-  top: 236px;
-  width: 190px;
-  height: 215px;
-  background: no-repeat top left url('${imgCacheBidule}');
-
-  &.opened {
-    animation: 1700ms ease-out ${openCacheBiduleAnimation};
-    animation-fill-mode: forwards;
-  }
-`;
-
-function CacheBidule({ opened }) {
-  return (
-    <CacheBiduleContainer className={opened ? 'opened' : ''} />
-  );
-}
-
-const rotateX = keyframes`
-  from {
-    transform: rotateX(20deg);
-    transform-origin: bottom center;
-  }
-  50% {
-    transform: rotateX(0deg);
-    transform-origin: bottom center;
-  }
-  to {
-    transform: rotateX(-20deg);
-    transform-origin: bottom center;
-  }
-`;
-
-const Pancarte = styled.div`
-  position: absolute;
-  left: 442px;
-  top: 90px;
-  height: 89px;
-  width: 164px;
-  animation: ${rotateX} 3s linear infinite;
-`;
-
-function Machine({ store }) {
-  return (
-    <div className="machine">
-      <div style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        pointerEvents: 'none',
-        background: `url('${imgMachine}') top left no-repeat`
-      }} />
-      <Pancarte>
-        <img style={{ position: 'absolute' }} src={imgPancarte} />
-      </Pancarte>
-      <MachineBidule focusId="bidule" bidule={store.bidule} />
-      <MachinePieces focusId="pieces" pieces={store.pieces} />
-      <MachinePipes focusId="pipes" pipes={store.pipes} />
-      <MachineLights focusId="lights" lights={store.lights} />
-      <MachineBinary focusId="binary" binary={store.binary} />
-      <MachineFuses focusId="fuses" fuses={store.fuses} />
-      <MachineSimon focusId="simon" simon={store.simon} />
-      <MachineWires focusId="wires" wires={store.wires} />
-      <Indicators store={store} />
-      <CacheBidule opened={store.bidule.SOLVED} />
-    </div>
-  );
-}
-
-export function BiduleOTron({ dispatch, store }) {
+export function BiduleOTron({ store }) {
   useInjectReducer({ key: 'biduleOTron', reducer });
 
   useEffect(() => {
     document.title = "Bidule-o-tron | Cour de récré | Habile Bill";
   });
 
+  let screen = null;
+  switch (store.nav.screen) {
+    case 'machine':
+      screen = (<Machine />);
+      break;
+    default:
+      screen = (<Home />);
+  }
+
   return (
     <BiduleOTronContainer>
       <Computer>
-        <Machine dispatch={dispatch} store={store}></Machine>
-        <ControlPanel dispatch={dispatch} store={store}></ControlPanel>
+        {screen}
+        <ControlPanel />
       </Computer>
     </BiduleOTronContainer>
   );

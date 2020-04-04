@@ -19,6 +19,7 @@ import {
   SFX_TOGGLE,
   WIRE_SELECT_TOP_SOCKET,
   WIRE_SELECT_BOTTOM_SOCKET,
+  SET_SCREEN,
 } from './constants';
 
 export function padUp() {
@@ -114,5 +115,12 @@ export function wireSelectBottomSocket(index) {
   return {
     type: WIRE_SELECT_BOTTOM_SOCKET,
     index,
+  };
+}
+
+export function setScreen(screen) {
+  return {
+    type: SET_SCREEN,
+    screen,
   };
 }

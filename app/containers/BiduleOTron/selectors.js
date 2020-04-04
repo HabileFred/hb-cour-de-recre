@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { initialState } from './reducer';
+import { initialState } from './reducers/initialState';
 
 /**
  * Direct selector to the BiduleOTron state domain
@@ -15,7 +15,7 @@ const selectBiduleOTronDomain = state => state.biduleOTron || initialState;
  * Default selector used by BiduleOTron
  */
 
-const makeSelectBiduleOTron = () =>
+export const makeSelectBiduleOTron = () =>
   createSelector(
     selectBiduleOTronDomain,
     substate => substate,
@@ -74,5 +74,3 @@ export const makeSelectSounds = () =>
     selectBiduleOTronDomain,
     substate => substate.sounds,
   );
-
-export default makeSelectBiduleOTron;
