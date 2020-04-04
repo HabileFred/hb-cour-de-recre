@@ -67,8 +67,8 @@ module.exports = options => ({
           {
             loader: 'url-loader',
             options: {
-              // Inline files smaller than 10 kB
-              limit: 10 * 1024,
+              // Inline files smaller than 200 kB
+              limit: 200 * 1024,
             },
           },
           {
