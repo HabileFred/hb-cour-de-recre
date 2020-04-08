@@ -86,3 +86,15 @@ export const makeSelectNav = () =>
     selectBiduleOTronDomain,
     substate => substate.nav,
   );
+
+export const makeSelectRadar = () =>
+  createSelector(
+    selectBiduleOTronDomain,
+    substate => substate.radar,
+  );
+
+export const makeSelectParams = () =>
+  createSelector(
+    selectBiduleOTronDomain,
+    substate => substate.params,
+  );

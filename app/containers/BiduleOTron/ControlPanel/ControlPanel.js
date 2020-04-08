@@ -14,6 +14,7 @@ import ButtonGroupArrows from './Arrows/Arrows';
 import ButtonGroupSubmitCancel from './SubmitCancel/SubmitCancel';
 import ButtonGroupColors from './Colors/Colors';
 import ButtonGroupSounds from './Sounds/Sounds';
+import ButtonGroupSimon from './Simon/Simon';
 
 const Wrapper = styled.section`
   position: absolute;
@@ -35,6 +36,7 @@ function ControlPanel({ dispatch, store }) {
       <ButtonGroupPipes />
       <ButtonGroupWires />
       <ButtonGroupKeypad />
+      <ButtonGroupSimon />
       <ButtonGroupSubmitCancel />
     </Wrapper>
   );

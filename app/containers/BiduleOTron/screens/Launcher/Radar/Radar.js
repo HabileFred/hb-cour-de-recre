@@ -1,178 +1,121 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+import classnames from 'classnames';
 
-import withFocus from '../../../withFocus';
+import withFocus from 'BOT/withFocus';
 
-import imgFrame from './img/cadre_bidule.png';
-import imgArrowLeft from './img/fleche_gauche.png';
-import imgArrowRight from './img/fleche_droite.png';
-import imgBtnSubmit from './img/bouton_valider.png';
-import imgBtnCancel from './img/bouton_annuler.png';
+import imgPointer from './img/aiguille.png';
+import imgCursor from './img/curseur.png';
 
-function importBiduleImages() {
-  const r = require.context('./img/', false, /bidule_\d+\.png$/);
-  const images = new Array(r.keys().length + 1);
-  r.keys().forEach(key => {
-    const l = key.match(/_(\d+)\.png$/)[1];
-    images[l] = r(key);
-  });
-  return images;
-}
-const biduleImages = importBiduleImages();
+import imgOff from './img/ampoule_off.png';
+import imgOn from './img/ampoule_on.png';
 
-function importProtocolImages() {
-  const r = require.context('./img/', false, /protocole_\d+\.png$/);
-  const images = new Array(r.keys().length);
-  r.keys().forEach(key => {
-    const l = key.match(/_(\d+)\.png$/)[1];
-    images[l - 1] = r(key);
-  });
-  return images;
-}
-const protocoleImages = importProtocolImages();
-// On réutilise les mêmes images plusieurs fois s'il y a moins de protocoles que de bidules.
-let i = 0;
-while (protocoleImages.length < biduleImages.length) {
-  protocoleImages.push(protocoleImages[i]);
-  i += 1;
-}
-
-const MachineBiduleContainer = styled.div`
+const Wrapper = styled.div`
   position: absolute;
-  top: 40px;
-  left: 85px;
-  width: 230px;
-  display: flex;
-  flex-flow: column;
-  align-items: center;
+  left: 600px;
+  top: 170px;
+  width: 120px;
+  height: 116px;
+`;
 
-  @keyframes grow {
-    from {
-      transform: scale(1.1);
-    }
-    50% {
-      transform: scale(0.9);
-    }
-    to {
-      transform: scale(1.1);
-    }
+const rotatingPointer = keyframes`
+  from {
+    transform: rotate(360deg);
   }
-
-  .frame {
-    position: absolute;
-    left: 17px;
-    top: 50px;
-    background: url(${imgFrame}) no-repeat top left;
-    width: 195px;
-    height: 190px;
+  to {
+    transform: rotate(0deg);
   }
+`;
 
-  &.focused .frame {
-    animation-name: grow;
-    animation-duration: 1300ms;
-    animation-iteration-count: infinite;
-    animation-timing-function: ease-in-out;
-  }
+const Pointer = styled.div`
+  position: absolute;
+  left: 48px;
+  top: 51px;
+  width: 56px;
+  height: 40px;
+  background: no-repeat center center url('${imgPointer}');
+  animation: ${rotatingPointer} 2s linear infinite;
+  transform-origin: 10px 10px;
+  z-index: 5;
+`;
 
-  .arrow {
-    position: absolute;
-    width: 42px;
-    height: 46px;
-    top: 118px;
-
-    &.left {
-      left: -12px;
-      background: url(${imgArrowLeft}) no-repeat top left;
-    }
-    &.right {
-      left: 195px;
-      background: url(${imgArrowRight}) no-repeat top left;
-    }
-  }
-
-  .ui-element {
+const onAnimation = keyframes`
+  from {
     opacity: 0;
-    transform: scale(0);
-    transition: opacity 250ms ease, transform 250ms ease;
   }
-  &.focused .ui-element {
+  5% {
     opacity: 1;
-    transform: scale(1);
   }
-
-  .buttons {
-    margin-top: -10px;
-    display: flex;
-    flew-flow: row no-wrap;
-    justify-content: center;
+  10% {
+    opacity: 0;
   }
-
-  .bidule-info-text {
-    text-align: center;
-    font-weight: bold;
-    text-transform: uppercase;
-    line-height: 130%;
-    transform: skew(1deg, 2deg);
-
-    code {
-      letter-spacing: 0.2em;
-      font: Courier New, Menlo, sans-serif;
-      display: block;
-    }
+  20% {
+    opacity: 1;
   }
-
-  .bidule-info-img {
-    flex-shrink: 0;
+  40% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 `;
 
-const BidulesView = styled.div`
-  position: relative;
-  width: 167px;
-  height: 166px;
-  overflow: hidden;
-  flex-shrink: 0;
-
-  .bidules {
-    position: absolute;
-    top: 0;
-    left: ${props => -props.index * 167}px;
-    display: flex;
-    flex-flow: row no-wrap;
-    transition: left 250ms ease-out;
-  }
+const IndicatorOff = styled.div`
+  position: absolute;
+  left: 625px;
+  top: 56px;
+  width: 54px;
+  height: 62px;
+  background: center center no-repeat url('${imgOff}');
 `;
 
-const MachineBidule = function({ bidule, focused }) {
-  const biduleInfos = bidule.biduleInfos[bidule.index];
+const IndicatorOn = styled(IndicatorOff)`
+  animation: ${onAnimation} 800ms ease-in;
+  background: center center no-repeat url('${imgOn}');
+`;
+
+const cursorX = [16, 37, 68, 92];
+const cursorY = [28, 48, 68, 91];
+const opacity = [
+  0.3, 0.6, 0.6, 0.3,
+  0.6, 0.8, 0.8, 0.6,
+  0.6, 0.8, 0.8, 0.6,
+  0.3, 0.6, 0.6, 0.3,
+];
+const Cursor = styled.div`
+  position: absolute;
+  left: ${props => cursorX[props.x]}px;
+  top: ${props => cursorY[props.y]}px;
+  opacity: ${props => opacity[props.y * 4 + props.x]};
+  width: 7px;
+  height: 8px;
+  background: no-repeat center center url('${imgCursor}');
+  z-index: 3;
+`;
+
+const Radar = function({ radar, focused, solved }) {
   return (
-    <MachineBiduleContainer className={`${focused ? 'focused' : ''}`}>
-      <div className="ui-element frame"></div>
-      <div className="ui-element arrow left"></div>
-      <div className="ui-element arrow right"></div>
-      <div className="bidule-info-text">
-        <div>Nom de code :</div>
-        <code>{biduleInfos.text1}</code>
-        <code>{biduleInfos.text2}</code>
-      </div>
-      <BidulesView index={bidule.index}>
-        <div className="bidules">
-          {biduleImages.map((img, i) => <img key={i} src={img} />)}
-        </div>
-      </BidulesView>
-      <div className="ui-element buttons">
-        <img src={imgBtnSubmit} />
-        <img src={imgBtnCancel} />
-      </div>
-      <div className="bidule-info-img">
-        {bidule.submitted
-        ? (<img src={protocoleImages[bidule.index]} />)
-        : null
-        }
-      </div>
-    </MachineBiduleContainer>
+    <React.Fragment>
+      <IndicatorOff />
+      {solved ? <IndicatorOn /> : null}
+
+      <Wrapper
+     className={classnames({ focused, solved })}>
+        <Cursor x={radar.cursor.x} y={radar.cursor.y} />
+        <Pointer />
+      </Wrapper
+    >
+    </React.Fragment>
   );
 }
 
-
-export default withFocus(MachineBidule);
+export default withFocus(Radar);

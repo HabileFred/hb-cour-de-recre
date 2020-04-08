@@ -14,7 +14,8 @@ import {
   MUSIC_TOGGLE, SFX_TOGGLE,
   WIRE_SELECT_BOTTOM_SOCKET, WIRE_SELECT_TOP_SOCKET,
   SET_SCREEN,
-  FOCUS_NEXT
+  FOCUS_NEXT,
+  BUTTON_SIMON_PRESSED
 } from '../constants';
 
 import { SFX } from '../SoundManager';
@@ -24,6 +25,8 @@ import { focus } from './focus';
 import { getDraft } from './draft';
 
 // Import reducers.
+import { homeReducer } from 'BOT/screens/Home/Home.reducer';
+// Machine
 import { biduleReducer } from 'BOT/screens/Machine/Bidule/Bidule.reducer';
 import { binaryReducer } from 'BOT/screens/Machine/Binary/Binary.reducer';
 import { fusesReducer } from 'BOT/screens/Machine/Fuses/Fuses.reducer';
@@ -32,7 +35,10 @@ import { piecesReducer } from 'BOT/screens/Machine/Pieces/Pieces.reducer';
 import { pipesReducer } from 'BOT/screens/Machine/Pipes/Pipes.reducer';
 import { simonReducer } from 'BOT/screens/Machine/Simon/Simon.reducer';
 import { wiresReducer } from 'BOT/screens/Machine/Wires/Wires.reducer';
-import { homeReducer } from 'BOT/screens/Home/Home.reducer';
+// Launcher
+import { radarReducer } from 'BOT/screens/Launcher/Radar/Radar.reducer';
+import { paramsReducer } from 'BOT/screens/Launcher/Params/Params.reducer';
+
 import { setWorkingDraft } from './draft';
 
 function checkWiresReadiness() {
@@ -70,6 +76,8 @@ const BiduleOTronReducer = (state = initialState, action) =>
       case PAD_UP:
         if (focus.is('binary@machine')) {
           binaryReducer.handlePadUp();
+        } else if (focus.is('radar@launcher')) {
+          radarReducer.handlePadUp();
         } else {
           SFX.wrong();
         }
@@ -78,6 +86,8 @@ const BiduleOTronReducer = (state = initialState, action) =>
       case PAD_DOWN:
         if (focus.is('binary@machine')) {
           binaryReducer.handlePadDown();
+        } else if (focus.is('radar@launcher')) {
+          radarReducer.handlePadDown();
         } else {
           SFX.wrong();
         }
@@ -88,6 +98,8 @@ const BiduleOTronReducer = (state = initialState, action) =>
           piecesReducer.handlePadLeft();
         } else if (focus.is('bidule@machine')) {
           biduleReducer.handlePadLeft();
+        } else if (focus.is('radar@launcher')) {
+          radarReducer.handlePadLeft();
         } else {
           SFX.wrong();
         }
@@ -98,6 +110,8 @@ const BiduleOTronReducer = (state = initialState, action) =>
           piecesReducer.handlePadRight();
         } else if (focus.is('bidule@machine')) {
           biduleReducer.handlePadRight();
+        } else if (focus.is('radar@launcher')) {
+          radarReducer.handlePadRight();
         } else {
           SFX.wrong();
         }
@@ -111,6 +125,10 @@ const BiduleOTronReducer = (state = initialState, action) =>
         } else if (focus.is('fuses@machine')) {
           fusesReducer.checkFuses();
           checkWiresReadiness();
+        } else if (focus.is('radar@launcher')) {
+          radarReducer.handlePadSubmit();
+        } else {
+          SFX.wrong();
         }
         break;
 
@@ -130,21 +148,35 @@ const BiduleOTronReducer = (state = initialState, action) =>
         pipesReducer.checkGauges(draft);
         break;
 
-      case BUTTON_PRESSED:
-        if (focus.is('lights@machine')) {
-          lightsReducer.handleButtonPressed(action.button);
-          checkWiresReadiness();
-        }
-        if (focus.is('pieces@machine')) {
-          piecesReducer.handleButtonPressed(action.button);
-        }
-        if (!focus.is('pieces@machine') && !focus.is('lights@machine')) {
+      case BUTTON_SIMON_PRESSED:
+        if (focus.is('params@launcher')) {
+          paramsReducer.handleButtonPressed(action.button);
+        } else {
           SFX.wrong();
         }
         break;
 
+      case BUTTON_PRESSED:
+        if (focus.is('params@launcher')) {
+          paramsReducer.handleButtonPressed(action.button);
+        } else {
+          if (focus.is('lights@machine')) {
+            lightsReducer.handleButtonPressed(action.button);
+            checkWiresReadiness();
+          }
+          if (focus.is('pieces@machine')) {
+            piecesReducer.handleButtonPressed(action.button);
+          }
+          if (!focus.is('pieces@machine') && !focus.is('lights@machine')) {
+            SFX.wrong();
+          }
+        }
+        break;
+
       case KEYPAD_INPUT:
-        if (focus.is('password@home')) {
+        if (focus.is('params@launcher')) {
+          paramsReducer.handleKeypadInput(action.value);
+        } else if (focus.is('password@home')) {
           homeReducer.handleKeypadInput(action.value);
         } else if (focus.is('binary@machine')) {
           binaryReducer.handleKeypadInput(action.value);

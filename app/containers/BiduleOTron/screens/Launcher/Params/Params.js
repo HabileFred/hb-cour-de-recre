@@ -1,112 +1,79 @@
 import React from 'react';
 import styled from 'styled-components';
+import classnames from 'classnames';
 import withFocus from '../../../withFocus';
 
-import imgBinary from './img/binaire.png';
-import imgFocusText from './img/focus_champs.png';
-import imgFocusMachine from './img/focus_binaire.png';
-import imgPastille1 from './img/pastille_1.png';
-import imgPastille1ok from './img/pastille_1_ok.png';
-import imgPastille2 from './img/pastille_2.png';
-import imgPastille2ok from './img/pastille_2_ok.png';
-import imgPastille3 from './img/pastille_3.png';
-import imgPastille3ok from './img/pastille_3_ok.png';
+import imgStability1 from './img/stabilite_1.png';
+import imgStability2 from './img/stabilite_2.png';
+import imgStability3 from './img/stabilite_3.png';
+import imgStability4 from './img/stabilite_4.png';
+const imgStability = [
+  null,
+  imgStability1,
+  imgStability2,
+  imgStability3,
+  imgStability4,
+];
 
-import imgDigit0 from './img/0.png';
-import imgDigit1 from './img/1.png';
+import imgVelocity0 from './img/carre_orange.png';
+import imgVelocity1 from './img/carre_bleu.png';
+import imgVelocity2 from './img/carre_jaune.png';
+import imgVelocity3 from './img/carre_rose.png';
+import imgVelocity4 from './img/carre_violet.png';
+const imgVelocity = [
+  imgVelocity0,
+  imgVelocity1,
+  imgVelocity2,
+  imgVelocity3,
+  imgVelocity4,
+  ];
 
-const MachineBinaryContainer = styled.div`
+const Wrapper = styled.div`
   position: absolute;
-  top: 102px;
-  left: 597px;
-  width: 113px;
-  height: 176px;
-  display: flex;
-  flex-flow: column;
-  align-items: center;
-  opacity: 0;
-  padding-top: 5px;
-  transition: opacity 250ms ease;
-
-  &.focused {
-    opacity: 1;
-  }
-  &.focused::before {
-    content: " ";
-    position: absolute;
-    left 0;
-    top: 0;
-    width: 113px;
-    height: 176px;
-    background: url(${imgFocusMachine}) no-repeat top left;
-  }
-
-  &.solved {
-    opacity: 1;
-  }
+  left: 793px;
+  top: 136px;
+  width: 175px;
+  height: 310px;
+  z-index: 5;
 `;
 
-const Field = styled.div`
+const ParamsInfos = styled.div`
   position: absolute;
-  width: 65px;
-  height: 28px;
-  left: 37px;
-  padding: 11px 4px 11px 7px;
-  display: flex;
-  background: ${props => props.focused ? 'no-repeat top left url(\'' + imgFocusText + '\')' : 'none'};
-`;
-const Field1 = styled(Field)`
-  top: 38px;
-`;
-const Field2 = styled(Field)`
-  top: 78px;
-`;
-const Field3 = styled(Field)`
-  top: 119px;
+  left: 6px;
+  top: 182px;
+  width: 160px;
+  height: 116px;
+  background: white;
+  transition: opacity 250ms linear;
+  opacity: ${props => props.revealed ? 0 : 1};
 `;
 
-const Pastille = styled.div`
+const StabilityItem = styled.div`
   position: absolute;
-  width: 16px;
-  height: 17px;
-  left: 14px;
-`;
-const Pastille1 = styled(Pastille)`
-  top: 38px;
-  background: no-repeat top left url('${props => props.solved ? imgPastille1ok : imgPastille1}');
-`;
-const Pastille2 = styled(Pastille)`
-  top: 78px;
-  background: no-repeat top left url('${props => props.solved ? imgPastille2ok : imgPastille2}');
-`;
-const Pastille3 = styled(Pastille)`
-  top: 119px;
-  background: no-repeat top left url('${props => props.solved ? imgPastille3ok : imgPastille3}');
+  left: ${props => 23 + props.index * 12}px;
+  top: 52px;
+  width: 14px;
+  height: 38px;
+  background: top center no-repeat url('${props => imgStability[props.value]}');
 `;
 
-const BinaryDigit = styled.div`
-  width: ${props => props.value === '1' ? 5 : 7}px;
-  margin-right: 1px;
-  height: 17px;
-  background: no-repeat top center url('${props => props.value === '1' ? imgDigit1 : imgDigit0}');
+const VelocityItem = styled.div`
+  position: absolute;
+  left: ${props => 30 + props.index * 15}px;
+  top: 19px;
+  width: 14px;
+  height: 15px;
+  background: top center no-repeat url('${props => imgVelocity[props.value]}');
 `;
 
-const BinaryDigits = function({ value }) {
-  return (<React.Fragment>{String(value).split('').map((c,i) => <BinaryDigit key={i} value={c} />)}</React.Fragment>);
-};
-
-const MachineBinary = function({ binary, focused, solved }) {
+const Params = function({ params, focused, solved }) {
   return (
-    <MachineBinaryContainer className={`${focused ? 'focused' : ''} ${solved ? 'solved' : ''}`}>
-      <img src={imgBinary} />
-      <Field1 focused={!solved && binary.index === 0}><BinaryDigits value={binary.values[0]} /></Field1>
-      <Field2 focused={!solved && binary.index === 1}><BinaryDigits value={binary.values[1]} /></Field2>
-      <Field3 focused={!solved && binary.index === 2}><BinaryDigits value={binary.values[2]} /></Field3>
-      <Pastille1 solved={binary.values[0] === binary.solution[0]} />
-      <Pastille2 solved={binary.values[1] === binary.solution[1]} />
-      <Pastille3 solved={binary.values[2] === binary.solution[2]} />
-    </MachineBinaryContainer>
+    <Wrapper className={classnames({ focused, solved })}>
+      <ParamsInfos revealed={focused} />
+      {params.stability.values.map((v, i) => (<StabilityItem key={i} index={i} value={v} />))}
+      {params.velocity.values.map((v, i) => (<VelocityItem key={i} index={i} value={v} />))}
+    </Wrapper>
   );
 };
 
-export default withFocus(MachineBinary);
+export default withFocus(Params);

@@ -16,6 +16,7 @@ export const PIPE_ROTATE = 'app/BiduleOTron/PIPE_ROTATE';
 export const PIPES_CHECK = 'app/BiduleOTron/PIPES_CHECK';
 
 export const BUTTON_PRESSED = 'app/BiduleOTron/BUTTON_PRESSED';
+export const BUTTON_SIMON_PRESSED = 'app/BiduleOTron/BUTTON_SIMON_PRESSED';
 
 export const KEYPAD_INPUT = 'app/BiduleOTron/KEYPAD_INPUT';
 export const FUSE_TOGGLE = 'app/BiduleOTron/FUSE_TOGGLE';

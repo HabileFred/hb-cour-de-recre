@@ -6,16 +6,20 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import styled, { keyframes } from 'styled-components';
 
-// import MachineBidule from './Bidule/Bidule';
+import Radar from './Radar/Radar';
+import Params from './Params/Params';
 
 import {
   makeSelectBiduleOTron,
+  makeSelectRadar,
+  makeSelectParams,
 } from '../../selectors';
 
 import imgLauncher from './img/launcher.png';
 
+import { Cable1, Cable2, Pipe, Barometer, Propellant, Porthole, Transmission, Antenna } from './Animations';
 
-function Launcher({ store }) {
+function Launcher({ store, params, radar }) {
   return (
     <div style={{
       position: 'absolute',
@@ -24,7 +28,6 @@ function Launcher({ store }) {
       width: '100%',
       height: '550px',
       cursor: 'not-allowed',
-      background: `url('${imgLauncher}') top left no-repeat`
     }}>
       <div style={{
         position: 'absolute',
@@ -33,8 +36,20 @@ function Launcher({ store }) {
         width: '100%',
         height: '100%',
         pointerEvents: 'none',
+        zIndex: 2,
+        background: `url('${imgLauncher}') top left no-repeat`,
       }}>
       </div>
+      <Barometer />
+      <Antenna />
+      <Radar radar={radar} focusId="radar" />
+      <Params params={params} focusId="params" />
+      <Cable1 animated={radar.SOLVED} />
+      <Cable2 animated={params.direction.SOLVED} />
+      <Pipe animated={params.stability.SOLVED} />
+      <Propellant />
+      <Porthole />
+      <Transmission animated={params.velocity.SOLVED} />
     </div>
   );
 }
@@ -45,6 +60,8 @@ Launcher.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   store: makeSelectBiduleOTron(),
+  radar: makeSelectRadar(),
+  params: makeSelectParams(),
 });
 
 function mapDispatchToProps(dispatch) {

@@ -21,6 +21,7 @@ import {
   WIRE_SELECT_BOTTOM_SOCKET,
   SET_SCREEN,
   FOCUS_NEXT,
+  BUTTON_SIMON_PRESSED,
 } from './constants';
 
 export function padUp() {
@@ -75,6 +76,13 @@ export function pipesCheck() {
 export function buttonPressed(button) {
   return {
     type: BUTTON_PRESSED,
+    button,
+  };
+}
+
+export function buttonSimonPressed(button) {
+  return {
+    type: BUTTON_SIMON_PRESSED,
     button,
   };
 }

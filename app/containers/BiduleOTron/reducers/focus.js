@@ -27,6 +27,7 @@ class Focus {
         },
         launcher: {
           $start: 'radar',
+          radar: 'params',
         },
       }
     };
