@@ -3,10 +3,4 @@ export const initialState = {
     music: false,
     sfx: true,
   },
-
-  password: {
-    value: '',
-    solution: '0456',
-    SOLVED: false,
-  },
 };

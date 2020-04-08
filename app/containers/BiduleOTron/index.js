@@ -12,7 +12,7 @@ import { compose } from 'redux';
 import styled from 'styled-components';
 
 import { useInjectReducer } from 'utils/injectReducer';
-import { makeSelectBiduleOTron, makeSelectNav } from './selectors';
+import { makeSelectNav } from './selectors';
 import reducer from './reducers/reducer';
 
 import Machine from './screens/Machine/Machine';
@@ -23,6 +23,7 @@ import ControlPanel from './ControlPanel/ControlPanel';
 import imgBackground from './img/papier_peint.png';
 import imgComputer from './img/ordinateur.png';
 import imgMouseCursor from './img/cursor.png';
+import Launcher from './screens/Launcher/Launcher';
 
 const Computer = styled.div`
   position: absolute;
@@ -74,11 +75,14 @@ export function BiduleOTron({ nav }) {
 
   let screen;
   switch (nav.screen) {
+    case 'loading':
+      screen = (<Loading />);
+      break;
     case 'machine':
       screen = (<Machine />);
       break;
-    case 'loading':
-      screen = (<Loading />);
+    case 'launcher':
+      screen = (<Launcher />);
       break;
     default:
       screen = (<Home />);

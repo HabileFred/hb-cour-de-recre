@@ -10,7 +10,6 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import HomePage from 'containers/HomePage/Loadable';
 import BiduleOTron from 'containers/BiduleOTron/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 
@@ -21,6 +20,7 @@ export default function App() {
     <React.Fragment>
       <Switch>
         <Route exact path="/" component={BiduleOTron} />
+        <Route exact path="/bidule-o-tron/" component={BiduleOTron} />
         <Route component={NotFoundPage} />
       </Switch>
     </React.Fragment>

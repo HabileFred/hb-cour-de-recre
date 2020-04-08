@@ -24,15 +24,15 @@ import { focus } from './focus';
 import { getDraft } from './draft';
 
 // Import reducers.
-import { biduleReducer } from './reducer.bidule';
-import { binaryReducer } from './reducer.binary';
-import { fusesReducer } from './reducer.fuses';
-import { lightsReducer } from './reducer.lights';
-import { piecesReducer } from './reducer.pieces';
-import { pipesReducer } from './reducer.pipes';
-import { simonReducer } from './reducer.simon';
-import { wiresReducer } from './reducer.wires';
-import { homeReducer } from './reducer.home';
+import { biduleReducer } from 'BOT/screens/Machine/Bidule/Bidule.reducer';
+import { binaryReducer } from 'BOT/screens/Machine/Binary/Binary.reducer';
+import { fusesReducer } from 'BOT/screens/Machine/Fuses/Fuses.reducer';
+import { lightsReducer } from 'BOT/screens/Machine/Lights/Lights.reducer';
+import { piecesReducer } from 'BOT/screens/Machine/Pieces/Pieces.reducer';
+import { pipesReducer } from 'BOT/screens/Machine/Pipes/Pipes.reducer';
+import { simonReducer } from 'BOT/screens/Machine/Simon/Simon.reducer';
+import { wiresReducer } from 'BOT/screens/Machine/Wires/Wires.reducer';
+import { homeReducer } from 'BOT/screens/Home/Home.reducer';
 import { setWorkingDraft } from './draft';
 
 function checkWiresReadiness() {

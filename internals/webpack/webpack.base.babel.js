@@ -127,6 +127,12 @@ module.exports = options => ({
     modules: ['node_modules', 'app'],
     extensions: ['.js', '.jsx', '.react.js'],
     mainFields: ['browser', 'jsnext:main', 'main'],
+    alias: {
+      app: path.resolve(__dirname, '../../app'),
+      containers: path.resolve(__dirname, '../../app/containers'),
+      components: path.resolve(__dirname, '../../app/components'),
+      BOT: path.resolve(__dirname, '../../app/containers/BiduleOTron')
+    },
   },
   devtool: options.devtool,
   target: 'web', // Make web variables accessible to webpack, e.g. window
