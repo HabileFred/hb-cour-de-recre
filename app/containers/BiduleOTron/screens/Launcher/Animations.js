@@ -35,7 +35,7 @@ export const Cable1 = styled(Animation)`
   top: 138px;
   width: 72px;
   height: 208px;
-  z-index: 2;
+  z-index: 4;
   background-image: ${props => props.animated ? ("url('" + imgCable1 + "')") : 'none'};
 `;
 
@@ -44,7 +44,7 @@ export const Cable2 = styled(Animation)`
   top: 359px;
   width: 157px;
   height: 168px;
-  z-index: 2;
+  z-index: 4;
   background-image: ${props => props.animated ? ("url('" + imgCable2 + "')") : 'none'};
 `;
 
