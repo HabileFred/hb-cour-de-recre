@@ -14,40 +14,35 @@ export class ReducerHome {
 
   constructor() {
     initialState.home = {
-      cursor: 0,
-      password: [-1, -1, -1, -1],
-      solution: [0, 4, 5, 6],
-      SOLVED: false,
+      cursor: -1,
     };
   }
 
-  reset() {
+  handleButtonPressed(button) {
     const { home } = getDraft();
-    home.cursor = 0;
-    home.password.forEach((v, i) => home.password[i] = -1);
-  }
-
-  handleKeypadInput(value) {
-    const { home } = getDraft();
-    if (value === 'depart' || home.cursor === 4) {
-      SFX.wrong();
-      this.reset();
-    } else {
-      SFX.click(2);
-      home.password[home.cursor] = value;
-      home.cursor += 1;
+    if (button === 'k') {
+      home.cursor = 0;
+    } else if (button === 'l') {
+      home.cursor = 1;
     }
   }
 
   handlePadSubmit() {
     const { home } = getDraft();
-    if (arraysEqual(home.password, home.solution)) {
-      focus.from('password').next();
+    if (home.cursor === 0) {
+      focus.setScreen('machine');
+    } else if (home.cursor === 1) {
+      focus.setScreen('launcher');
     } else {
       SFX.wrong();
-      this.reset();
     }
   }
+
+  handlePadCancel() {
+    const { home } = getDraft();
+    home.cursor = -1;
+  }
+
 }
 
 export const homeReducer = new ReducerHome();

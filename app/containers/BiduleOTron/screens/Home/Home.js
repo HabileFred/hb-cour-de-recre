@@ -8,18 +8,12 @@ import styled, { keyframes } from 'styled-components';
 
 import { makeSelectHome } from '../../selectors';
 
-import imgBackground from './img/accueil_fond.png';
+import imgBackground from './img/home.png';
 
-function importDigitsImages() {
-  const r = require.context('./img/', false, /\d\.png$/);
-  const images = new Array(10);
-  r.keys().forEach(key => {
-    const l = parseInt(key.match(/\d\.png$/), 10);
-    images[l] = r(key);
-  });
-  return images;
-}
-const digitImages = importDigitsImages();
+import imgMachineOff from './img/biduleotron_off.png';
+import imgMachineOn from './img/biduleotron_on.png';
+import imgLauncherOff from './img/lancebidule_off.png';
+import imgLauncherOn from './img/lancebidule_on.png';
 
 const Wrapper = styled.section`
   position: absolute;
@@ -33,18 +27,29 @@ const Wrapper = styled.section`
   padding: 230px 466px;
 `;
 
-const Digit = styled.div`
-  width: 82px;
-  height: 38px;
-  background: center center no-repeat url('${props => digitImages[props.digit]}');
+const MenuItem1 = styled.div`
+  width: 245px;
+  height: 311px;
+  position: absolute;
+  left: 80px;
+  top: 90px;
+  background: top left no-repeat url('${props => props.active ? imgMachineOn : imgMachineOff}');
+`;
+
+const MenuItem2 = styled.div`
+  width: 245px;
+  height: 311px;
+  position: absolute;
+  left: 365px;
+  top: 90px;
+  background: top left no-repeat url('${props => props.active ? imgLauncherOn : imgLauncherOff}');
 `;
 
 function Home({ home }) {
   return (
     <Wrapper>
-      {home.password.map((d, i) => (
-        d >= 0 && d <= 9 ? (<Digit key={`d${i}`} digit={d} />) : null
-      ))}
+      <MenuItem1 active={home.cursor === 0} />
+      <MenuItem2 active={home.cursor === 1} />
     </Wrapper>
   );
 }

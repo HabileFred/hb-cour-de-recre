@@ -4,12 +4,15 @@ import { getDraft } from './draft';
 class Focus {
   constructor() {
     initialState.nav = {
-      screen: 'launcher', // FIXME '@home'
-      focus: ['radar'], // FIXME 'password'
+      screen: 'login', // FIXME 'login'
+      focus: ['password'], // FIXME 'password'
       workflow: {
-        home: {
+        login: {
           $start: 'password',
-          password: '@machine', // FIXME '@loading'
+          password: '@home', // FIXME '@loading'
+        },
+        home: {
+          $start: 'menu',
         },
         loading: {
           $start: 'loading',
@@ -41,11 +44,14 @@ class Focus {
     const draft = getDraft();
     const p = focusId.indexOf('@');
     if (p !== -1) {
-      return focusId.substring(p + 1) === draft.nav.screen
-        && draft.nav.focus.indexOf(focusId.substring(0, p)) !== -1
-      ;
+      const [f, s] = focusId.split('@');
+      return s === draft.nav.screen && (!f.length || draft.nav.focus.indexOf(f) !== -1);
     }
     return draft.nav.focus.indexOf(focusId) !== -1;
+  }
+
+  isNot(focusId) {
+    return !this.is(focusId);
   }
 
   /**
@@ -53,7 +59,7 @@ class Focus {
    * @param {Array} newFocusId IDs of elements to give focus to.
    * @param {Array} oldFocusId IDs of elements to remove focus from.
    */
-  set(newFocusId, oldFocusId)  {
+  set(newFocusId, oldFocusId) {
     const draft = getDraft();
     const set = new Set(draft.nav.focus);
     if (oldFocusId) {

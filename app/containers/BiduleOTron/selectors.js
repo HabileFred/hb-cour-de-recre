@@ -75,6 +75,12 @@ export const makeSelectSounds = () =>
     substate => substate.sounds,
   );
 
+export const makeSelectLogin = () =>
+  createSelector(
+    selectBiduleOTronDomain,
+    substate => substate.login,
+  );
+
 export const makeSelectHome = () =>
   createSelector(
     selectBiduleOTronDomain,

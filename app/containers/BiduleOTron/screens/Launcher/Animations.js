@@ -58,7 +58,7 @@ export const Pipe = styled(Animation)`
 
 export const Barometer = styled(Animation)`
   left: 576px;
-  top: 392px;
+  top: 315px;
   width: 86px;
   height: 66px;
   z-index: 3;
@@ -78,7 +78,7 @@ export const Propellant = styled(Animation)`
 // Hublot
 export const Porthole = styled(Animation)`
   left: 361px;
-  top: 303px;
+  top: 302px;
   width: 157px;
   height: 168px;
   z-index: 1;

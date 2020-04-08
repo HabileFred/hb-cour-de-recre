@@ -39,7 +39,6 @@ class ReducerParams {
     const { params } = getDraft();
     const cursor = 'ghjklm'.indexOf(button);
     if (cursor !== -1) {
-      console.log(button, cursor);
       params.stability.values[cursor] = cycleValue(params.stability.values[cursor], 1, 1, 4);
       params.stability.SOLVED = arraysEqual(params.stability.values, params.stability.solution);
     } else {
@@ -58,7 +57,6 @@ class ReducerParams {
     params.direction.values[params.direction.cursor] = value;
     params.direction.cursor = cycleValue(params.direction.cursor, 1, 0, params.direction.solution.length - 1);
     params.direction.SOLVED = arraysEqual(params.direction.values, params.direction.solution);
-    console.log(JSON.stringify(params.direction));
   }
 
 }

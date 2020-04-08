@@ -25,6 +25,7 @@ import { focus } from './focus';
 import { getDraft } from './draft';
 
 // Import reducers.
+import { loginReducer } from 'BOT/screens/Login/Login.reducer';
 import { homeReducer } from 'BOT/screens/Home/Home.reducer';
 // Machine
 import { biduleReducer } from 'BOT/screens/Machine/Bidule/Bidule.reducer';
@@ -52,18 +53,24 @@ function checkWiresReadiness() {
  * Pad button 'cancel' has been pressed.
  */
 function handlePadCancel() {
-  biduleReducer.handlePadCancel();
-  // TODO
-  const draft = getDraft();
-  draft.bidule.SOLVED = false;
-  draft.fuses.SOLVED = false;
-  draft.wires.SOLVED = false;
-  draft.lights.SOLVED = false;
-  draft.binary.SOLVED = false;
-  draft.pieces.SOLVED = false;
-  draft.pipes.SOLVED = false;
-  if (! focus.is('bidule@machine')) {
-    focus.replace('bidule');
+  if (focus.is('@login')) {
+    loginReducer.handlePadCancel();
+  } else {
+    if (focus.is('@machine')) {
+      if (focus.is('bidule@machine')) {
+        biduleReducer.handlePadCancel();
+        focus.setScreen('home');
+      } else {
+        focus.setScreen('machine');
+      }
+    } else {
+      if (focus.is('@home')) {
+        homeReducer.handlePadCancel();
+        SFX.wrong();
+      } else {
+        focus.setScreen('home');
+      }
+    }
   }
 }
 
@@ -118,8 +125,10 @@ const BiduleOTronReducer = (state = initialState, action) =>
         break;
 
       case PAD_SUBMIT:
-        if (focus.is('password@home')) {
+        if (focus.is('@home')) {
           homeReducer.handlePadSubmit();
+        } else if (focus.is('password@login')) {
+          loginReducer.handlePadSubmit();
         } else if (focus.is('bidule@machine')) {
           biduleReducer.handlePadSubmit();
         } else if (focus.is('fuses@machine')) {
@@ -157,7 +166,9 @@ const BiduleOTronReducer = (state = initialState, action) =>
         break;
 
       case BUTTON_PRESSED:
-        if (focus.is('params@launcher')) {
+        if (focus.is('@home')) {
+          homeReducer.handleButtonPressed(action.button);
+        } else if (focus.is('params@launcher')) {
           paramsReducer.handleButtonPressed(action.button);
         } else {
           if (focus.is('lights@machine')) {
@@ -176,8 +187,8 @@ const BiduleOTronReducer = (state = initialState, action) =>
       case KEYPAD_INPUT:
         if (focus.is('params@launcher')) {
           paramsReducer.handleKeypadInput(action.value);
-        } else if (focus.is('password@home')) {
-          homeReducer.handleKeypadInput(action.value);
+        } else if (focus.is('password@login')) {
+          loginReducer.handleKeypadInput(action.value);
         } else if (focus.is('binary@machine')) {
           binaryReducer.handleKeypadInput(action.value);
         } else {

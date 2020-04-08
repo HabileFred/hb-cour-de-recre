@@ -43,23 +43,27 @@ const Button = styled.button`
   }
 `;
 
+const keys = {
+  '89': 'y',
+  '85': 'u',
+  '73': 'i',
+  '79': 'o',
+  '80': 'p',
+};
+
 /**
  *
  */
 function ButtonGroupSimon({ dispatch, simon }) {
 
   const keyListener = event => {
-    /*
     if (event.isComposing || event.keyCode === 229) {
       return;
     }
-    if (event.keyCode >= 65 && event.keyCode <= 90) {
-      const p = buttonPipesLetters.indexOf(String.fromCharCode(event.keyCode));
-      if (p !== -1) {
-        rotatePipe(p);
-      }
+    const l = keys[String(event.keyCode)];
+    if (l) {
+      dispatch(buttonSimonPressed(l));
     }
-    */
   };
 
   useEffect(() => {

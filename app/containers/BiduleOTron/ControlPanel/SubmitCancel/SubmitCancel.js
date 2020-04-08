@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
 import { connect } from 'react-redux';
@@ -59,6 +59,27 @@ const Bill = styled.div`
  *
  */
 function ButtonGroupSubmitCancel({ dispatch }) {
+
+  const keyListener = event => {
+    if (event.isComposing || event.keyCode === 229) {
+      return;
+    }
+    if (event.keyCode === 86) {        // V
+      dispatch(padSubmit());
+    } else if (event.keyCode === 88) { // X
+      dispatch(padCancel());
+    }
+  };
+
+  useEffect(() => {
+    // Add event listener
+    document.addEventListener('keyup', keyListener);
+    // Remove event listener on cleanup
+    return () => {
+      document.removeEventListener('keyup', keyListener);
+    };
+  });
+
   return (
     <React.Fragment>
       <Bill />

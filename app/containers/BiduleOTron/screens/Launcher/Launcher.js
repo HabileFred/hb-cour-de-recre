@@ -10,7 +10,7 @@ import Radar from './Radar/Radar';
 import Params from './Params/Params';
 
 import {
-  makeSelectBiduleOTron,
+  makeSelectBidule,
   makeSelectRadar,
   makeSelectParams,
 } from '../../selectors';
@@ -19,7 +19,7 @@ import imgLauncher from './img/launcher.png';
 
 import { Cable1, Cable2, Pipe, Barometer, Propellant, Porthole, Transmission, Antenna } from './Animations';
 
-function Launcher({ params, radar }) {
+function Launcher({ params, bidule, radar }) {
   return (
     <div style={{
       position: 'absolute',
@@ -48,7 +48,7 @@ function Launcher({ params, radar }) {
       <Cable2 animated={params.direction.SOLVED} />
       <Pipe animated={params.stability.SOLVED} />
       <Propellant />
-      <Porthole />
+      <Porthole status={bidule.SOLVED ? 'bidule' : 'empty'} />
       <Transmission animated={params.velocity.SOLVED} />
     </div>
   );
@@ -59,7 +59,7 @@ Launcher.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  store: makeSelectBiduleOTron(),
+  bidule: makeSelectBidule(),
   radar: makeSelectRadar(),
   params: makeSelectParams(),
 });

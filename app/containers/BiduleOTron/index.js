@@ -16,14 +16,15 @@ import { makeSelectNav } from './selectors';
 import reducer from './reducers/reducer';
 
 import Machine from './screens/Machine/Machine';
-import Home from './screens/Home/Home';
+import Login from './screens/Login/Login';
 import Loading from './screens/Loading/Loading';
 import ControlPanel from './ControlPanel/ControlPanel';
+import Launcher from './screens/Launcher/Launcher';
+import Home from './screens/Home/Home';
 
 import imgBackground from './img/papier_peint.png';
 import imgComputer from './img/ordinateur.png';
 import imgMouseCursor from './img/cursor.png';
-import Launcher from './screens/Launcher/Launcher';
 
 const Computer = styled.div`
   position: absolute;
@@ -84,8 +85,11 @@ export function BiduleOTron({ nav }) {
     case 'launcher':
       screen = (<Launcher />);
       break;
-    default:
+    case 'home':
       screen = (<Home />);
+      break;
+    default:
+      screen = (<Login />);
   }
 
   return (
