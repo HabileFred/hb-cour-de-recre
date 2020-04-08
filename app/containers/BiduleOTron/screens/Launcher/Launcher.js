@@ -19,7 +19,7 @@ import imgLauncher from './img/launcher.png';
 
 import { Cable1, Cable2, Pipe, Barometer, Propellant, Porthole, Transmission, Antenna } from './Animations';
 
-function Launcher({ store, params, radar }) {
+function Launcher({ params, radar }) {
   return (
     <div style={{
       position: 'absolute',
