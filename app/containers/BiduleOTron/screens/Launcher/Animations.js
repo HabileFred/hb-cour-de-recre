@@ -40,8 +40,8 @@ export const Cable1 = styled(Animation)`
 `;
 
 export const Cable2 = styled(Animation)`
-  left: 511px;
-  top: 359px;
+  left: 512px;
+  top: 357px;
   width: 157px;
   height: 168px;
   z-index: 4;
@@ -53,6 +53,7 @@ export const Pipe = styled(Animation)`
   top: 150px;
   width: 184px;
   height: 348px;
+  z-index: 3;
   background-image: url('${props => props.animated ? imgPipeAnimated : imgPipeFixed}');
 `;
 

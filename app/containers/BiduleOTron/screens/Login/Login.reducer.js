@@ -29,7 +29,7 @@ export class ReducerLogin {
 
   handleKeypadInput(value) {
     const { login } = getDraft();
-    if (value === 'depart' || login.cursor === 4) {
+    if (value === '*' || login.cursor === 4) {
       SFX.wrong();
       this.reset();
     } else {

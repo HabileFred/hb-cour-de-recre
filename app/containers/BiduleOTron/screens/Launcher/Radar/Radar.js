@@ -71,8 +71,8 @@ const onAnimation = keyframes`
 
 const IndicatorOff = styled.div`
   position: absolute;
-  left: 625px;
-  top: 56px;
+  left: 829px;
+  top: 66px;
   width: 54px;
   height: 62px;
   background: center center no-repeat url('${imgOff}');

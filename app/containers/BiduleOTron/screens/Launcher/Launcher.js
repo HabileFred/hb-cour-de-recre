@@ -15,9 +15,34 @@ import {
   makeSelectParams,
 } from '../../selectors';
 
-import imgLauncher from './img/launcher.png';
-
 import { Cable1, Cable2, Pipe, Barometer, Propellant, Porthole, Transmission, Antenna } from './Animations';
+
+import imgBidulePresent from './img/bidule_aspitruc.png';
+import imgBiduleAbsent from './img/bidule_aucun.png';
+import imgLauncher from './img/launcher.png';
+import imgBiduleOK from './img/bidule_ok.png';
+
+const BiduleInfos = styled.div`
+  position: absolute;
+  left: 663px;
+  top: 359px;
+  width: 141px;
+  height: 31px;
+  z-index: 3;
+  background: top left no-repeat url('${props => props.present ? imgBidulePresent : imgBiduleAbsent}');
+`;
+
+const BiduleOK = styled.div`
+  position: absolute;
+  left: 699px;
+  top: 437px;
+  width: 40px;
+  height: 40px;
+  z-index: 3;
+  background: top left no-repeat url('${props => props.present ? imgBiduleOK : ''}');
+  background-size: contain;
+`;
+
 
 function Launcher({ params, bidule, radar }) {
   return (
@@ -48,6 +73,8 @@ function Launcher({ params, bidule, radar }) {
       <Cable2 animated={params.direction.SOLVED} />
       <Pipe animated={params.stability.SOLVED} />
       <Propellant />
+      <BiduleInfos present={bidule.SOLVED} />
+      <BiduleOK present={bidule.SOLVED} />
       <Porthole status={bidule.SOLVED ? 'bidule' : 'empty'} />
       <Transmission animated={params.velocity.SOLVED} />
     </div>

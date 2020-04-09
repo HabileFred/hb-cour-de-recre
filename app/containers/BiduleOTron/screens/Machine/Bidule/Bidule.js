@@ -10,7 +10,7 @@ import imgBtnSubmit from './img/bouton_valider.png';
 import imgBtnCancel from './img/bouton_annuler.png';
 
 function importBiduleImages() {
-  const r = require.context('./img/', false, /bidule_\d+\.png$/);
+  const r = require.context('./img/bidules/', false, /bidule_\d+\.png$/);
   const images = new Array(r.keys().length + 1);
   r.keys().forEach(key => {
     const l = key.match(/_(\d+)\.png$/)[1];
@@ -20,8 +20,20 @@ function importBiduleImages() {
 }
 const biduleImages = importBiduleImages();
 
+function importCodesImages() {
+  const r = require.context('./img/codes/', false, /\.png$/);
+  const images = {};
+  r.keys().forEach(key => {
+    const name = key.match(/\.\/([^.]+)\.png$/)[1];
+    images[name] = r(key);
+  });
+  return images;
+}
+const codeImages = importCodesImages();
+console.log(codeImages);
+
 function importProtocolImages() {
-  const r = require.context('./img/', false, /protocole_\d+\.png$/);
+  const r = require.context('./img/protocoles/', false, /protocole_\d+\.png$/);
   const images = new Array(r.keys().length);
   r.keys().forEach(key => {
     const l = key.match(/_(\d+)\.png$/)[1];
@@ -107,20 +119,6 @@ const MachineBiduleContainer = styled.div`
     justify-content: center;
   }
 
-  .bidule-info-text {
-    text-align: center;
-    font-weight: bold;
-    text-transform: uppercase;
-    line-height: 130%;
-    transform: skew(1deg, 2deg);
-
-    code {
-      letter-spacing: 0.2em;
-      font: Courier New, Menlo, sans-serif;
-      display: block;
-    }
-  }
-
   .bidule-info-img {
     flex-shrink: 0;
   }
@@ -143,18 +141,21 @@ const BidulesView = styled.div`
   }
 `;
 
+const BiduleCodeName = styled.div`
+  width: 122px;
+  height: 58px;
+  background: top left no-repeat url('${props => codeImages[props.name]}');
+`;
+
 const MachineBidule = function({ bidule, focused }) {
-  const biduleInfos = bidule.biduleInfos[bidule.index];
+  const biduleName = bidule.biduleNames[bidule.index];
+  console.log(biduleName, codeImages[biduleName]);
   return (
     <MachineBiduleContainer className={`${focused ? 'focused' : ''}`}>
       <div className="ui-element frame"></div>
       <div className="ui-element arrow left"></div>
       <div className="ui-element arrow right"></div>
-      <div className="bidule-info-text">
-        <div>Nom de code :</div>
-        <code>{biduleInfos.text1}</code>
-        <code>{biduleInfos.text2}</code>
-      </div>
+      <BiduleCodeName name={biduleName} />
       <BidulesView index={bidule.index}>
         <div className="bidules">
           {biduleImages.map((img, i) => <img key={i} src={img} />)}

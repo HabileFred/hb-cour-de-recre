@@ -15,18 +15,37 @@ const imgStability = [
   imgStability4,
 ];
 
-import imgVelocity0 from './img/carre_orange.png';
-import imgVelocity1 from './img/carre_bleu.png';
-import imgVelocity2 from './img/carre_jaune.png';
-import imgVelocity3 from './img/carre_rose.png';
-import imgVelocity4 from './img/carre_violet.png';
+import imgVelocity0 from './img/carre_vide.png';
+import imgVelocity1 from './img/carre_orange.png';
+import imgVelocity2 from './img/carre_bleu.png';
+import imgVelocity3 from './img/carre_jaune.png';
+import imgVelocity4 from './img/carre_rose.png';
+import imgVelocity5 from './img/carre_violet.png';
 const imgVelocity = [
   imgVelocity0,
   imgVelocity1,
   imgVelocity2,
   imgVelocity3,
   imgVelocity4,
-  ];
+  imgVelocity5,
+];
+
+function importDigitsImages() {
+  const r = require.context('./img/', false, /\d\.png$/);
+  const images = {};
+  r.keys().forEach(key => {
+    const l = key.match(/^\.\/(\d)\.png/);;
+    if (l) {
+      images[l[1]] = r(key);
+    }
+  });
+  return images;
+}
+const digitsImages = importDigitsImages();
+import imgP from './img/p.png';
+digitsImages['*'] = imgP;
+console.log(digitsImages);
+
 
 const Wrapper = styled.div`
   position: absolute;
@@ -59,12 +78,33 @@ const StabilityItem = styled.div`
 
 const VelocityItem = styled.div`
   position: absolute;
-  left: ${props => 30 + props.index * 15}px;
+  left: ${props => 16 + props.index * 15}px;
   top: 19px;
   width: 14px;
   height: 15px;
   background: top center no-repeat url('${props => imgVelocity[props.value]}');
 `;
+
+const Direction = styled.div`
+  position: absolute;
+  left: 20px;
+  top: 107px;
+  width: 82px;
+  height: 20px;
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: center;
+`;
+
+const Digit = styled.div`
+  width: 18px;
+  height: 18px;
+  background: no-repeat url('${props => digitsImages[props.value]}');
+  background-size: contain;
+  transform: ${props => props.value === '*' ? 'none' : 'scale(.8)'};
+`;
+
 
 const Params = function({ params, focused, solved }) {
   return (
@@ -72,6 +112,9 @@ const Params = function({ params, focused, solved }) {
       <ParamsInfos revealed={focused} />
       {params.stability.values.map((v, i) => (<StabilityItem key={i} index={i} value={v} />))}
       {params.velocity.values.map((v, i) => (<VelocityItem key={i} index={i} value={v} />))}
+      <Direction>
+        {params.direction.values.map((c,i) => <Digit key={i} value={c} />)}
+      </Direction>
     </Wrapper>
   );
 };

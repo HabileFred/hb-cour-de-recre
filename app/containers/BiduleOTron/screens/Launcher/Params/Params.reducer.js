@@ -18,36 +18,56 @@ class ReducerParams {
       velocity: {
         SOLVED: false,
         cursor: 0,
-        values: [0, 0, 0, 0],
-        solution: [1, 1, 1, 1],
+        values: [0, 0, 0, 0, 0, 0],
+        solution: [2, 2, 2, 2, 0, 0],
       },
       stability: {
         SOLVED: false,
+        cursor: 0,
         values: [0, 0, 0, 0, 0, 0],
         solution: [1, 2, 3, 4, 2, 3],
+        buttonValues: {
+          'g': 4,
+          'h': 1,
+          'j': 3,
+          'k': 2,
+        }
       },
       direction: {
         SOLVED: false,
         cursor: 0,
         values: [],
-        solution: ['depart', 3, 0, 4],
+        solution: ['*', 3, 0, 4],
       },
     };
   }
 
   handleButtonPressed(button) {
     const { params } = getDraft();
-    const cursor = 'ghjklm'.indexOf(button);
-    if (cursor !== -1) {
-      params.stability.values[cursor] = cycleValue(params.stability.values[cursor], 1, 1, 4);
-      params.stability.SOLVED = arraysEqual(params.stability.values, params.stability.solution);
+    if ('ghjk'.indexOf(button) !== -1) {
+      const { stability: s } = params;
+      if (s.cursor === s.solution.length) {
+        s.values.splice(0, 6, 0, 0, 0, 0, 0, 0);
+        s.cursor = 0;
+      } else {
+        s.values[s.cursor] = s.buttonValues[button];
+        s.SOLVED = arraysEqual(s.values, s.solution);
+        s.cursor = cycleValue(s.cursor, 1, 0, s.solution.length);
+      }
     } else {
       const value = 'yuiop'.indexOf(button);
       if (value !== -1) {
-        const { velocity } = params;
-        velocity.values[velocity.cursor] = value;
-        velocity.cursor = cycleValue(velocity.cursor, 1, 0, 3);
-        params.velocity.SOLVED = arraysEqual(params.velocity.values, params.velocity.solution);
+        const { velocity: v } = params;
+        if (v.cursor === v.solution.length) {
+          v.values.splice(0, 6, 0, 0, 0, 0, 0, 0);
+          v.cursor = 0;
+        } else {
+          v.values[v.cursor] = value + 1;
+          v.SOLVED = arraysEqual(v.values, v.solution);
+          v.cursor = cycleValue(v.cursor, 1, 0, v.solution.length);
+        }
+      } else {
+        SFX.wrong();
       }
     }
   }

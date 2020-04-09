@@ -8,7 +8,6 @@ import { SFX } from 'BOT/SoundManager';
 import { initialState } from 'BOT/reducers/initialState';
 import { focus } from 'BOT/reducers/focus';
 import { getDraft } from 'BOT/reducers/draft';
-import { arraysEqual } from 'BOT/utils';
 
 export class ReducerHome {
 
@@ -24,6 +23,8 @@ export class ReducerHome {
       home.cursor = 0;
     } else if (button === 'l') {
       home.cursor = 1;
+    } else {
+      SFX.wrong();
     }
   }
 

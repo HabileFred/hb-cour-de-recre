@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
 import { connect } from 'react-redux';
@@ -59,7 +59,7 @@ const Key = styled.button`
 `;
 
 const keys = [
-  'depart', 4, 2, 7,
+  '*', 4, 2, 7,
   6, 3, 9, 5,
   8, 2, 0, 6,
   1, 5, 7, 4,
@@ -68,11 +68,39 @@ const keys = [
 /**
  *
  */
-function ButtonGroupKeypad({ dispatch, binary }) {
+function ButtonGroupKeypad({ dispatch }) {
+
+  const keyListener = event => {
+    if (event.isComposing || event.keyCode === 229) {
+      return;
+    }
+    const k = event.keyCode;
+    let n = -1;
+    if (k >= 48 && k <= 57) {
+      n = k - 48;
+    } else if (k >= 96 && k <= 105) {
+      n = k - 96;
+    } else if (k === 106 || k === 221) {
+      dispatch(keypadInput('*'));
+    }
+    if (n !== -1) {
+      dispatch(keypadInput(n));
+    }
+  };
+
+  useEffect(() => {
+    // Add event listener
+    document.addEventListener('keyup', keyListener);
+    // Remove event listener on cleanup
+    return () => {
+      document.removeEventListener('keyup', keyListener);
+    };
+  });
+
   return (
     <Wrapper>
       {keys.map((k, i) => (
-        <Key key={`k${i}`} code={k} type="button" onClick={() => dispatch(keypadInput(k))} />
+        <Key key={`k${i}`} code={k === '*' ? 'depart' : k} type="button" onClick={() => dispatch(keypadInput(k))} />
       ))}
     </Wrapper>
   );

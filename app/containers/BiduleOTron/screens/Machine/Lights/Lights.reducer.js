@@ -75,10 +75,10 @@ export class ReducerLights {
   handleKeypadInput(value) {
     const draft = getDraft();
     // This is a cheat code for me :P
-    if (!draft.lights.cheatCode || value === 'depart') {
+    if (!draft.lights.cheatCode || value === '*') {
       draft.lights.cheatCode = '';
     }
-    if (value !== 'depart') {
+    if (value !== '*') {
       if (draft.lights.cheatCode.length >= 9) {
         draft.lights.cheatCode = '';
       } else {

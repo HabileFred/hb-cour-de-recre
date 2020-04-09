@@ -4,8 +4,8 @@ import { getDraft } from './draft';
 class Focus {
   constructor() {
     initialState.nav = {
-      screen: 'login', // FIXME 'login'
-      focus: ['password'], // FIXME 'password'
+      screen: 'launcher', // FIXME 'login'
+      focus: ['radar'], // FIXME 'password'
       workflow: {
         login: {
           $start: 'password',

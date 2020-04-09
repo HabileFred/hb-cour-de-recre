@@ -56,10 +56,10 @@ export class ReducerPipes {
 
   handleKeypadInput(value) {
     const draft = getDraft();
-    if (!draft.pipes.cheatCode || value === 'depart') {
+    if (!draft.pipes.cheatCode || value === '*') {
       draft.pipes.cheatCode = '';
     }
-    if (value !== 'depart') {
+    if (value !== '*') {
       if (draft.pipes.cheatCode.length >= 9) {
         draft.pipes.cheatCode = '';
       } else {

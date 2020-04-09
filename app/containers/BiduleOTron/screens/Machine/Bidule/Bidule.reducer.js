@@ -17,24 +17,24 @@ export class ReducerBidule {
       BIDULE_COUNT: 15,
       index: 0,
       submitted: false,
-      biduleInfos: [
-        { text1: 'ABCDEFG', text2: '1234567' },
-        { text1: 'ABCDEFG', text2: '1234567' },
-        { text1: 'ABCDEFG', text2: '1234567' },
-        { text1: 'ABCDEFG', text2: '1234567' },
-        { text1: 'ABCDEFG', text2: '1234567' },
-        { text1: 'ABCDEFG', text2: '1234567' },
-        { text1: 'ABCDEFG', text2: '1234567' }, // solution
-        { text1: 'ABCDEFG', text2: '1234567' },
-        { text1: 'ABCDEFG', text2: '1234567' },
-        { text1: 'ABCDEFG', text2: '1234567' },
-        { text1: 'ABCDEFG', text2: '1234567' },
-        { text1: 'ABCDEFG', text2: '1234567' },
-        { text1: 'ABCDEFG', text2: '1234567' },
-        { text1: 'ABCDEFG', text2: '1234567' },
-        { text1: 'ABCDEFG', text2: '1234567' },
+      biduleNames: [
+        'temporel',
+        'parasite',
+        'transmetteur',
+        'recepteur',
+        'aspi_fausses_idees',
+        'annule_parole',
+        'aspitruc', // solution
+        'encodeur',
+        'antibug',
+        'ramasse_clou',
+        'attrape_eternuement',
+        'geolocalisateur',
+        'souffle_rien',
+        'ramasse_vide',
+        'solution',
       ],
-      SOLVED: false,
+      SOLVED: true,
     };
   }
 
