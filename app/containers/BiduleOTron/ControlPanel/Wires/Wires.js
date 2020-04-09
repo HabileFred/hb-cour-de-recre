@@ -27,6 +27,29 @@ function importButtonImages() {
 }
 
 const images = importButtonImages();
+import imgFocus from './img/focus.png';
+
+const Wrapper = styled.section`
+  position: absolute;
+  display: flex;
+  flex-flow: column;
+  bottom: 102px;
+  left: 441px;
+  height: 60px;
+
+  &::before {
+    pointer-events: none;
+    content: "";
+    position: absolute;
+    width: 181px;
+    height: 80px;
+    left: 0px;
+    top: 0px;
+    opacity: ${props => props.focused ? 1 : 0};
+    transition: opacity 250ms ease;
+    background: top left no-repeat url('${imgFocus}');
+  }
+`;
 
 const Line1 = styled.section`
   display: grid;
@@ -34,8 +57,8 @@ const Line1 = styled.section`
   grid-gap: 6px;
   grid-auto-rows: 16px;
   position: absolute;
-  bottom: 124px;
-  left: 460px;
+  top: 20px;
+  left: 20px;
 `;
 
 const Line2 = styled.section`
@@ -44,8 +67,8 @@ const Line2 = styled.section`
   grid-gap: 6px;
   grid-auto-rows: 16px;
   position: absolute;
-  bottom: 100px;
-  left: 474px;
+  top: 44px;
+  left: 34px;
 `;
 
 const Button = styled.button`
@@ -57,9 +80,9 @@ const Button = styled.button`
 /**
  *
  */
-function ButtonGroupWires({ dispatch, wires }) {
+function ButtonGroupWires({ dispatch, wires, focused }) {
   return (
-    <React.Fragment>
+    <Wrapper focused={focused}>
       <Line1>
         <Button type="button" value={1} selected={wires.sockets.top === 1} onClick={() => dispatch(wireSelectTopSocket(1))} />
         <Button type="button" value={2} selected={wires.sockets.top === 2} onClick={() => dispatch(wireSelectTopSocket(2))} />
@@ -73,7 +96,7 @@ function ButtonGroupWires({ dispatch, wires }) {
         <Button type="button" value={3} selected={wires.sockets.bottom === 3} onClick={() => dispatch(wireSelectBottomSocket(3))} />
         <Button type="button" value={4} selected={wires.sockets.bottom === 4} onClick={() => dispatch(wireSelectBottomSocket(4))} />
       </Line2>
-    </React.Fragment>
+    </Wrapper>
   );
 }
 

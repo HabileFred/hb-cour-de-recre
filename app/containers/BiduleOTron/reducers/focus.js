@@ -3,9 +3,17 @@ import { getDraft } from './draft';
 
 class Focus {
   constructor() {
+    const initialScreen = 'home'; // FIXME 'login'
+    const initialFocus = ['menu'];  // FIXME 'password'
+
     initialState.nav = {
-      screen: 'launcher', // FIXME 'login'
-      focus: ['radar'], // FIXME 'password'
+      popup: {
+        id: null,
+        resolve: null,
+        reject: null,
+      },
+      screen: initialScreen,
+      focus: initialFocus,
       workflow: {
         login: {
           $start: 'password',
@@ -32,8 +40,28 @@ class Focus {
           $start: 'radar',
           radar: 'params',
         },
-      }
+      },
+      controlPanel: {
+        focus: ['ColoredButtons', 'Submit', 'Cancel'],
+        definition: {
+          'menu@home': ['ColoredButtons', 'Submit', 'Cancel'],
+          'bidule@machine': ['Arrows', 'Submit', 'Cancel'],
+          'pieces@machine': ['Arrows', 'ColoredButtons', 'Cancel'],
+          'pipes@machine': ['Pipes', 'Cancel'],
+          'binary@machine': ['Keypad', 'Cancel'],
+          'wires@machine': ['Wires', 'Cancel'],
+          'fuses@machine': ['Fuses', 'Submit', 'Cancel'],
+          'lights@machine': ['ColoredButtons', 'Cancel'],
+          'simon@machine': ['Simon', 'Cancel'],
+
+          'radar@launcher': ['Arrows', 'Cancel'],
+          'params@launcher': ['Keypad', 'ColoredButtons', 'Simon', 'Cancel'],
+        },
+      },
     };
+
+    // Update control panel focus according to initial focus.
+    initialState.nav.controlPanel.focus = initialState.nav.controlPanel.definition[`${initialFocus[0]}@${initialScreen}`];
   }
 
   /**
@@ -50,8 +78,27 @@ class Focus {
     return draft.nav.focus.indexOf(focusId) !== -1;
   }
 
+  inPopup() {
+    const { nav } = getDraft();
+    return nav.popup.id !== null;
+  }
+
   isNot(focusId) {
     return !this.is(focusId);
+  }
+
+  updateControlPanelFocus() {
+    const { nav } = getDraft();
+    const cpf = new Set();
+    nav.focus.forEach(f => {
+      const key = `${f}@${nav.screen}`;
+      const def = nav.controlPanel.definition[key];
+      if (def) {
+        def.forEach(d => cpf.add(d));
+      }
+    });
+    nav.controlPanel.focus = [...cpf];
+    console.log('Updated control panel focus:', nav.controlPanel.focus);
   }
 
   /**
@@ -77,6 +124,7 @@ class Focus {
       }
     }
     draft.nav.focus = [...set];
+    this.updateControlPanelFocus();
   }
 
   from(current) {
@@ -109,13 +157,50 @@ class Focus {
       }
     }
     draft.nav.focus = [...set];
+    this.updateControlPanelFocus();
   }
 
-  setScreen(screen) {
+  setScreen(screen, focus) {
     const draft = getDraft();
     draft.nav.screen = screen;
-    this.replace(draft.nav.workflow[screen].$start);
+    this.replace(focus ? focus : draft.nav.workflow[screen].$start);
   }
+
+  popup(popupId, submitHandler, cancelHandler) {
+    const { nav } = getDraft();
+    nav.popup.id = popupId;
+    nav.popup.resolve = submitHandler;
+    nav.popup.reject = cancelHandler;
+
+    const { controlPanel } = nav;
+    this.prevControlPanelFocus = controlPanel.focus.slice();
+    controlPanel.focus.splice(0, controlPanel.focus.length, 'Submit', 'Cancel');
+  }
+
+  popupAccept() {
+    const { nav } = getDraft();
+    nav.popup.id = null;
+
+    const { controlPanel } = nav;
+    controlPanel.focus.splice(0, controlPanel.focus.length, ...this.prevControlPanelFocus);
+    if (nav.popup.resolve) {
+      nav.popup.resolve.call(nav.popup.resolve);
+    }
+    console.log(JSON.stringify(nav.popup));
+  }
+
+  popupDeny() {
+    const { nav } = getDraft();
+    nav.popup.id = null;
+
+    const { controlPanel } = nav;
+    controlPanel.focus.splice(0, controlPanel.focus.length, ...this.prevControlPanelFocus);
+    if (nav.popup.reject) {
+      nav.popup.reject.call(nav.popup.reject);
+    }
+    console.log(JSON.stringify(nav.popup));
+  }
+
 }
 
 export const focus = new Focus();

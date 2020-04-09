@@ -5,26 +5,35 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import styled, { keyframes } from 'styled-components';
+import classnames from 'classnames';
 
 import { makeSelectHome } from '../../selectors';
 
 import imgBackground from './img/home.png';
-
 import imgMachineOff from './img/biduleotron_off.png';
 import imgMachineOn from './img/biduleotron_on.png';
 import imgLauncherOff from './img/lancebidule_off.png';
 import imgLauncherOn from './img/lancebidule_on.png';
 
 const Wrapper = styled.section`
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
-  height: 100%;
+  flex: 1;
   background: url('${imgBackground}') top left no-repeat;
   display: flex;
   flex-flow: row;
   padding: 230px 466px;
+`;
+
+const animation = keyframes`
+  from {
+    transform: scale(1.1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  to {
+    transform: scale(1.1);
+  }
 `;
 
 const MenuItem1 = styled.div`
@@ -33,7 +42,13 @@ const MenuItem1 = styled.div`
   position: absolute;
   left: 80px;
   top: 90px;
-  background: top left no-repeat url('${props => props.active ? imgMachineOn : imgMachineOff}');
+  background-image: url('${imgMachineOff}');
+  transform: scale(1.1);
+
+  &.active {
+    animation: ${animation} 1300ms ease-in-out infinite;
+    background-image: url('${imgMachineOn}');
+  }
 `;
 
 const MenuItem2 = styled.div`
@@ -42,14 +57,20 @@ const MenuItem2 = styled.div`
   position: absolute;
   left: 365px;
   top: 90px;
-  background: top left no-repeat url('${props => props.active ? imgLauncherOn : imgLauncherOff}');
+  background-image: url('${imgLauncherOff}');
+  transform: scale(1.1);
+
+  &.active {
+    animation: ${animation} 1300ms ease-in-out infinite;
+    background-image: url('${imgLauncherOn}');
+  }
 `;
 
 function Home({ home }) {
   return (
     <Wrapper>
-      <MenuItem1 active={home.cursor === 0} />
-      <MenuItem2 active={home.cursor === 1} />
+      <MenuItem1 className={classnames({ active: home.cursor === 0 })} />
+      <MenuItem2 className={classnames({ active: home.cursor === 1 })} />
     </Wrapper>
   );
 }

@@ -44,16 +44,18 @@ const BiduleOK = styled.div`
 `;
 
 
+const Wrapper = styled.section`
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-flow: row;
+  cursor: not-allowed;
+`;
+
+
 function Launcher({ params, bidule, radar }) {
   return (
-    <div style={{
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      width: '100%',
-      height: '550px',
-      cursor: 'not-allowed',
-    }}>
+    <Wrapper>
       <div style={{
         position: 'absolute',
         top: 0,
@@ -77,7 +79,7 @@ function Launcher({ params, bidule, radar }) {
       <BiduleOK present={bidule.SOLVED} />
       <Porthole status={bidule.SOLVED ? 'bidule' : 'empty'} />
       <Transmission animated={params.velocity.SOLVED} />
-    </div>
+    </Wrapper>
   );
 }
 

@@ -93,6 +93,12 @@ export const makeSelectNav = () =>
     substate => substate.nav,
   );
 
+export const makeSelectControlPanelFocus = () =>
+  createSelector(
+    selectBiduleOTronDomain,
+    substate => substate.nav.controlPanel.focus,
+  );
+
 export const makeSelectRadar = () =>
   createSelector(
     selectBiduleOTronDomain,

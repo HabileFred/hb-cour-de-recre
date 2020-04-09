@@ -11,6 +11,7 @@ import {
 } from '../../actions';
 
 import imgBill from './img/bill.png';
+import imgFocus from './img/focus.png';
 
 function importAllImages() {
   const r = require.context('./img/', false, /bouton_.*\.png$/);
@@ -38,11 +39,22 @@ const Wrapper = styled.section`
 `;
 
 const Button = styled.button`
+  position: relative;
   border: none;
   outline: none;
   background: center center no-repeat url('${props => images[props.action][0]}');
   &:active {
     background-image: url('${props => images[props.action][1]}');
+  }
+  &:after {
+    display: ${props => props.focused ? 'block' : 'none'};
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: -13px;
+    width: 94px;
+    height: 56px;
+    background: center center no-repeat url('${imgFocus}');
   }
 `;
 
@@ -58,15 +70,15 @@ const Bill = styled.div`
 /**
  *
  */
-function ButtonGroupSubmitCancel({ dispatch }) {
+function ButtonGroupSubmitCancel({ dispatch, submitFocused, cancelFocused }) {
 
   const keyListener = event => {
     if (event.isComposing || event.keyCode === 229) {
       return;
     }
-    if (event.keyCode === 86) {        // V
+    if (event.keyCode === 13) {       // enter
       dispatch(padSubmit());
-    } else if (event.keyCode === 88) { // X
+    } else if (event.keyCode === 8) { // backspace
       dispatch(padCancel());
     }
   };
@@ -80,12 +92,13 @@ function ButtonGroupSubmitCancel({ dispatch }) {
     };
   });
 
+  console.log(submitFocused, cancelFocused);
   return (
     <React.Fragment>
       <Bill />
       <Wrapper>
-        <Button type="button" action="valider" onClick={() => dispatch(padSubmit())} />
-        <Button type="button" action="annuler" onClick={() => dispatch(padCancel())} />
+      <Button focused={cancelFocused} type="button" action="annuler" onClick={() => dispatch(padCancel())} />
+        <Button focused={submitFocused} type="button" action="valider" onClick={() => dispatch(padSubmit())} />
       </Wrapper>
     </React.Fragment>
   );

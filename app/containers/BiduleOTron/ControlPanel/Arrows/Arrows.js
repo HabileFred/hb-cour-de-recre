@@ -13,7 +13,7 @@ import {
 } from '../../actions';
 
 function importAllImages() {
-  const r = require.context('./img/', false, /\.png$/);
+  const r = require.context('./img/', false, /bouton.*\.png$/);
   const images = {};
   r.keys().forEach(key => {
     const l = key.match(/_(bas|haut|gauche|droite)_/)[1];
@@ -25,8 +25,8 @@ function importAllImages() {
   });
   return images;
 }
-
 const images = importAllImages();
+import imgFocus from './img/focus.png';
 
 const width = 138;
 const height = 110;
@@ -38,12 +38,25 @@ const sizes = {
   droite: [85, 33, 37, 46],
 };
 
-const ButtonGroupWrapper = styled.section`
+const Wrapper = styled.section`
   position: absolute;
   bottom: 15px;
   left: 47px;
   width: ${width}px;
   height: ${height}px;
+
+  &::before {
+    pointer-events: none;
+    content: "";
+    position: absolute;
+    width: 154px;
+    height: 125px;
+    left: -14px;
+    top: -4px;
+    opacity: ${props => props.focused ? 1 : 0};
+    transition: opacity 250ms ease;
+    background: top left no-repeat url('${imgFocus}');
+  }
 `;
 
 const Button = styled.button`
@@ -63,7 +76,7 @@ const Button = styled.button`
 /**
  *
  */
-function ButtonGroupArrows({ dispatch }) {
+function ButtonGroupArrows({ dispatch, focused }) {
 
   const keyListener = event => {
     if (event.isComposing || event.keyCode === 229) {
@@ -95,17 +108,16 @@ function ButtonGroupArrows({ dispatch }) {
   });
 
   return (
-    <ButtonGroupWrapper>
+    <Wrapper focused={focused}>
       <Button type="button" dir="haut" onClick={() => dispatch(padUp())} />
       <Button type="button" dir="gauche" onClick={() => dispatch(padLeft())} />
       <Button type="button" dir="droite" onClick={() => dispatch(padRight())} />
       <Button type="button" dir="bas" onClick={() => dispatch(padDown())} />
-    </ButtonGroupWrapper>
+    </Wrapper>
   );
 }
 
 const mapStateToProps = createStructuredSelector({
-  
 });
 
 function mapDispatchToProps(dispatch) {

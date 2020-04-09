@@ -30,7 +30,6 @@ function importCodesImages() {
   return images;
 }
 const codeImages = importCodesImages();
-console.log(codeImages);
 
 function importProtocolImages() {
   const r = require.context('./img/protocoles/', false, /protocole_\d+\.png$/);
@@ -149,7 +148,6 @@ const BiduleCodeName = styled.div`
 
 const MachineBidule = function({ bidule, focused }) {
   const biduleName = bidule.biduleNames[bidule.index];
-  console.log(biduleName, codeImages[biduleName]);
   return (
     <MachineBiduleContainer className={`${focused ? 'focused' : ''}`}>
       <div className="ui-element frame"></div>

@@ -22,6 +22,7 @@ const keyImages = importKeyImages();
 
 import btnImageOn from './img/bouton_numero_on.png';
 import btnImageOff from './img/bouton_numero_off.png';
+import imgFocus from './img/focus.png';
 
 const Wrapper = styled.section`
   display: grid;
@@ -31,6 +32,19 @@ const Wrapper = styled.section`
   position: absolute;
   top: 54px;
   left: 638px;
+
+  &::before {
+    pointer-events: none;
+    content: "";
+    position: absolute;
+    width: 253px;
+    height: 140px;
+    left: -14px;
+    top: -13px;
+    opacity: ${props => props.focused ? 1 : 0};
+    transition: opacity 250ms ease;
+    background: top left no-repeat url('${imgFocus}');
+  }
 `;
 
 const Key = styled.button`
@@ -68,7 +82,7 @@ const keys = [
 /**
  *
  */
-function ButtonGroupKeypad({ dispatch }) {
+function ButtonGroupKeypad({ dispatch, focused }) {
 
   const keyListener = event => {
     if (event.isComposing || event.keyCode === 229) {
@@ -98,7 +112,7 @@ function ButtonGroupKeypad({ dispatch }) {
   });
 
   return (
-    <Wrapper>
+    <Wrapper focused={focused}>
       {keys.map((k, i) => (
         <Key key={`k${i}`} code={k === '*' ? 'depart' : k} type="button" onClick={() => dispatch(keypadInput(k))} />
       ))}

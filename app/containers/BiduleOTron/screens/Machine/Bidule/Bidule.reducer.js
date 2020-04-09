@@ -34,7 +34,7 @@ export class ReducerBidule {
         'ramasse_vide',
         'solution',
       ],
-      SOLVED: true,
+      SOLVED: false,
     };
   }
 
@@ -79,8 +79,8 @@ export class ReducerBidule {
     const draft = getDraft();
     if (!draft.bidule.submitted) {
       draft.bidule.submitted = true;
-      focus.from('bidule').next();
     }
+    focus.from('bidule').next();
   }
 
   /**

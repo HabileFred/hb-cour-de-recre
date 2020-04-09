@@ -14,10 +14,11 @@ import {
 
 import imgButton from './img/bouton_tuyaux_off.png';
 import imgButtonPressed from './img/bouton_tuyaux_on.png';
+import imgFocus from './img/focus.png';
 
 const buttonPipesLetters = 'AZ ERTQSD F WXCVBN'.split('');
 
-const ButtonGroupWrapper = styled.section`
+const Wrapper = styled.section`
   display: grid;
   grid-template-columns: repeat(6,30px);
   grid-gap: 5px;
@@ -25,6 +26,19 @@ const ButtonGroupWrapper = styled.section`
   position: absolute;
   bottom: 28px;
   left: 211px;
+
+  &::before {
+    pointer-events: none;
+    content: "";
+    position: absolute;
+    width: 253px;
+    height: 140px;
+    left: -25px;
+    top: -9px;
+    opacity: ${props => props.focused ? 1 : 0};
+    transition: opacity 250ms ease;
+    background: top left no-repeat url('${imgFocus}');
+  }
 `;
 
 const Button = styled.button`
@@ -39,7 +53,7 @@ const Button = styled.button`
 /**
  *
  */
-function ButtonGroupPipes({ dispatch, pipes }) {
+function ButtonGroupPipes({ dispatch, pipes, focused }) {
   let pipeCheckTimeout = null;
 
   function rotatePipe(index) {
@@ -78,7 +92,7 @@ function ButtonGroupPipes({ dispatch, pipes }) {
   });
 
   return (
-    <ButtonGroupWrapper>
+    <Wrapper focused={focused}>
       {[pipes.pipes.map((v, i) =>
         v === 9
         ? (<div key={`pipe-button-${i}`}></div>)
@@ -86,7 +100,7 @@ function ButtonGroupPipes({ dispatch, pipes }) {
           <Button key={`pipe-button-${i}`} type="button" onClick={() => rotatePipe(i)} />
         )
       )]}
-    </ButtonGroupWrapper>
+    </Wrapper>
   );
 }
 

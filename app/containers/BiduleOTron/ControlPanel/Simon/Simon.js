@@ -23,6 +23,7 @@ function importAllImages() {
   return images;
 }
 const images = importAllImages();
+import imgFocus from './img/focus.png';
 
 const Wrapper = styled.section`
   display: grid;
@@ -32,6 +33,19 @@ const Wrapper = styled.section`
   position: absolute;
   bottom: 19px;
   left: 930px;
+
+  &::before {
+    pointer-events: none;
+    content: "";
+    position: absolute;
+    width: 151px;
+    height: 163px;
+    left: -18px;
+    top: -16px;
+    opacity: ${props => props.focused ? 1 : 0};
+    transition: opacity 250ms ease;
+    background: top left no-repeat url('${imgFocus}');
+  }
 `;
 
 const Button = styled.button`
@@ -54,7 +68,7 @@ const keys = {
 /**
  *
  */
-function ButtonGroupSimon({ dispatch, simon }) {
+function ButtonGroupSimon({ dispatch, focused }) {
 
   const keyListener = event => {
     if (event.isComposing || event.keyCode === 229) {
@@ -76,7 +90,7 @@ function ButtonGroupSimon({ dispatch, simon }) {
   });
 
   return (
-    <Wrapper>
+    <Wrapper focused={focused}>
       {['y', 'u', 'i', 'o', 'p'].map(l => (
         <Button key={l} type="button" letter={l} onClick={() => dispatch(buttonSimonPressed(l))} />
       ))}

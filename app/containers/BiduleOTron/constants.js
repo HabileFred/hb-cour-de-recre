@@ -30,3 +30,6 @@ export const FOCUS_NEXT = 'app/BiduleOTron/FOCUS_NEXT';
 
 export const MUSIC_TOGGLE = 'app/BiduleOTron/MUSIC_TOGGLE';
 export const SFX_TOGGLE = 'app/BiduleOTron/SFX_TOGGLE';
+
+export const SET_CONTROL_PANEL_FOCUS = 'app/BiduleOTron/SET_CONTROL_PANEL_FOCUS';
+export const SHOW_CONFIRM_POPUP = 'app/BiduleOTron/SHOW_CONFIRM_POPUP';

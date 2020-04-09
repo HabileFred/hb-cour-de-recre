@@ -6,6 +6,10 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { compose } from 'redux';
+
 import ButtonGroupWires from './Wires/Wires';
 import ButtonGroupPipes from './Pipes/Pipes';
 import ButtonGroupKeypad from './Keypad/Keypad';
@@ -15,10 +19,10 @@ import ButtonGroupSubmitCancel from './SubmitCancel/SubmitCancel';
 import ButtonGroupColors from './Colors/Colors';
 import ButtonGroupSounds from './Sounds/Sounds';
 import ButtonGroupSimon from './Simon/Simon';
+import { makeSelectControlPanelFocus } from '../selectors';
 
 const Wrapper = styled.section`
-  position: absolute;
-  top: 520px;
+  position: relative;
   width: 100%;
   height: 230px;
 `;
@@ -26,20 +30,37 @@ const Wrapper = styled.section`
 /**
  *
  */
-function ControlPanel({ dispatch, store }) {
+function ControlPanel({ focus }) {
+  const focused = (id) => focus.indexOf(id) !== -1;
+
   return (
     <Wrapper>
       <ButtonGroupSounds />
-      <ButtonGroupArrows />
-      <ButtonGroupColors />
-      <ButtonGroupFuses />
-      <ButtonGroupPipes />
-      <ButtonGroupWires />
-      <ButtonGroupKeypad />
-      <ButtonGroupSimon />
-      <ButtonGroupSubmitCancel />
+      <ButtonGroupArrows focused={focused('Arrows')} />
+      <ButtonGroupColors focused={focused('ColoredButtons')} />
+      <ButtonGroupFuses focused={focused('Fuses')} />
+      <ButtonGroupPipes focused={focused('Pipes')} />
+      <ButtonGroupWires focused={focused('Wires')} />
+      <ButtonGroupKeypad focused={focused('Keypad')} />
+      <ButtonGroupSimon focused={focused('Simon')} />
+      <ButtonGroupSubmitCancel submitFocused={focused('Submit')} cancelFocused={focused('Cancel')} />
     </Wrapper>
   );
 }
 
-export default ControlPanel;
+const mapStateToProps = createStructuredSelector({
+  focus: makeSelectControlPanelFocus(),
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    dispatch,
+  };
+}
+
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+
+export default compose(withConnect)(ControlPanel);

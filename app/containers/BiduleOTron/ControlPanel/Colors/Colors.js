@@ -24,7 +24,10 @@ function importAllImages() {
 }
 const images = importAllImages();
 
+import imgFocus from './img/focus.png';
+
 const Wrapper = styled.section`
+  position: relative;
   display: grid;
   grid-template-columns: repeat(6, 54px);
   grid-gap: 4px;
@@ -32,6 +35,19 @@ const Wrapper = styled.section`
   position: absolute;
   bottom: 32px;
   left: 460px;
+
+  &::before {
+    pointer-events: none;
+    content: "";
+    position: absolute;
+    width: 381px;
+    height: 70px;
+    left: -18px;
+    top: -16px;
+    opacity: ${props => props.focused ? 1 : 0};
+    transition: opacity 250ms ease;
+    background: top left no-repeat url('${imgFocus}');
+  }
 `;
 
 const Button = styled.button`
@@ -46,7 +62,7 @@ const Button = styled.button`
 /**
  *
  */
-function ButtonGroupColors({ dispatch, binary }) {
+function ButtonGroupColors({ dispatch, focused }) {
 
   const keyListener = event => {
     if (event.isComposing || event.keyCode === 229) {
@@ -84,7 +100,7 @@ function ButtonGroupColors({ dispatch, binary }) {
   });
 
   return (
-    <Wrapper>
+    <Wrapper focused={focused}>
       {['g', 'h', 'j', 'k', 'l', 'm'].map(l => (
         <Button key={l} type="button" letter={l} onClick={() => dispatch(buttonPressed(l))} />
       ))}

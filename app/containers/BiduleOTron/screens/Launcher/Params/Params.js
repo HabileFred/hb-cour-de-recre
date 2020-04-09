@@ -44,8 +44,6 @@ function importDigitsImages() {
 const digitsImages = importDigitsImages();
 import imgP from './img/p.png';
 digitsImages['*'] = imgP;
-console.log(digitsImages);
-
 
 const Wrapper = styled.div`
   position: absolute;

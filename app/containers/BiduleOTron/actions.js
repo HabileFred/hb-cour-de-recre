@@ -22,6 +22,8 @@ import {
   SET_SCREEN,
   FOCUS_NEXT,
   BUTTON_SIMON_PRESSED,
+  SET_CONTROL_PANEL_FOCUS,
+  SHOW_CONFIRM_POPUP,
 } from './constants';
 
 export function padUp() {
@@ -137,5 +139,20 @@ export function setScreen(screen) {
 export function focusNext() {
   return {
     type: FOCUS_NEXT,
+  };
+}
+
+export function setControlPanelFocus() {
+  return {
+    type: SET_CONTROL_PANEL_FOCUS,
+  };
+}
+
+export function confirm(popupId, acceptHandler, denyHandler) {
+  return {
+    type: SHOW_CONFIRM_POPUP,
+    popupId,
+    acceptHandler,
+    denyHandler,
   };
 }

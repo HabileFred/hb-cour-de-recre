@@ -15,7 +15,8 @@ import {
   WIRE_SELECT_BOTTOM_SOCKET, WIRE_SELECT_TOP_SOCKET,
   SET_SCREEN,
   FOCUS_NEXT,
-  BUTTON_SIMON_PRESSED
+  BUTTON_SIMON_PRESSED,
+  SHOW_CONFIRM_POPUP
 } from '../constants';
 
 import { SFX } from '../SoundManager';
@@ -61,7 +62,11 @@ function handlePadCancel() {
         biduleReducer.handlePadCancel();
         focus.setScreen('home');
       } else {
-        focus.setScreen('machine');
+        focus.popup(
+          'confirm',
+          (id) => {console.log('accept', id);focus.setScreen('home');},
+          (id) => {console.log('deny', id);}
+        );
       }
     } else {
       if (focus.is('@home')) {
@@ -78,6 +83,17 @@ function handlePadCancel() {
 const BiduleOTronReducer = (state = initialState, action) =>
   produce(state, (draft) => {
     setWorkingDraft(draft);
+
+    if (focus.inPopup()) {
+      console.log('in popup');
+      if (action.type === PAD_CANCEL) {
+        focus.popupDeny();
+      } else if (action.type === PAD_SUBMIT) {
+        focus.popupAccept();
+      }
+      return;
+    }
+
     switch (action.type) {
 
       case PAD_UP:
@@ -243,6 +259,10 @@ const BiduleOTronReducer = (state = initialState, action) =>
 
       case FOCUS_NEXT:
         focus.next();
+        break;
+
+      case SHOW_CONFIRM_POPUP:
+        focus.popup(action.popupId, action.acceptHandler, action.denyHandler);
         break;
     }
   });

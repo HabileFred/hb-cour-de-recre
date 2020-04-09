@@ -40,17 +40,17 @@ const Computer = styled.div`
   button {
     cursor: url('${imgMouseCursor}') 10 2, auto;
   }
+`;
 
-  .machine {
-    position: relative;
-    flex: 1;
-  }
-
-  .control-panel {
-    background: rgba(255, 255, 0, 0.1);
-    width: 100%;
-    height: 200px;
-  }
+const Popup = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 570px;
+  //background: url('${imgBackground}') top left no-repeat;
+  background: rgba(0,0,0,0.5);
+  z-index: 100;
 `;
 
 const BiduleOTronContainer = styled.div`
@@ -92,10 +92,20 @@ export function BiduleOTron({ nav }) {
       screen = (<Login />);
   }
 
+  let popup;
+  switch (nav.popup.id) {
+    case 'confirm':
+      popup = (<Popup>Confim?</Popup>);
+      break;
+    default:
+      popup = null;
+  }
+
   return (
     <BiduleOTronContainer>
       <Computer>
         {screen}
+        {popup}
         <ControlPanel />
       </Computer>
     </BiduleOTronContainer>

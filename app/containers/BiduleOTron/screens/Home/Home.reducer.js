@@ -20,8 +20,10 @@ export class ReducerHome {
   handleButtonPressed(button) {
     const { home } = getDraft();
     if (button === 'k') {
+      SFX.click();
       home.cursor = 0;
     } else if (button === 'l') {
+      SFX.click();
       home.cursor = 1;
     } else {
       SFX.wrong();
