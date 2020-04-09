@@ -21,27 +21,33 @@ class ReducerRadar {
   }
 
   handlePadDown() {
-    SFX.click();
     const draft = getDraft();
-    draft.radar.cursor.y = betweenValue(draft.radar.cursor.y, 1, 0, 3);
+    const y = draft.radar.cursor.y;
+    draft.radar.cursor.y = betweenValue(y, 1, 0, 3);
+    SFX[draft.radar.cursor.y === y ? 'wrong' : 'click']();
   }
 
   handlePadUp() {
-    SFX.click();
     const draft = getDraft();
-    draft.radar.cursor.y = betweenValue(draft.radar.cursor.y, -1, 0, 3);
+    const y = draft.radar.cursor.y;
+    draft.radar.cursor.y = betweenValue(y, -1, 0, 3);
+    SFX[draft.radar.cursor.y === y ? 'wrong' : 'click']();
   }
 
   handlePadLeft() {
     SFX.click();
     const draft = getDraft();
-    draft.radar.cursor.x = betweenValue(draft.radar.cursor.x, -1, 0, 3);
+    const x = draft.radar.cursor.x;
+    draft.radar.cursor.x = betweenValue(x, -1, 0, 3);
+    SFX[draft.radar.cursor.x === x ? 'wrong' : 'click']();
   }
 
   handlePadRight() {
     SFX.click();
     const draft = getDraft();
-    draft.radar.cursor.x = betweenValue(draft.radar.cursor.x, 1, 0, 3);
+    const x = draft.radar.cursor.x;
+    draft.radar.cursor.x = betweenValue(x, 1, 0, 3);
+    SFX[draft.radar.cursor.x === x ? 'wrong' : 'click']();
   }
 
   handlePadSubmit() {
