@@ -22,17 +22,18 @@ const Wrapper = styled.section`
   display: flex;
   flex-flow: row;
   padding: 230px 466px;
+  // TODO Use Theme filter: drop-shadow(3px 0px 2px rgba(0,0,0,0.3));
 `;
 
 const animation = keyframes`
   from {
-    transform: scale(1.1);
+    transform: scale(.95);
   }
   50% {
-    transform: scale(0.95);
+    transform: scale(1.10);
   }
   to {
-    transform: scale(1.1);
+    transform: scale(.95);
   }
 `;
 
@@ -43,7 +44,7 @@ const MenuItem1 = styled.div`
   left: 80px;
   top: 90px;
   background-image: url('${imgMachineOff}');
-  transform: scale(1.1);
+  transform: scale(.95);
 
   &.active {
     animation: ${animation} 1300ms ease-in-out infinite;
@@ -58,7 +59,7 @@ const MenuItem2 = styled.div`
   left: 365px;
   top: 90px;
   background-image: url('${imgLauncherOff}');
-  transform: scale(1.1);
+  transform: scale(.95);
 
   &.active {
     animation: ${animation} 1300ms ease-in-out infinite;

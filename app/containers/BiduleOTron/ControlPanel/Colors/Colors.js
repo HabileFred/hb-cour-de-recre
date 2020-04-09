@@ -27,7 +27,6 @@ const images = importAllImages();
 import imgFocus from './img/focus.png';
 
 const Wrapper = styled.section`
-  position: relative;
   display: grid;
   grid-template-columns: repeat(6, 54px);
   grid-gap: 4px;
@@ -35,6 +34,10 @@ const Wrapper = styled.section`
   position: absolute;
   bottom: 32px;
   left: 460px;
+
+  button {
+    filter: ${props => props.grayscale ? 'grayscale(1)' : 'none'};
+  }
 
   &::before {
     pointer-events: none;
@@ -62,7 +65,7 @@ const Button = styled.button`
 /**
  *
  */
-function ButtonGroupColors({ dispatch, focused }) {
+function ButtonGroupColors({ dispatch, focused, grayscale }) {
 
   const keyListener = event => {
     if (event.isComposing || event.keyCode === 229) {
@@ -100,7 +103,7 @@ function ButtonGroupColors({ dispatch, focused }) {
   });
 
   return (
-    <Wrapper focused={focused}>
+    <Wrapper focused={focused} grayscale={grayscale}>
       {['g', 'h', 'j', 'k', 'l', 'm'].map(l => (
         <Button key={l} type="button" letter={l} onClick={() => dispatch(buttonPressed(l))} />
       ))}

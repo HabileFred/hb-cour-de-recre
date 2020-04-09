@@ -98,8 +98,9 @@ function Machine({ store, bidule, pieces, pipes, lights, binary, fuses, simon, w
   return (
     <div style={{
       width: '100%',
-      height: '570px',
+      height: '520px',
       cursor: 'not-allowed',
+      // TODO Use Theme filter: 'drop-shadow(3px 0px 2px rgba(0,0,0,0.3))',
       background: `url('${imgMachine}') top left no-repeat`
     }}>
       <div style={{

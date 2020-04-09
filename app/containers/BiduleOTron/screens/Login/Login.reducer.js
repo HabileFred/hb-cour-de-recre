@@ -42,6 +42,7 @@ export class ReducerLogin {
   handlePadSubmit() {
     const { login } = getDraft();
     if (arraysEqual(login.password, login.solution)) {
+      login.SOLVED = true;
       focus.from('password').next();
     } else {
       SFX.wrong();

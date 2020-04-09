@@ -47,7 +47,8 @@ const Button = styled.button`
     background-image: url('${props => images[props.action][1]}');
   }
   &:after {
-    display: ${props => props.focused ? 'block' : 'none'};
+    opacity: ${props => props.focused ? 1 : 0};
+    transition: opacity 250ms ease;
     content: "";
     position: absolute;
     top: -10px;
@@ -92,7 +93,6 @@ function ButtonGroupSubmitCancel({ dispatch, submitFocused, cancelFocused }) {
     };
   });
 
-  console.log(submitFocused, cancelFocused);
   return (
     <React.Fragment>
       <Bill />

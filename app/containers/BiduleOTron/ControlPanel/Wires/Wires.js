@@ -25,8 +25,19 @@ function importButtonImages() {
   });
   return images;
 }
-
 const images = importButtonImages();
+
+function importWireImages() {
+  const r = require.context('./img/', false, /cable_reponse_.+\.png$/);
+  const images = {};
+  r.keys().forEach(key => {
+    const l = key.match(/_(\d\d)\.png/)[1];
+    images[l] = r(key);
+  });
+  return images;
+}
+const wireImages = importWireImages();
+
 import imgFocus from './img/focus.png';
 
 const Wrapper = styled.section`
@@ -71,6 +82,20 @@ const Line2 = styled.section`
   left: 34px;
 `;
 
+const wireDefinitions = {
+  '11': { x: 25, y: -20, w: 28, h: 68 },
+  '24': { x: 50, y: 20, w: 20, h: 20 },
+  '32': { x: 50, y: 20, w: 20, h: 20 },
+};
+const Wire = styled.div`
+  position: absolute;
+  left: ${props => wireDefinitions[props.wireId].x}px;
+  top: ${props => wireDefinitions[props.wireId].y}px;
+  width: ${props => wireDefinitions[props.wireId].w}px;
+  height: ${props => wireDefinitions[props.wireId].h}px;
+  background: center center no-repeat url('${props => wireImages[props.wireId]}');
+`;
+
 const Button = styled.button`
   border: none;
   outline: none;
@@ -96,6 +121,7 @@ function ButtonGroupWires({ dispatch, wires, focused }) {
         <Button type="button" value={3} selected={wires.sockets.bottom === 3} onClick={() => dispatch(wireSelectBottomSocket(3))} />
         <Button type="button" value={4} selected={wires.sockets.bottom === 4} onClick={() => dispatch(wireSelectBottomSocket(4))} />
       </Line2>
+      {wires.values.map((v) => <Wire wireId={v} />)}
     </Wrapper>
   );
 }

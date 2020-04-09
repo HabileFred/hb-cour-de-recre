@@ -1,10 +1,11 @@
+import { SFX } from 'BOT/SoundManager';
 import { initialState } from './initialState';
 import { getDraft } from './draft';
 
 class Focus {
   constructor() {
-    const initialScreen = 'home'; // FIXME 'login'
-    const initialFocus = ['menu'];  // FIXME 'password'
+    const initialScreen = 'login'; // FIXME 'login'
+    const initialFocus = ['password'];  // FIXME 'password'
 
     initialState.nav = {
       popup: {
@@ -17,20 +18,20 @@ class Focus {
       workflow: {
         login: {
           $start: 'password',
-          password: '@home', // FIXME '@loading'
+          password: 'home/', // FIXME? 'loading/'
         },
         home: {
           $start: 'menu',
         },
         loading: {
           $start: 'loading',
-          loading: '@machine',
+          loading: 'machine/',
         },
         machine: {
           $start: 'bidule',
           bidule: ['pieces', 'pipes'],
           pieces: 'binary',
-          pipes: 'lights', // FIXME 'simon'
+          pipes: 'simon',
           simon: 'lights',
           binary: 'fuses',
           lights: null,
@@ -44,24 +45,27 @@ class Focus {
       controlPanel: {
         focus: ['ColoredButtons', 'Submit', 'Cancel'],
         definition: {
-          'menu@home': ['ColoredButtons', 'Submit', 'Cancel'],
-          'bidule@machine': ['Arrows', 'Submit', 'Cancel'],
-          'pieces@machine': ['Arrows', 'ColoredButtons', 'Cancel'],
-          'pipes@machine': ['Pipes', 'Cancel'],
-          'binary@machine': ['Keypad', 'Cancel'],
-          'wires@machine': ['Wires', 'Cancel'],
-          'fuses@machine': ['Fuses', 'Submit', 'Cancel'],
-          'lights@machine': ['ColoredButtons', 'Cancel'],
-          'simon@machine': ['Simon', 'Cancel'],
+          'login/password': ['Submit', 'Cancel'],
 
-          'radar@launcher': ['Arrows', 'Cancel'],
-          'params@launcher': ['Keypad', 'ColoredButtons', 'Simon', 'Cancel'],
+          'home/menu': ['ColoredButtons', 'Submit', 'Cancel'],
+
+          'machine/bidule': ['Arrows', 'Submit', 'Cancel'],
+          'machine/pieces': ['Arrows', 'ColoredButtons', 'Cancel'],
+          'machine/pipes': ['Pipes', 'Cancel'],
+          'machine/binary': ['Keypad', 'Cancel'],
+          'machine/wires': ['Wires', 'Cancel'],
+          'machine/fuses': ['Fuses', 'Submit', 'Cancel'],
+          'machine/lights': ['ColoredButtons', 'Cancel'],
+          'machine/simon': ['Simon', 'Cancel'],
+
+          'launcher/radar': ['Arrows', 'Cancel'],
+          'launcher/params': ['Keypad', 'ColoredButtons', 'Simon', 'Cancel'],
         },
       },
     };
 
     // Update control panel focus according to initial focus.
-    initialState.nav.controlPanel.focus = initialState.nav.controlPanel.definition[`${initialFocus[0]}@${initialScreen}`];
+    initialState.nav.controlPanel.focus = initialState.nav.controlPanel.definition[`${initialScreen}/${initialFocus[0]}`];
   }
 
   /**
@@ -70,9 +74,9 @@ class Focus {
    */
   is(focusId) {
     const draft = getDraft();
-    const p = focusId.indexOf('@');
+    const p = focusId.indexOf('/');
     if (p !== -1) {
-      const [f, s] = focusId.split('@');
+      const [s, f] = focusId.split('/');
       return s === draft.nav.screen && (!f.length || draft.nav.focus.indexOf(f) !== -1);
     }
     return draft.nav.focus.indexOf(focusId) !== -1;
@@ -91,13 +95,14 @@ class Focus {
     const { nav } = getDraft();
     const cpf = new Set();
     nav.focus.forEach(f => {
-      const key = `${f}@${nav.screen}`;
+      const key = `${nav.screen}/${f}`;
       const def = nav.controlPanel.definition[key];
       if (def) {
         def.forEach(d => cpf.add(d));
       }
     });
     nav.controlPanel.focus = [...cpf];
+    console.warn('---', initialState.nav.controlPanel.focus);
     console.log('Updated control panel focus:', nav.controlPanel.focus);
   }
 
@@ -132,8 +137,8 @@ class Focus {
       next: () => {
         const draft = getDraft();
         const n = draft.nav.workflow[draft.nav.screen][current];
-        if (typeof n === 'string' && n.charAt(0) === '@') {
-          this.setScreen(n.substring(1));
+        if (typeof n === 'string' && n.endsWith('/')) {
+          this.setScreen(n.substring(0, n.length - 1));
         } else {
           this.set(n, current);
         }
@@ -167,6 +172,7 @@ class Focus {
   }
 
   popup(popupId, submitHandler, cancelHandler) {
+    SFX.popup();
     const { nav } = getDraft();
     nav.popup.id = popupId;
     nav.popup.resolve = submitHandler;
@@ -175,30 +181,28 @@ class Focus {
     const { controlPanel } = nav;
     this.prevControlPanelFocus = controlPanel.focus.slice();
     controlPanel.focus.splice(0, controlPanel.focus.length, 'Submit', 'Cancel');
+
+    document.activeElement.blur();
   }
 
   popupAccept() {
     const { nav } = getDraft();
-    nav.popup.id = null;
-
     const { controlPanel } = nav;
     controlPanel.focus.splice(0, controlPanel.focus.length, ...this.prevControlPanelFocus);
     if (nav.popup.resolve) {
       nav.popup.resolve.call(nav.popup.resolve);
     }
-    console.log(JSON.stringify(nav.popup));
+    nav.popup.id = null;
   }
 
   popupDeny() {
     const { nav } = getDraft();
-    nav.popup.id = null;
-
     const { controlPanel } = nav;
     controlPanel.focus.splice(0, controlPanel.focus.length, ...this.prevControlPanelFocus);
     if (nav.popup.reject) {
       nav.popup.reject.call(nav.popup.reject);
     }
-    console.log(JSON.stringify(nav.popup));
+    nav.popup.id = null;
   }
 
 }

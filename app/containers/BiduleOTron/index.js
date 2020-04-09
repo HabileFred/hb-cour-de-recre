@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 import { useInjectReducer } from 'utils/injectReducer';
 import { makeSelectNav } from './selectors';
@@ -25,6 +25,8 @@ import Home from './screens/Home/Home';
 import imgBackground from './img/papier_peint.png';
 import imgComputer from './img/ordinateur.png';
 import imgMouseCursor from './img/cursor.png';
+import imgPopupBg from './img/popup_fond.png';
+import imgConfirm from './img/confirmation_annulation_bidule.png';
 
 const Computer = styled.div`
   position: absolute;
@@ -42,15 +44,35 @@ const Computer = styled.div`
   }
 `;
 
+const popupAnimation = keyframes`
+  from {
+    transform: translateX(-50%) translateY(-50%) scale(0);
+  }
+  90% {
+    transform: translateX(-50%) translateY(-50%) scale(1.15);
+  }
+  to {
+    transform: translateX(-50%) translateY(-50%) scale(1);
+  }
+`;
+
 const Popup = styled.div`
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 570px;
-  //background: url('${imgBackground}') top left no-repeat;
-  background: rgba(0,0,0,0.5);
+  height: 530px;
+  background: url('${imgPopupBg}') top left no-repeat;
   z-index: 100;
+  cursor: not-allowed;
+
+  img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    animation: ${popupAnimation} 250ms ease;
+  }
 `;
 
 const BiduleOTronContainer = styled.div`
@@ -95,7 +117,7 @@ export function BiduleOTron({ nav }) {
   let popup;
   switch (nav.popup.id) {
     case 'confirm':
-      popup = (<Popup>Confim?</Popup>);
+      popup = (<Popup><img src={imgConfirm} /></Popup>);
       break;
     default:
       popup = null;

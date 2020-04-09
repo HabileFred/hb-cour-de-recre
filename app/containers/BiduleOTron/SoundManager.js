@@ -8,6 +8,7 @@ import sndTool from './sounds/cliquet.mp3';
 import sndOpenBidule from './sounds/ouverture_bidule.mp3';
 import sndElectricity from './sounds/electricity.mp3';
 import sndToggleSwitch from './sounds/toggle_switch.mp3';
+import sndPopup from './sounds/popup.mp3';
 
 class SoundManager {
   constructor() {
@@ -48,6 +49,10 @@ class SoundManager {
         src: sndToggleSwitch,
         autoplay: false,
       }),
+      popup: new Howl({
+        src: sndPopup,
+        autoplay: false,
+      }),
     };
   }
 
@@ -80,6 +85,7 @@ export const SFX = {
   biduleBuilt: () => soundManager.play('biduleBuilt'),
   electricity: () => soundManager.play('electricity'),
   toggleSwitch: () => soundManager.play('toggleSwitch'),
+  popup: () => soundManager.play('popup'),
   music: (on = true) => {
     if (on) {
       soundManager.play('music');

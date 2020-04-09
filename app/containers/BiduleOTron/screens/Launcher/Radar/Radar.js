@@ -95,6 +95,7 @@ const Cursor = styled.div`
   position: absolute;
   left: ${props => cursorX[props.x]}px;
   top: ${props => cursorY[props.y]}px;
+  transition: left 100ms ease-in-out, top 100ms ease-in-out;
   opacity: ${props => opacity[props.y * 4 + props.x]};
   width: 7px;
   height: 8px;

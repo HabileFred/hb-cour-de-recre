@@ -4,7 +4,7 @@
  *
  */
 import { SFX } from 'BOT/SoundManager';
-import { arraysEqual, cycleValue } from 'BOT/utils';
+import { betweenValue } from 'BOT/utils';
 
 import { initialState } from 'BOT/reducers/initialState';
 import { focus } from 'BOT/reducers/focus';
@@ -23,25 +23,25 @@ class ReducerRadar {
   handlePadDown() {
     SFX.click();
     const draft = getDraft();
-    draft.radar.cursor.y = cycleValue(draft.radar.cursor.y, 1, 0, 3);
+    draft.radar.cursor.y = betweenValue(draft.radar.cursor.y, 1, 0, 3);
   }
 
   handlePadUp() {
     SFX.click();
     const draft = getDraft();
-    draft.radar.cursor.y = cycleValue(draft.radar.cursor.y, -1, 0, 3);
+    draft.radar.cursor.y = betweenValue(draft.radar.cursor.y, -1, 0, 3);
   }
 
   handlePadLeft() {
     SFX.click();
     const draft = getDraft();
-    draft.radar.cursor.x = cycleValue(draft.radar.cursor.x, -1, 0, 3);
+    draft.radar.cursor.x = betweenValue(draft.radar.cursor.x, -1, 0, 3);
   }
 
   handlePadRight() {
     SFX.click();
     const draft = getDraft();
-    draft.radar.cursor.x = cycleValue(draft.radar.cursor.x, 1, 0, 3);
+    draft.radar.cursor.x = betweenValue(draft.radar.cursor.x, 1, 0, 3);
   }
 
   handlePadSubmit() {

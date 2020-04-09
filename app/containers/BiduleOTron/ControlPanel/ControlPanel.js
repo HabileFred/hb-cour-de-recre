@@ -19,25 +19,27 @@ import ButtonGroupSubmitCancel from './SubmitCancel/SubmitCancel';
 import ButtonGroupColors from './Colors/Colors';
 import ButtonGroupSounds from './Sounds/Sounds';
 import ButtonGroupSimon from './Simon/Simon';
-import { makeSelectControlPanelFocus } from '../selectors';
+import { makeSelectControlPanelFocus, makeSelectNav } from '../selectors';
 
 const Wrapper = styled.section`
-  position: relative;
+  position: absolute;
   width: 100%;
   height: 230px;
+  bottom: 0;
+  // TODO Use Theme filter: drop-shadow(3px 0px 2px rgba(0,0,0,0.3));
 `;
 
 /**
  *
  */
-function ControlPanel({ focus }) {
-  const focused = (id) => focus.indexOf(id) !== -1;
+function ControlPanel({ controlPanelFocus, nav }) {
+  const focused = (id) => controlPanelFocus.indexOf(id) !== -1;
 
   return (
     <Wrapper>
       <ButtonGroupSounds />
       <ButtonGroupArrows focused={focused('Arrows')} />
-      <ButtonGroupColors focused={focused('ColoredButtons')} />
+      <ButtonGroupColors grayscale={nav.focus.indexOf('lights') !== -1} focused={focused('ColoredButtons')} />
       <ButtonGroupFuses focused={focused('Fuses')} />
       <ButtonGroupPipes focused={focused('Pipes')} />
       <ButtonGroupWires focused={focused('Wires')} />
@@ -49,7 +51,8 @@ function ControlPanel({ focus }) {
 }
 
 const mapStateToProps = createStructuredSelector({
-  focus: makeSelectControlPanelFocus(),
+  controlPanelFocus: makeSelectControlPanelFocus(),
+  nav: makeSelectNav(),
 });
 
 function mapDispatchToProps(dispatch) {
