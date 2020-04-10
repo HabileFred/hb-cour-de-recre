@@ -265,6 +265,10 @@ const BiduleOTronReducer = (state = initialState, action) =>
       case SHOW_CONFIRM_POPUP:
         focus.popup(action.popupId, action.acceptHandler, action.denyHandler);
         break;
+
+      default:
+        simonReducer.handleAction(action);
+        break;
     }
   });
 

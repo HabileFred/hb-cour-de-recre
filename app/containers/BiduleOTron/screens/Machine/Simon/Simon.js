@@ -1,7 +1,27 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import withFocus from '../../../withFocus';
 import classnames from 'classnames';
+
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { compose } from 'redux';
+
+import withFocus from 'BOT/withFocus';
+
+function importImages() {
+  const r = require.context('./img/', false, /couleur_.*\.png$/);
+  const images = {};
+  r.keys().forEach(key => {
+    const l = key.match(/(\d)/)[1];
+    const on = key.match(/_on_/);
+    if (!images[l]) {
+      images[l] = [];
+    }
+    images[l][on ? 1 : 0] = r(key);
+  });
+  return images;
+}
+const images = importImages();
 
 import imgFocus from './img/simon_focus.png';
 
@@ -12,14 +32,16 @@ const MachineSimonContainer = styled.div`
   width: 119px;
   height: 253px;
   display: flex;
-  flex-flow: row;
-  align-items: center;
+  flex-flow: column;
   opacity: 0;
   transition: opacity 250ms ease;
+  padding: 80px 0 0 30px;
 
-  &.focused {
+  &.focused,
+  &.solved {
     opacity: 1;
   }
+
   &.focused::before {
     content: " ";
     position: absolute;
@@ -29,46 +51,72 @@ const MachineSimonContainer = styled.div`
     height: 253px;
     background: url(${imgFocus}) no-repeat top left;
   }
-
-  &.solved {
-    opacity: 1;
-  }
 `;
 
-const MachineSimon = function({ simon, focused }) {
+const Indicator = styled.div`
+  width: 52px;
+  height: 15px;
+  margin-bottom: 14px;
+  background: top left no-repeat url('${props => images[props.index][props.on ? 1 : 0]}');
+`;
+
+const MachineSimon = function({ dispatch, simon, focused, solved }) {
 
   let timer;
 
   const sequencer = () => {
-    console.log("simon sequencer");
+    dispatch({ type: 'SIMON_SEQ_PLAY_NEXT' });
   };
 
   const startSequencer = () => {
-    console.log("starting timer for Simon");
+    console.log("Starting timer for Simon");
     timer = window.setInterval(sequencer, 2000);
   };
 
   const stopSequencer = () => {
     if (timer) {
-      console.log("stopping timer for Simon");
+      console.log("Stopping timer for Simon");
       window.clearInterval(timer);
       timer = null;
     }
   };
 
   useEffect(() => {
-    if (focused) {
+    dispatch({ type: 'SIMON_SEQ_GENERATE' });
+  }, []);
+
+  useEffect(() => {
+    if (simon.status === 'Sequence') {
       startSequencer();
     } else {
       stopSequencer();
     }
     return stopSequencer;
-  }, [focused]);
+  }, [simon.status]);
+
+  const playingSeq = simon.status === 'Sequence';
 
   return (
-    <MachineSimonContainer className={classnames({ focused })}>
+    <MachineSimonContainer className={classnames({ focused, solved })}>
+      {[1, 2, 3, 4, 5].map(i => (
+        <Indicator key={i} index={i} on={solved || (playingSeq && simon.desired[simon.cursor] === i)} />
+      ))}
     </MachineSimonContainer>
   );
 };
 
-export default withFocus(MachineSimon);
+const mapStateToProps = createStructuredSelector({
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    dispatch,
+  };
+}
+
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+
+export default compose(withConnect, withFocus)(MachineSimon);
