@@ -84,8 +84,8 @@ const Line2 = styled.section`
 
 const wireDefinitions = {
   '11': { x: 25, y: -20, w: 28, h: 68 },
-  '24': { x: 50, y: 20, w: 20, h: 20 },
-  '32': { x: 50, y: 20, w: 20, h: 20 },
+  '24': { x: 50, y: -19, w: 92, h: 68 },
+  '32': { x: 65, y: -10, w: 34, h: 60 },
 };
 const Wire = styled.div`
   position: absolute;
@@ -94,6 +94,7 @@ const Wire = styled.div`
   width: ${props => wireDefinitions[props.wireId].w}px;
   height: ${props => wireDefinitions[props.wireId].h}px;
   background: center center no-repeat url('${props => wireImages[props.wireId]}');
+  pointer-events: none;
 `;
 
 const Button = styled.button`
