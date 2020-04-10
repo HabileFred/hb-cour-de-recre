@@ -31,7 +31,7 @@ import {
 import imgCacheBidule from './img/cache_bidule.png';
 import imgPancarte from './img/pancarte.png';
 import imgMachine from './img/machine_squelette.png';
-import imgBackground from 'BOT/img/fond_indus.png';
+import imgBackground from 'BOT/img/fond_machine.png';
 
 const openCacheBiduleAnimation = keyframes`
   from {

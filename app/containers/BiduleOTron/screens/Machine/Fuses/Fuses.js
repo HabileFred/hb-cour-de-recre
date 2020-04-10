@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import withFocus from '../../../withFocus';
+import classnames from 'classnames';
+
+import withFocus from 'BOT/withFocus';
 
 import imgFocus from './img/fusibles_focus.png';
 import imgError from './img/indicateur_erreur.png';
@@ -45,7 +47,7 @@ const Fuse = styled.div`
 
 const MachineFuses = function({ fuses, focused, solved }) {
   return (
-    <MachineFusesContainer className={`${focused ? 'focused' : ''} ${solved ? 'solved' : ''}`}>
+    <MachineFusesContainer className={classnames({ focused, solved })}>
       {fuses.feedback.map((on, i) => (
         <Fuse key={`f${i}`} on={on}/>
       ))}

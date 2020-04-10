@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
+import classnames from 'classnames';
 
-import withFocus from '../../../withFocus';
+import withFocus from 'BOT/withFocus';
 
 import imgFiole1 from './img/fiole_1.gif';
 import imgFiole2 from './img/fiole_2.gif';
@@ -148,7 +149,7 @@ const GaugeFilled = styled(Gauge)`
 
 const MachinePipes = function({ focused, solved, pipes }) {
   return (
-    <MachinePipesContainer className={`${focused ? 'focused' : ''} ${solved ? 'solved' : ''}`}>
+    <MachinePipesContainer className={classnames({ focused, solved })}>
       <Fioles focused={focused || solved}>
         <Fiole className="fiole-0" />
         <Fiole className="fiole-1" />

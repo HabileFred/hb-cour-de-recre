@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
+import classnames from 'classnames';
 
-import withFocus from '../../../withFocus';
+import withFocus from 'BOT/withFocus';
 
 import imgOff from './img/led_eteinte.png';
 import imgOnBlue from './img/led_bleue.png';
@@ -82,7 +83,7 @@ const MachineLightbulbs = function({ focused, solved, lights }) {
     purple: `purple ${lights.values.purple ? 'on' : 'off'}`,
   };
   return (
-    <MachineLightbulbsContainer className={`${focused ? 'focused' : ''} ${solved ? 'solved' : ''}`}>
+    <MachineLightbulbsContainer className={classnames({ focused, solved })}>
       <Lightbulbs>
         <Lightbulb className={cls.yellow} />
         <Lightbulb className={cls.purple} />

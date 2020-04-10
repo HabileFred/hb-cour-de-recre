@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import withFocus from '../../../withFocus';
+import classnames from 'classnames';
+
+import withFocus from 'BOT/withFocus';
 
 import imgWire11 from './img/cable_11.png';
 import imgWire24 from './img/cable_24.png';
@@ -51,7 +53,7 @@ const FocusConnectorBottom = styled(FocusConnector)`
 
 const MachineWires = function({ wires, focused, solved }) {
   return (
-    <MachineWiresContainer className={`${focused ? 'focused' : ''} ${solved ? 'solved' : ''}`}>
+    <MachineWiresContainer className={classnames({ focused, solved })}>
       <FocusConnectorTop ready={wires.readiness.top} />
       <FocusConnectorBottom ready={wires.readiness.bottom} />
       {wires.values.map((wireId, i) => (

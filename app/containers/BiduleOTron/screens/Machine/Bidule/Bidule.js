@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
+import classnames from 'classnames';
 
-import withFocus from '../../../withFocus';
+import withFocus from 'BOT/withFocus';
 
 import imgFrame from './img/cadre_bidule.png';
 import imgArrowLeft from './img/fleche_gauche.png';
@@ -146,10 +147,10 @@ const BiduleCodeName = styled.div`
   background: top left no-repeat url('${props => codeImages[props.name]}');
 `;
 
-const MachineBidule = function({ bidule, focused }) {
+const MachineBidule = function({ bidule, focused, solved }) {
   const biduleName = bidule.biduleNames[bidule.index];
   return (
-    <MachineBiduleContainer className={`${focused ? 'focused' : ''}`}>
+    <MachineBiduleContainer className={classnames({ focused, solved })}>
       <div className="ui-element frame"></div>
       <div className="ui-element arrow left"></div>
       <div className="ui-element arrow right"></div>

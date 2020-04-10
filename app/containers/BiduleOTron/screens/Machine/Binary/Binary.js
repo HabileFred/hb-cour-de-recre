@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import withFocus from '../../../withFocus';
+import classnames from 'classnames';
+
+import withFocus from 'BOT/withFocus';
 
 import imgBinary from './img/binaire.png';
 import imgFocusText from './img/focus_champs.png';
@@ -97,7 +99,7 @@ const BinaryDigits = function({ value }) {
 
 const MachineBinary = function({ binary, focused, solved }) {
   return (
-    <MachineBinaryContainer className={`${focused ? 'focused' : ''} ${solved ? 'solved' : ''}`}>
+    <MachineBinaryContainer className={classnames({ focused, solved })}>
       <img src={imgBinary} />
       <Field1 focused={!solved && binary.index === 0}><BinaryDigits value={binary.values[0]} /></Field1>
       <Field2 focused={!solved && binary.index === 1}><BinaryDigits value={binary.values[1]} /></Field2>

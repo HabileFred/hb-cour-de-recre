@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
+import classnames from 'classnames';
 
-import withFocus from '../../../withFocus';
+import withFocus from 'BOT/withFocus';
 
 function importPiecesImages() {
   const r = require.context('./img/', false, /piece_\d+\.png$/);
@@ -78,7 +79,7 @@ const Cursor = styled.div`
 
 const MachinePieces = function({ pieces, focused, solved }) {
   return (
-    <MachinePiecesContainer className={`${focused ? 'focused' : ''} ${solved ? 'solved' : ''}`}>
+    <MachinePiecesContainer className={classnames({ focused, solved })}>
       <Cursor active={!solved && focused} position={pieces.cursor} />
       {pieces.current.map((v, i) => (
         <Piece key={`p${i}`} value={v} index={i} />

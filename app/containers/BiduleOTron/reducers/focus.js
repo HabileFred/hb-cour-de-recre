@@ -203,6 +203,26 @@ class Focus {
     nav.popup.id = null;
   }
 
+  controlPanel() {
+    return {
+      setFocus: (fid) => {
+        const { nav } = getDraft();
+        const { controlPanel } = nav;
+        if (controlPanel.focus.indexOf(fid) === -1) {
+          controlPanel.focus.push(fid);
+        }
+      },
+      removeFocus: (fid) => {
+        const { nav } = getDraft();
+        const { controlPanel } = nav;
+        const p = controlPanel.focus.indexOf(fid);
+        if (p !== -1) {
+          controlPanel.focus.splice(p, 1);
+        }
+      }
+    }
+  }
+
 }
 
 export const focus = new Focus();

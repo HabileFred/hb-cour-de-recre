@@ -15,7 +15,7 @@ function withFocus(WrappedComponent) {
     render() {
       const focused = this.props.store ? this.props.store.nav.focus.indexOf(this.props.focusId) !== -1 : false;
       const solved = this.props.store && this.props.store[this.props.focusId] ? this.props.store[this.props.focusId].SOLVED : false;
-      return <WrappedComponent className={focused ? 'focused' : ''} solved={solved} focused={focused} {...this.props} />;
+      return <WrappedComponent solved={solved} focused={focused} {...this.props} />;
     }
   }
 }
