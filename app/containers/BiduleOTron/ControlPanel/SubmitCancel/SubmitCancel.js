@@ -17,7 +17,7 @@ function importAllImages() {
   const r = require.context('./img/', false, /bouton_.*\.png$/);
   const images = {};
   r.keys().forEach(key => {
-    const l = key.match(/_(annuler|valider)_/)[1];
+    const l = key.match(/_(annuler|valider|message)_/)[1];
     const s = key.match(/_(on|off)\.png/)[1];
     if (!images[l]) {
       images[l] = [];
