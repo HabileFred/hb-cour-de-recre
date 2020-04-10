@@ -22,7 +22,6 @@ const Wrapper = styled.section`
   display: flex;
   flex-flow: row;
   padding: 230px 466px;
-  // TODO Use Theme filter: drop-shadow(3px 0px 2px rgba(0,0,0,0.3));
 `;
 
 const animation = keyframes`

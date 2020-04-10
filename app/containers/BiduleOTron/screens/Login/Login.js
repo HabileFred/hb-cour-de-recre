@@ -9,6 +9,7 @@ import styled, { keyframes } from 'styled-components';
 import { makeSelectLogin } from '../../selectors';
 
 import imgBackground from './img/accueil_fond.png';
+import imgFocus from './img/focus.png';
 
 function importDigitsImages() {
   const r = require.context('./img/', false, /\d\.png$/);
@@ -25,12 +26,34 @@ const Wrapper = styled.section`
   top: 0;
   left: 0;
   width: 100%;
-  height: 520px;
+  height: 530px;
   background: url('${imgBackground}') top left no-repeat;
   display: flex;
   flex-flow: row;
   padding: 230px 466px;
 `;
+
+const animation = keyframes`
+  from {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  to {
+    transform: scale(1);
+  }
+`;
+
+const Focus = styled.div`
+  position: absolute;
+  width: 447px;
+  height: 114px;
+  top: 192px;
+  left: 410px;
+  background: url('${imgFocus}') top left no-repeat;
+  animation: ${animation} 2s ease-in-out infinite;
+  `;
 
 const Digit = styled.div`
   width: 82px;
@@ -41,6 +64,7 @@ const Digit = styled.div`
 function Login({ login }) {
   return (
     <Wrapper>
+      <Focus />
       {login.password.map((d, i) => (
         d >= 0 && d <= 9 ? (<Digit key={`d${i}`} digit={d} />) : null
       ))}

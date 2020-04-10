@@ -26,7 +26,6 @@ const Wrapper = styled.section`
   width: 100%;
   height: 230px;
   bottom: 0;
-  // TODO Use Theme filter: drop-shadow(3px 0px 2px rgba(0,0,0,0.3));
 `;
 
 /**

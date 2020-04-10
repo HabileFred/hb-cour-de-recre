@@ -45,7 +45,7 @@ class Focus {
       controlPanel: {
         focus: ['ColoredButtons', 'Submit', 'Cancel'],
         definition: {
-          'login/password': ['Submit', 'Cancel'],
+          'login/password': ['Keypad', 'Submit', 'Cancel'],
 
           'home/menu': ['ColoredButtons', 'Submit', 'Cancel'],
 
@@ -102,8 +102,6 @@ class Focus {
       }
     });
     nav.controlPanel.focus = [...cpf];
-    console.warn('---', initialState.nav.controlPanel.focus);
-    console.log('Updated control panel focus:', nav.controlPanel.focus);
   }
 
   /**

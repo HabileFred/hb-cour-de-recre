@@ -31,6 +31,7 @@ import {
 import imgCacheBidule from './img/cache_bidule.png';
 import imgPancarte from './img/pancarte.png';
 import imgMachine from './img/machine_squelette.png';
+import imgBackground from 'BOT/img/fond_indus.png';
 
 const openCacheBiduleAnimation = keyframes`
   from {
@@ -97,11 +98,11 @@ const Pancarte = styled.div`
 function Machine({ store, bidule, pieces, pipes, lights, binary, fuses, simon, wires }) {
   return (
     <div style={{
+      position: 'relative',
       width: '100%',
-      height: '520px',
+      height: '530px',
       cursor: 'not-allowed',
-      // TODO Use Theme filter: 'drop-shadow(3px 0px 2px rgba(0,0,0,0.3))',
-      background: `url('${imgMachine}') top left no-repeat`
+      background: `url('${imgBackground}') top left no-repeat`
     }}>
       <div style={{
         position: 'absolute',
@@ -110,6 +111,7 @@ function Machine({ store, bidule, pieces, pipes, lights, binary, fuses, simon, w
         width: '100%',
         height: '100%',
         pointerEvents: 'none',
+        background: `url('${imgMachine}') top left no-repeat`
       }}>
         <Pancarte>
           <img style={{ position: 'absolute' }} src={imgPancarte} />

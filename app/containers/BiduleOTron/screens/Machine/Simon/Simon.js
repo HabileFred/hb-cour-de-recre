@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import withFocus from '../../../withFocus';
+import classnames from 'classnames';
 
 import imgFocus from './img/simon_focus.png';
 
@@ -35,8 +36,37 @@ const MachineSimonContainer = styled.div`
 `;
 
 const MachineSimon = function({ simon, focused }) {
+
+  let timer;
+
+  const sequencer = () => {
+    console.log("simon sequencer");
+  };
+
+  const startSequencer = () => {
+    console.log("starting timer for Simon");
+    timer = window.setInterval(sequencer, 2000);
+  };
+
+  const stopSequencer = () => {
+    if (timer) {
+      console.log("stopping timer for Simon");
+      window.clearInterval(timer);
+      timer = null;
+    }
+  };
+
+  useEffect(() => {
+    if (focused) {
+      startSequencer();
+    } else {
+      stopSequencer();
+    }
+    return stopSequencer;
+  }, [focused]);
+
   return (
-    <MachineSimonContainer className={`${focused ? 'focused' : ''}`}>
+    <MachineSimonContainer className={classnames({ focused })}>
     </MachineSimonContainer>
   );
 };

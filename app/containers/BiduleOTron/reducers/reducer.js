@@ -81,7 +81,6 @@ const BiduleOTronReducer = (state = initialState, action) =>
     setWorkingDraft(draft);
 
     if (focus.inPopup()) {
-      console.log('in popup');
       if (action.type === PAD_CANCEL) {
         SFX.click(2);
         focus.popupDeny();
@@ -176,6 +175,8 @@ const BiduleOTronReducer = (state = initialState, action) =>
       case BUTTON_SIMON_PRESSED:
         if (focus.is('launcher/params')) {
           paramsReducer.handleButtonPressed(action.button);
+        } else if (focus.is('machine/simon')) {
+          simonReducer.handleButtonPressed(action.button);
         } else {
           SFX.wrong();
         }

@@ -36,6 +36,7 @@ class SoundManager {
       tool: new Howl({
         src: sndTool,
         autoplay: false,
+        volume: 0.3,
       }),
       biduleBuilt: new Howl({
         src: sndOpenBidule,
@@ -44,6 +45,7 @@ class SoundManager {
       electricity: new Howl({
         src: sndElectricity,
         autoplay: false,
+        volume: 0.4,
       }),
       toggleSwitch: new Howl({
         src: sndToggleSwitch,
@@ -52,6 +54,7 @@ class SoundManager {
       popup: new Howl({
         src: sndPopup,
         autoplay: false,
+        volume: 0.2,
       }),
     };
   }

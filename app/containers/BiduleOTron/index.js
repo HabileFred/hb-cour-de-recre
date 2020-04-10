@@ -27,14 +27,44 @@ import imgComputer from './img/ordinateur.png';
 import imgMouseCursor from './img/cursor.png';
 import imgPopupBg from './img/popup_fond.png';
 import imgConfirm from './img/confirmation_annulation_bidule.png';
+import imgShadow from './img/lueur.png';
+
+const screenGlowAnimation = keyframes`
+  from {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
+const Shadow = styled.div`
+  position: absolute;
+  left: -15px;
+  top: -28px;
+  width: 1312px;
+  height: 587px;
+  z-index: -1;
+  background: url('${imgShadow}') top left no-repeat;
+  animation: ${screenGlowAnimation} 5s ease-in-out infinite;
+`;
+
+const Wrapper = styled.div`
+  position: relative;
+  width: 1280px;
+  height: 750px;
+  background: url('${imgComputer}') no-repeat;
+  z-index: 0;
+  flex-shrink: 0;
+`;
 
 const Computer = styled.div`
   position: absolute;
   width: 1280px;
   height: 750px;
-  display: flex;
-  flex-flow: column;
-  align-self: center;
   background: url('${imgComputer}') no-repeat;
   color: black;
   z-index: 0;
@@ -46,10 +76,12 @@ const Computer = styled.div`
 
 const popupAnimation = keyframes`
   from {
-    transform: translateX(-50%) translateY(-50%) scale(0);
+    transform: translateX(-50%) translateY(-50%) scale(.5);
+    opacity: 0;
   }
   90% {
     transform: translateX(-50%) translateY(-50%) scale(1.15);
+    opacity: 1;
   }
   to {
     transform: translateX(-50%) translateY(-50%) scale(1);
@@ -71,7 +103,7 @@ const Popup = styled.div`
     top: 50%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
-    animation: ${popupAnimation} 250ms ease;
+    animation: ${popupAnimation} 330ms ease;
   }
 `;
 
@@ -85,8 +117,8 @@ const BiduleOTronContainer = styled.div`
   display: flex;
   overflow: auto;
   flex-flow: column;
-  align-self: center;
-}
+  align-items: center;
+  justify-content: center;
 `;
 
 export function BiduleOTron({ nav }) {
@@ -125,11 +157,14 @@ export function BiduleOTron({ nav }) {
 
   return (
     <BiduleOTronContainer>
-      <Computer>
-        {screen}
-        {popup}
+      <Wrapper>
+        <Shadow />
+        <Computer>
+          {screen}
+          {popup}
         <ControlPanel />
       </Computer>
+      </Wrapper>
     </BiduleOTronContainer>
   );
 }
