@@ -23,7 +23,12 @@ import {
   FOCUS_NEXT,
   BUTTON_SIMON_PRESSED,
   SET_CONTROL_PANEL_FOCUS,
-  SHOW_CONFIRM_POPUP,
+  SHOW_POPUP,
+  PAD_MAILBOX,
+  GAME_STARTED,
+  GAME_COMPLETED,
+  TURN_OFF,
+  COMPUTER_ON_OFF,
 } from './constants';
 
 export function padUp() {
@@ -59,6 +64,12 @@ export function padSubmit() {
 export function padCancel() {
   return {
     type: PAD_CANCEL,
+  };
+}
+
+export function padMailbox() {
+  return {
+    type: PAD_MAILBOX,
   };
 }
 
@@ -142,17 +153,44 @@ export function focusNext() {
   };
 }
 
-export function setControlPanelFocus() {
+export function setControlPanelFocus(focus) {
   return {
     type: SET_CONTROL_PANEL_FOCUS,
+    focus,
   };
 }
 
 export function confirm(popupId, acceptHandler, denyHandler) {
   return {
-    type: SHOW_CONFIRM_POPUP,
+    type: SHOW_POPUP,
     popupId,
     acceptHandler,
     denyHandler,
+  };
+}
+
+export function popup(popupId, closeHandler) {
+  return {
+    type: SHOW_POPUP,
+    popupId,
+    closeHandler,
+  };
+}
+
+export function gameStarted() {
+  return {
+    type: GAME_STARTED,
+  };
+}
+
+export function gameCompleted() {
+  return {
+    type: GAME_COMPLETED,
+  };
+}
+
+export function computerOnOff() {
+  return {
+    type: COMPUTER_ON_OFF,
   };
 }

@@ -8,6 +8,7 @@ import { compose } from 'redux';
 import {
   padSubmit,
   padCancel,
+  padMailbox,
 } from '../../actions';
 
 import imgBill from './img/bill.png';
@@ -59,6 +60,14 @@ const Button = styled.button`
   }
 `;
 
+const MailButton = styled(Button)`
+  position: absolute;
+  width: 73px;
+  height: 34px;
+  top: 165px;
+  left: 1079px;
+`;
+
 const Bill = styled.div`
   position: absolute;
   width: 71px;
@@ -71,16 +80,18 @@ const Bill = styled.div`
 /**
  *
  */
-function ButtonGroupSubmitCancel({ dispatch, submitFocused, cancelFocused }) {
+function ButtonGroupSubmitCancel({ dispatch, submitFocused, cancelFocused, mailboxFocused }) {
 
   const keyListener = event => {
     if (event.isComposing || event.keyCode === 229) {
       return;
     }
-    if (event.keyCode === 13) {       // enter
+    if (event.keyCode === 13) {        // enter
       dispatch(padSubmit());
-    } else if (event.keyCode === 8) { // backspace
+    } else if (event.keyCode === 8) {  // backspace
       dispatch(padCancel());
+    } else if (event.keyCode === 192) { // mail
+      dispatch(padMailbox());
     }
   };
 
@@ -97,9 +108,10 @@ function ButtonGroupSubmitCancel({ dispatch, submitFocused, cancelFocused }) {
     <React.Fragment>
       <Bill />
       <Wrapper>
-      <Button focused={cancelFocused} type="button" action="annuler" onClick={() => dispatch(padCancel())} />
+        <Button focused={cancelFocused} type="button" action="annuler" onClick={() => dispatch(padCancel())} />
         <Button focused={submitFocused} type="button" action="valider" onClick={() => dispatch(padSubmit())} />
       </Wrapper>
+      <MailButton focused={mailboxFocused} type="button" action="message" onClick={() => dispatch(padMailbox())} />
     </React.Fragment>
   );
 }

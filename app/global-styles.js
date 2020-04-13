@@ -16,8 +16,6 @@ const GlobalStyle = createGlobalStyle`
   }
 
   #app {
-    display: flex;
-    flex-flow: column;
   }
 
   p,

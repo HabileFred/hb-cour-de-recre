@@ -16,6 +16,10 @@ class Focus {
       screen: initialScreen,
       focus: initialFocus,
       workflow: {
+        off: {
+          $start: 'off',
+          off: 'login/',
+        },
         login: {
           $start: 'password',
           password: 'home/', // FIXME? 'loading/'
@@ -40,16 +44,23 @@ class Focus {
         launcher: {
           $start: 'radar',
           radar: 'params',
+          params: 'credits/',
+        },
+        credits: {
+          $start: 'credits',
+          credits: null,
         },
       },
       controlPanel: {
         focus: ['ColoredButtons', 'Submit', 'Cancel'],
         definition: {
-          'login/password': ['Keypad', 'Submit', 'Cancel'],
+          'off/off': ['On'],
+
+          'login/password': ['Keypad', 'Mailbox', 'Submit', 'Cancel'],
 
           'home/menu': ['ColoredButtons', 'Submit', 'Cancel'],
 
-          'machine/bidule': ['Arrows', 'Submit', 'Cancel'],
+          'machine/bidule': ['Arrows', 'Submit', 'Cancel', 'Mailbox'],
           'machine/pieces': ['Arrows', 'ColoredButtons', 'Cancel'],
           'machine/pipes': ['Pipes', 'Cancel'],
           'machine/binary': ['Keypad', 'Cancel'],
@@ -58,8 +69,10 @@ class Focus {
           'machine/lights': ['ColoredButtons', 'Cancel'],
           'machine/simon': ['Simon', 'Cancel'],
 
-          'launcher/radar': ['Arrows', 'Cancel'],
+          'launcher/radar': ['Arrows', 'Submit', 'Cancel', 'Mailbox'],
           'launcher/params': ['Keypad', 'ColoredButtons', 'Simon', 'Cancel'],
+
+          'credits/credits': ['Submit', 'Cancel'],
         },
       },
     };
@@ -164,12 +177,26 @@ class Focus {
   }
 
   setScreen(screen, focus) {
-    const draft = getDraft();
-    draft.nav.screen = screen;
-    this.replace(focus ? focus : draft.nav.workflow[screen].$start);
+    const { nav } = getDraft();
+    nav.screen = screen;
+    if (focus) {
+      this.replace(focus);
+    } else if (nav.workflow[screen] && nav.workflow[screen].$start) {
+      this.replace(nav.workflow[screen].$start);
+    }
   }
 
-  popup(popupId, submitHandler, cancelHandler) {
+  popup(popupId, closeHandler) {
+    const { nav } = getDraft();
+    nav.popup.id = popupId;
+    nav.popup.reject = closeHandler;
+    const { controlPanel } = nav;
+    this.prevControlPanelFocus = controlPanel.focus.slice();
+    controlPanel.focus.splice(0, controlPanel.focus.length, 'Cancel');
+    document.activeElement.blur();
+  }
+
+  confirm(popupId, submitHandler, cancelHandler) {
     SFX.popup();
     const { nav } = getDraft();
     nav.popup.id = popupId;
@@ -178,22 +205,27 @@ class Focus {
 
     const { controlPanel } = nav;
     this.prevControlPanelFocus = controlPanel.focus.slice();
-    controlPanel.focus.splice(0, controlPanel.focus.length, 'Submit', 'Cancel');
+    controlPanel.focus.splice(0, controlPanel.focus.length, 'Cancel');
+    if (nav.popup.resolve) {
+      controlPanel.focus.push('Submit');
+    }
 
     document.activeElement.blur();
   }
 
-  popupAccept() {
+  confirmAccept() {
     const { nav } = getDraft();
     const { controlPanel } = nav;
     controlPanel.focus.splice(0, controlPanel.focus.length, ...this.prevControlPanelFocus);
     if (nav.popup.resolve) {
       nav.popup.resolve.call(nav.popup.resolve);
+    } else if (nav.popup.reject) {
+      nav.popup.reject.call(nav.popup.reject);
     }
     nav.popup.id = null;
   }
 
-  popupDeny() {
+  confirmReject() {
     const { nav } = getDraft();
     const { controlPanel } = nav;
     controlPanel.focus.splice(0, controlPanel.focus.length, ...this.prevControlPanelFocus);
@@ -208,7 +240,9 @@ class Focus {
       setFocus: (fid) => {
         const { nav } = getDraft();
         const { controlPanel } = nav;
-        if (controlPanel.focus.indexOf(fid) === -1) {
+        if (fid === null) {
+          controlPanel.focus.length = 0;
+        } else if (controlPanel.focus.indexOf(fid) === -1) {
           controlPanel.focus.push(fid);
         }
       },

@@ -4,32 +4,38 @@
  *
  */
 
-export const PAD_UP = 'app/BiduleOTron/PAD_UP';
-export const PAD_DOWN = 'app/BiduleOTron/PAD_DOWN';
-export const PAD_LEFT = 'app/BiduleOTron/PAD_LEFT';
-export const PAD_RIGHT = 'app/BiduleOTron/PAD_RIGHT';
+export const GAME_STARTED = 'BOT/GAME_STARTED';
+export const GAME_COMPLETED = 'BOT/GAME_COMPLETED';
 
-export const PAD_SUBMIT = 'app/BiduleOTron/PAD_SUBMIT';
-export const PAD_CANCEL = 'app/BiduleOTron/PAD_CANCEL';
+export const PAD_UP = 'BOT/PAD_UP';
+export const PAD_DOWN = 'BOT/PAD_DOWN';
+export const PAD_LEFT = 'BOT/PAD_LEFT';
+export const PAD_RIGHT = 'BOT/PAD_RIGHT';
 
-export const PIPE_ROTATE = 'app/BiduleOTron/PIPE_ROTATE';
-export const PIPES_CHECK = 'app/BiduleOTron/PIPES_CHECK';
+export const PAD_SUBMIT = 'BOT/PAD_SUBMIT';
+export const PAD_CANCEL = 'BOT/PAD_CANCEL';
+export const PAD_MAILBOX = 'BOT/PAD_MAILBOX';
 
-export const BUTTON_PRESSED = 'app/BiduleOTron/BUTTON_PRESSED';
-export const BUTTON_SIMON_PRESSED = 'app/BiduleOTron/BUTTON_SIMON_PRESSED';
+export const PIPE_ROTATE = 'BOT/PIPE_ROTATE';
+export const PIPES_CHECK = 'BOT/PIPES_CHECK';
 
-export const KEYPAD_INPUT = 'app/BiduleOTron/KEYPAD_INPUT';
-export const FUSE_TOGGLE = 'app/BiduleOTron/FUSE_TOGGLE';
-export const FUSES_CHECK = 'app/BiduleOTron/FUSES_CHECK';
+export const BUTTON_PRESSED = 'BOT/BUTTON_PRESSED';
+export const BUTTON_SIMON_PRESSED = 'BOT/BUTTON_SIMON_PRESSED';
 
-export const WIRE_SELECT_TOP_SOCKET = 'app/BiduleOTron/WIRE_SELECT_TOP_SOCKET';
-export const WIRE_SELECT_BOTTOM_SOCKET = 'app/BiduleOTron/WIRE_SELECT_BOTTOM_SOCKET';
+export const KEYPAD_INPUT = 'BOT/KEYPAD_INPUT';
+export const FUSE_TOGGLE = 'BOT/FUSE_TOGGLE';
+export const FUSES_CHECK = 'BOT/FUSES_CHECK';
 
-export const SET_SCREEN = 'app/BiduleOTron/SET_SCREEN';
-export const FOCUS_NEXT = 'app/BiduleOTron/FOCUS_NEXT';
+export const WIRE_SELECT_TOP_SOCKET = 'BOT/WIRE_SELECT_TOP_SOCKET';
+export const WIRE_SELECT_BOTTOM_SOCKET = 'BOT/WIRE_SELECT_BOTTOM_SOCKET';
 
-export const MUSIC_TOGGLE = 'app/BiduleOTron/MUSIC_TOGGLE';
-export const SFX_TOGGLE = 'app/BiduleOTron/SFX_TOGGLE';
+export const SET_SCREEN = 'BOT/SET_SCREEN';
+export const FOCUS_NEXT = 'BOT/FOCUS_NEXT';
 
-export const SET_CONTROL_PANEL_FOCUS = 'app/BiduleOTron/SET_CONTROL_PANEL_FOCUS';
-export const SHOW_CONFIRM_POPUP = 'app/BiduleOTron/SHOW_CONFIRM_POPUP';
+export const MUSIC_TOGGLE = 'BOT/MUSIC_TOGGLE';
+export const SFX_TOGGLE = 'BOT/SFX_TOGGLE';
+
+export const SET_CONTROL_PANEL_FOCUS = 'BOT/SET_CONTROL_PANEL_FOCUS';
+export const SHOW_POPUP = 'BOT/SHOW_POPUP';
+
+export const COMPUTER_ON_OFF = 'BOT/COMPUTER_ON_OFF';

@@ -44,7 +44,7 @@ function ControlPanel({ controlPanelFocus, nav }) {
       <ButtonGroupWires focused={focused('Wires')} />
       <ButtonGroupKeypad focused={focused('Keypad')} />
       <ButtonGroupSimon focused={focused('Simon')} />
-      <ButtonGroupSubmitCancel submitFocused={focused('Submit')} cancelFocused={focused('Cancel')} />
+      <ButtonGroupSubmitCancel mailboxFocused={focused('Mailbox')} submitFocused={focused('Submit')} cancelFocused={focused('Cancel')} />
     </Wrapper>
   );
 }

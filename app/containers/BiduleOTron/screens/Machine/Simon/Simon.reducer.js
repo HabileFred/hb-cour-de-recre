@@ -28,6 +28,7 @@ export class ReducerSimon {
     simon.progress = 0;
     simon.status = 'Sequence';
     focus.controlPanel().removeFocus('Simon');
+    SFX.wrong();
   }
 
   playerSuccess() {
@@ -36,6 +37,7 @@ export class ReducerSimon {
     simon.length += 1;
     simon.status = 'Sequence';
     focus.controlPanel().removeFocus('Simon');
+    SFX.click();
   }
 
   handleButtonPressed(button) {
@@ -50,6 +52,7 @@ export class ReducerSimon {
         } else {
           simon.cursor += 1;
           if (simon.cursor === simon.desired.length) {
+            SFX.click();
             simon.SOLVED = true;
             focus.from('simon').next();
           } else {
@@ -78,7 +81,6 @@ export class ReducerSimon {
         } while (i && v === a[i - 1]);
         simon.desired[i] = v;
       });
-      console.log(`La séquence pour le jeu du simon vient d'être générée. J'aurais pu l'afficher pour toi, le petit malin qui vient voir ce qui se passe ici, mais... non, désolé :P`);
     }
   }
 }

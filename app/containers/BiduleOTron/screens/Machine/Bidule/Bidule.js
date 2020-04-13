@@ -151,7 +151,7 @@ const MachineBidule = function({ bidule, focused, solved }) {
   const biduleName = bidule.biduleNames[bidule.index];
   return (
     <MachineBiduleContainer className={classnames({ focused, solved })}>
-      <div className="ui-element frame"></div>
+      <div className="frame"></div>
       <div className="ui-element arrow left"></div>
       <div className="ui-element arrow right"></div>
       <BiduleCodeName name={biduleName} />

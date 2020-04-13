@@ -36,9 +36,7 @@ export default function configureStore(initialState = {}, history) {
 
   const enhancers = [applyMiddleware(...middlewares)];
 
-  /*
-  FIXME
-  const isProduction = process.env.NODE_ENV === 'production';
+  const isProduction = true; // process.env.NODE_ENV === 'production';
   if (isProduction) {
     try {
       const serializedState = localStorage.getItem('state');
@@ -47,7 +45,6 @@ export default function configureStore(initialState = {}, history) {
       }
     } catch (err) {}
   }
-  */
 
   const store = createStore(
     createReducer(),
@@ -55,15 +52,12 @@ export default function configureStore(initialState = {}, history) {
     composeEnhancers(...enhancers),
   );
 
-  /*
-  FIXME
   if (isProduction) {
       const saveStore = () => {
       try {
         const serializedState = JSON.stringify(store.getState());
         localStorage.setItem('state', serializedState);
-      } catch {
-      }
+      } catch (err) {}
     };
 
     let saveStoreTimeout;
@@ -76,7 +70,6 @@ export default function configureStore(initialState = {}, history) {
       saveStoreTimeout = setTimeout(saveStore, 500);
     });
   }
-  */
 
   // Extensions
   store.runSaga = sagaMiddleware.run;

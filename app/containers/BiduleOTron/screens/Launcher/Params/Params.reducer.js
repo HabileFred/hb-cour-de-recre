@@ -42,6 +42,11 @@ class ReducerParams {
     };
   }
 
+  checkSolved() {
+    const { params } = getDraft();
+    params.SOLVED = params.velocity.SOLVED && params.stability.SOLVED && params.direction.SOLVED;
+  }
+
   handleButtonPressed(button) {
     const { params } = getDraft();
     if ('ghjk'.indexOf(button) !== -1) {
@@ -52,6 +57,7 @@ class ReducerParams {
       } else {
         s.values[s.cursor] = s.buttonValues[button];
         s.SOLVED = arraysEqual(s.values, s.solution);
+        this.checkSolved();
         s.cursor = cycleValue(s.cursor, 1, 0, s.solution.length);
       }
     } else {
@@ -64,6 +70,7 @@ class ReducerParams {
         } else {
           v.values[v.cursor] = value + 1;
           v.SOLVED = arraysEqual(v.values, v.solution);
+          this.checkSolved();
           v.cursor = cycleValue(v.cursor, 1, 0, v.solution.length);
         }
       } else {
@@ -77,6 +84,7 @@ class ReducerParams {
     params.direction.values[params.direction.cursor] = value;
     params.direction.cursor = cycleValue(params.direction.cursor, 1, 0, params.direction.solution.length - 1);
     params.direction.SOLVED = arraysEqual(params.direction.values, params.direction.solution);
+    this.checkSolved();
   }
 
 }

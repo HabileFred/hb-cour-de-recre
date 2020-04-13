@@ -16,7 +16,14 @@ import {
   SET_SCREEN,
   FOCUS_NEXT,
   BUTTON_SIMON_PRESSED,
-  SHOW_CONFIRM_POPUP
+  SHOW_POPUP,
+  PAD_MAILBOX,
+  GAME_STARTED,
+  GAME_COMPLETED,
+  TURN_OFF,
+  TURN_ON,
+  COMPUTER_ON_OFF,
+  SET_CONTROL_PANEL_FOCUS
 } from '../constants';
 
 import { SFX } from '../SoundManager';
@@ -28,6 +35,7 @@ import { getDraft } from './draft';
 // Import reducers.
 import { loginReducer } from 'BOT/screens/Login/Login.reducer';
 import { homeReducer } from 'BOT/screens/Home/Home.reducer';
+import { creditsReducer } from 'BOT/screens/Credits/Credits.reducer';
 // Machine
 import { biduleReducer } from 'BOT/screens/Machine/Bidule/Bidule.reducer';
 import { binaryReducer } from 'BOT/screens/Machine/Binary/Binary.reducer';
@@ -62,7 +70,12 @@ function handlePadCancel() {
         biduleReducer.handlePadCancel();
         focus.setScreen('home');
       } else {
-        focus.popup('confirm', () => focus.setScreen('machine'));
+        const draft = getDraft();
+        if (!draft.bidule.SOLVED) {
+          focus.confirm('confirm', () => focus.setScreen('machine'));
+        } else {
+          focus.setScreen('home');
+        }
       }
     } else {
       if (focus.is('home/')) {
@@ -80,13 +93,15 @@ const BiduleOTronReducer = (state = initialState, action) =>
   produce(state, (draft) => {
     setWorkingDraft(draft);
 
+    document.activeElement.blur();
+
     if (focus.inPopup()) {
       if (action.type === PAD_CANCEL) {
         SFX.click(2);
-        focus.popupDeny();
+        focus.confirmReject();
       } else if (action.type === PAD_SUBMIT) {
         SFX.click();
-        focus.popupAccept();
+        focus.confirmAccept();
       } else {
         SFX.wrong();
       }
@@ -140,7 +155,11 @@ const BiduleOTronReducer = (state = initialState, action) =>
         break;
 
       case PAD_SUBMIT:
-        if (focus.is('home/')) {
+        if (focus.is('credits/')) {
+          // TODO
+        } else if (focus.is('machine/') && draft.bidule.SOLVED) {
+          focus.setScreen('home');
+        } else if (focus.is('home/')) {
           homeReducer.handlePadSubmit();
         } else if (focus.is('login/password')) {
           loginReducer.handlePadSubmit();
@@ -156,8 +175,24 @@ const BiduleOTronReducer = (state = initialState, action) =>
         }
         break;
 
+      case PAD_MAILBOX:
+        if (focus.is('login/password')) {
+          loginReducer.handlePadMailbox();
+        } else if (focus.is('launcher/radar')) {
+          radarReducer.handlePadMailbox();
+        } else if (focus.is('machine/bidule')) {
+          biduleReducer.handlePadMailbox();
+        } else {
+          SFX.wrong();
+        }
+        break;
+
       case PAD_CANCEL:
-        handlePadCancel(draft);
+        if (focus.is('credits/')) {
+          // TODO
+        } else {
+          handlePadCancel(draft);
+        }
         break;
 
       case PIPE_ROTATE:
@@ -262,8 +297,39 @@ const BiduleOTronReducer = (state = initialState, action) =>
         focus.next();
         break;
 
-      case SHOW_CONFIRM_POPUP:
-        focus.popup(action.popupId, action.acceptHandler, action.denyHandler);
+      case SHOW_POPUP:
+        if (action.acceptHandler) {
+          focus.confirm(action.popupId, action.acceptHandler, action.denyHandler);
+        } else if (action.closeHandler) {
+          focus.popup(action.popupId, action.closeHandler);
+        }
+        break;
+
+      case GAME_STARTED:
+        draft.$game.startedAt = Date.now();
+        break;
+
+      case GAME_COMPLETED:
+        draft.$game.completedAt = Date.now();
+        break;
+
+      case COMPUTER_ON_OFF:
+        if (draft.status == 'on') {
+          localStorage.removeItem('state');
+          const newState = { ...initialState, status: 'off' };
+          newState.nav.screen = 'off';
+          newState.nav.focus = ['off'];
+          newState.nav.controlPanel.focus = ['On'];
+          return newState;
+        } else {
+          draft.status = 'on';
+          focus.setScreen('login');
+          SFX.play('boot');
+        }
+        break;
+
+      case SET_CONTROL_PANEL_FOCUS:
+        focus.controlPanel().setFocus(action.focus);
         break;
 
       default:

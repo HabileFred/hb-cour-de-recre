@@ -16,6 +16,7 @@ export class ReducerBidule {
     initialState.bidule = {
       BIDULE_COUNT: 15,
       index: 0,
+      solution: 6,
       submitted: false,
       biduleNames: [
         'temporel',
@@ -39,16 +40,16 @@ export class ReducerBidule {
   }
 
   handlePadLeft() {
-    const draft = getDraft();
+    const { bidule } = getDraft();
     const v = betweenValue(
-      draft.bidule.index,
+      bidule.index,
       -1,
       0,
-      (draft.bidule.BIDULE_COUNT - 1)
+      (bidule.BIDULE_COUNT - 1)
     );
-    if (v !== draft.bidule.index) {
-      draft.bidule.index = v;
-      draft.bidule.submitted = false;
+    if (v !== bidule.index) {
+      bidule.index = v;
+      bidule.submitted = false;
       SFX.click();
     } else {
       SFX.wrong();
@@ -56,16 +57,16 @@ export class ReducerBidule {
   }
 
   handlePadRight() {
-    const draft = getDraft();
+    const { bidule } = getDraft();
     const v = betweenValue(
-      draft.bidule.index,
+      bidule.index,
       1,
       0,
-      (draft.bidule.BIDULE_COUNT - 1)
+      (bidule.BIDULE_COUNT - 1)
     );
-    if (v !== draft.bidule.index) {
-      draft.bidule.index = v;
-      draft.bidule.submitted = false;
+    if (v !== bidule.index) {
+      bidule.index = v;
+      bidule.submitted = false;
       SFX.click();
     } else {
       SFX.wrong();
@@ -76,10 +77,11 @@ export class ReducerBidule {
    * Pad button 'submit' has been pressed.
    */
   handlePadSubmit() {
-    const draft = getDraft();
-    if (!draft.bidule.submitted) {
-      draft.bidule.submitted = true;
+    const { bidule } = getDraft();
+    if (!bidule.submitted) {
+      bidule.submitted = true;
     }
+    // bidule.SOLVED = true; // FIXME
     focus.from('bidule').next();
   }
 
@@ -87,8 +89,12 @@ export class ReducerBidule {
    * Pad button 'cancel' has been pressed.
    */
   handlePadCancel() {
-    const draft = getDraft();
-    draft.bidule.submitted = false;
+    const { bidule } = getDraft();
+    bidule.submitted = false;
+  }
+
+  handlePadMailbox() {
+    focus.popup('mail');
   }
 }
 

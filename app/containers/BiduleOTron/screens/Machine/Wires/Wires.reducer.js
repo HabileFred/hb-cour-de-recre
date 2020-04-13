@@ -57,8 +57,9 @@ export class ReducerWires {
         // Résolu si 3 fils correctement branchés.
         draft.wires.SOLVED = draft.wires.values.length === 3;
         if (draft.wires.SOLVED) {
-          draft.bidule.SOLVED = true;
-          SFX.biduleBuilt();
+          // On teste quand même encore ici si c'est le bidule attendu
+          // qui a été choisi.
+          draft.bidule.SOLVED = draft.bidule.index === draft.bidule.solution;
         } else {
           SFX.electricity();
         }

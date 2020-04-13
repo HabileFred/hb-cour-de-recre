@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import classnames from 'classnames';
 
 import withFocus from 'BOT/withFocus';
+import { focus } from 'BOT/reducers/focus';
 
 import imgPointer from './img/aiguille.png';
 import imgCursor from './img/curseur.png';
@@ -29,6 +30,7 @@ const rotatingPointer = keyframes`
 
 const Pointer = styled.div`
   position: absolute;
+  display: ${props => props.enabled ? 'block' : 'none'};
   left: 48px;
   top: 51px;
   width: 56px;
@@ -92,10 +94,11 @@ const opacity = [
   0.3, 0.6, 0.6, 0.3,
 ];
 const Cursor = styled.div`
+  display: ${props => props.enabled ? 'block' : 'none'};
   position: absolute;
   left: ${props => cursorX[props.x]}px;
   top: ${props => cursorY[props.y]}px;
-  transition: left 100ms ease-in-out, top 100ms ease-in-out;
+  transition: left 250ms ease-in-out, top 250ms ease-in-out;
   opacity: ${props => opacity[props.y * 4 + props.x]};
   width: 7px;
   height: 8px;
@@ -103,18 +106,16 @@ const Cursor = styled.div`
   z-index: 3;
 `;
 
-const Radar = function({ radar, focused, solved }) {
+const Radar = function({ radar, focused, solved, enabled }) {
+
   return (
     <React.Fragment>
       <IndicatorOff />
       {solved ? <IndicatorOn /> : null}
-
-      <Wrapper
-     className={classnames({ focused, solved })}>
-        <Cursor x={radar.cursor.x} y={radar.cursor.y} />
-        <Pointer />
-      </Wrapper
-    >
+      <Wrapper className={classnames({ focused, solved })}>
+        <Cursor enabled={enabled} x={radar.cursor.x} y={radar.cursor.y} />
+        <Pointer enabled={enabled} />
+      </Wrapper>
     </React.Fragment>
   );
 }

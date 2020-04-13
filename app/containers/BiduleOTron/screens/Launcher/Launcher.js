@@ -1,11 +1,13 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 
+import { SFX } from 'BOT/SoundManager';
+import { focus } from 'BOT/reducers/focus';
 import Radar from './Radar/Radar';
 import Params from './Params/Params';
 
@@ -13,6 +15,7 @@ import {
   makeSelectBidule,
   makeSelectRadar,
   makeSelectParams,
+  makeSelectGame,
 } from '../../selectors';
 
 import { Cable1, Cable2, Pipe, Barometer, Propellant, Porthole, Transmission, Antenna } from './Animations';
@@ -21,6 +24,8 @@ import imgBidulePresent from './img/bidule_aspitruc.png';
 import imgBiduleAbsent from './img/bidule_aucun.png';
 import imgLauncher from './img/launcher.png';
 import imgBiduleOK from './img/bidule_ok.png';
+import imgBackground from 'BOT/img/fond_machine.png';
+import { popup, gameCompleted } from '../../actions';
 
 const BiduleInfos = styled.div`
   position: absolute;
@@ -43,17 +48,45 @@ const BiduleOK = styled.div`
   background-size: contain;
 `;
 
-
 const Wrapper = styled.section`
   width: 100%;
   height: 530px;
   display: flex;
   flex-flow: row;
   cursor: not-allowed;
+  background: no-repeat url('${imgBackground}');
 `;
 
+function Launcher({ dispatch, game, params, bidule, radar }) {
 
-function Launcher({ params, bidule, radar }) {
+  const [animation, setAnimation] = useState(null);
+
+  const visualFX = () => {
+    SFX.play('fan');
+    window.setTimeout(() => {
+      setAnimation('shake');
+      window.setTimeout(() => {
+        SFX.play('rocket');
+        setAnimation('launch');
+        window.setTimeout(() => {
+          dispatch(popup('score', () => {
+            focus.from('params').next();
+          }));
+        }, 4000);
+      }, 4700);
+    }, 1500);
+  };
+
+  useEffect(() => {
+    if (params.SOLVED) {
+      dispatch(gameCompleted());
+      dispatch(popup(
+        'bidule-envoi-debut',
+        () => setImmediate(visualFX),
+      ));
+    }
+  }, [params.SOLVED]);
+
   return (
     <Wrapper>
       <div style={{
@@ -69,15 +102,15 @@ function Launcher({ params, bidule, radar }) {
       </div>
       <Barometer />
       <Antenna />
-      <Radar radar={radar} focusId="radar" />
+      <Radar radar={radar} focusId="radar" enabled={bidule.SOLVED} />
       <Params params={params} focusId="params" />
       <Cable1 animated={radar.SOLVED} />
       <Cable2 animated={params.direction.SOLVED} />
       <Pipe animated={params.stability.SOLVED} />
-      <Propellant />
+      <Propellant animated={params.SOLVED} />
       <BiduleInfos present={bidule.SOLVED} />
       <BiduleOK present={bidule.SOLVED} />
-      <Porthole status={bidule.SOLVED ? 'bidule' : 'empty'} />
+      <Porthole status={bidule.SOLVED ? 'bidule' : 'empty'} animation={animation}/>
       <Transmission animated={params.velocity.SOLVED} />
     </Wrapper>
   );
@@ -89,6 +122,7 @@ Launcher.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   bidule: makeSelectBidule(),
+  game: makeSelectGame(),
   radar: makeSelectRadar(),
   params: makeSelectParams(),
 });

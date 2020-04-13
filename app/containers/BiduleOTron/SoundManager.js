@@ -9,6 +9,12 @@ import sndOpenBidule from './sounds/ouverture_bidule.mp3';
 import sndElectricity from './sounds/electricity.mp3';
 import sndToggleSwitch from './sounds/toggle_switch.mp3';
 import sndPopup from './sounds/popup.mp3';
+import sndFan from './sounds/soufflerie.mp3';
+import sndRocket from './sounds/sabre_laser.mp3';
+import sndRadar from './sounds/radar.mp3';
+import sndVisseuse from './sounds/visseuse.mp3';
+import sndMachine from './sounds/machine.mp3';
+import sndBoot from './sounds/boot.mp3';
 
 class SoundManager {
   constructor() {
@@ -56,6 +62,36 @@ class SoundManager {
         autoplay: false,
         volume: 0.2,
       }),
+      fan: new Howl({
+        src: sndFan,
+        autoplay: false,
+        volume: 0.2,
+      }),
+      rocket: new Howl({
+        src: sndRocket,
+        autoplay: false,
+        volume: 0.2,
+      }),
+      radar: new Howl({
+        src: sndRadar,
+        autoplay: false,
+        volume: 0.2,
+      }),
+      visseuse: new Howl({
+        src: sndVisseuse,
+        autoplay: false,
+        volume: 0.2,
+      }),
+      machine: new Howl({
+        src: sndMachine,
+        autoplay: false,
+        volume: 0.2,
+      }),
+      boot: new Howl({
+        src: sndBoot,
+        autoplay: false,
+        volume: 0.2,
+      }),
     };
   }
 
@@ -81,7 +117,9 @@ const soundManager = new SoundManager();
 export default soundManager;
 
 export const SFX = {
+  play: (s) => soundManager.play(s),
   enableSFX: (b) => soundManager.enableSFX(b),
+
   click: (n = '') => soundManager.play(`click${n}`),
   wrong: () => soundManager.play('wrong'),
   tool: () => soundManager.play('tool'),

@@ -110,3 +110,14 @@ export const makeSelectParams = () =>
     selectBiduleOTronDomain,
     substate => substate.params,
   );
+
+export const makeSelectGame = () =>
+  createSelector(
+    selectBiduleOTronDomain,
+    substate => substate.$game,
+  );
+export const makeSelectStatus = () =>
+  createSelector(
+    selectBiduleOTronDomain,
+    substate => substate.status,
+  );

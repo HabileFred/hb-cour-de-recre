@@ -69,13 +69,11 @@ const MachineSimon = function({ dispatch, simon, focused, solved }) {
   };
 
   const startSequencer = () => {
-    console.log("Starting timer for Simon");
-    timer = window.setInterval(sequencer, 2000);
+    timer = window.setInterval(sequencer, 1300);
   };
 
   const stopSequencer = () => {
     if (timer) {
-      console.log("Stopping timer for Simon");
       window.clearInterval(timer);
       timer = null;
     }

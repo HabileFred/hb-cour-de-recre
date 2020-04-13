@@ -122,7 +122,7 @@ function ButtonGroupWires({ dispatch, wires, focused }) {
         <Button type="button" value={3} selected={wires.sockets.bottom === 3} onClick={() => dispatch(wireSelectBottomSocket(3))} />
         <Button type="button" value={4} selected={wires.sockets.bottom === 4} onClick={() => dispatch(wireSelectBottomSocket(4))} />
       </Line2>
-      {wires.values.map((v) => <Wire wireId={v} />)}
+      {wires.values.map((v) => <Wire key={v} wireId={v} />)}
     </Wrapper>
   );
 }

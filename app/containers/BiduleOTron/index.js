@@ -12,7 +12,7 @@ import { compose } from 'redux';
 import styled, { keyframes } from 'styled-components';
 
 import { useInjectReducer } from 'utils/injectReducer';
-import { makeSelectNav } from './selectors';
+import { makeSelectNav, makeSelectGame } from './selectors';
 import reducer from './reducers/reducer';
 
 import Machine from './screens/Machine/Machine';
@@ -21,25 +21,24 @@ import Loading from './screens/Loading/Loading';
 import ControlPanel from './ControlPanel/ControlPanel';
 import Launcher from './screens/Launcher/Launcher';
 import Home from './screens/Home/Home';
+import Credits from './screens/Credits/Credits';
+import Off from './screens/Off/Off';
 
-import imgBackground from './img/papier_peint.png';
 import imgComputer from './img/ordinateur.png';
 import imgMouseCursor from './img/cursor.png';
-import imgPopupBg from './img/popup_fond.png';
-import imgConfirm from './img/confirmation_annulation_bidule.png';
+
 import imgShadow from './img/lueur.png';
 
-const screenGlowAnimation = keyframes`
-  from {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.6;
-  }
-  to {
-    opacity: 1;
-  }
-`;
+import imgPopupBg from './img/popup_fond.png';
+import imgConfirm from './img/popups/confirmation_annulation_bidule.png';
+import imgMail from './img/popups/message.png';
+import imgMailDirection from './img/popups/message_direction.png';
+import imgScore from './img/popups/fin_score.png';
+import imgConfirmOff from './img/popups/confirmation_eteindre.png';
+import imgPopupBiduleBuild from './img/popups/fabrication_bidule.png';
+import imgPopupBiduleSend from './img/popups/envoi_bidule.png';
+
+import { Digits } from './Digits';
 
 const Shadow = styled.div`
   position: absolute;
@@ -49,7 +48,6 @@ const Shadow = styled.div`
   height: 587px;
   z-index: -1;
   background: url('${imgShadow}') top left no-repeat;
-  animation: ${screenGlowAnimation} 5s ease-in-out infinite;
 `;
 
 const Wrapper = styled.div`
@@ -80,6 +78,20 @@ const popupAnimation = keyframes`
     opacity: 0;
   }
   90% {
+    //transform: translateX(-50%) translateY(-50%) scale(1.15);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-50%) translateY(-50%) scale(1);
+  }
+`;
+
+const confirmAnimation = keyframes`
+  from {
+    transform: translateX(-50%) translateY(-50%) scale(.5);
+    opacity: 0;
+  }
+  90% {
     transform: translateX(-50%) translateY(-50%) scale(1.15);
     opacity: 1;
   }
@@ -98,7 +110,7 @@ const Popup = styled.div`
   z-index: 100;
   cursor: not-allowed;
 
-  img {
+  .contents {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -107,13 +119,14 @@ const Popup = styled.div`
   }
 `;
 
+const Confirm = styled(Popup)`
+  .contents {
+    animation: ${confirmAnimation} 330ms ease;
+  }
+`;
+
 const BiduleOTronContainer = styled.div`
-  background: url('${imgBackground}');
-  position: absolute;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
+  position: relative;
   display: flex;
   overflow: auto;
   flex-flow: column;
@@ -121,7 +134,9 @@ const BiduleOTronContainer = styled.div`
   justify-content: center;
 `;
 
-export function BiduleOTron({ nav }) {
+import globalStyles from './styles.scss';
+
+export function BiduleOTron({ nav, game }) {
   useInjectReducer({ key: 'biduleOTron', reducer });
 
   useEffect(() => {
@@ -142,6 +157,12 @@ export function BiduleOTron({ nav }) {
     case 'home':
       screen = (<Home />);
       break;
+    case 'credits':
+      screen = (<Credits />);
+      break;
+    case 'off':
+      screen = (<Off />);
+      break;
     default:
       screen = (<Login />);
   }
@@ -149,8 +170,77 @@ export function BiduleOTron({ nav }) {
   let popup;
   switch (nav.popup.id) {
     case 'confirm':
-      popup = (<Popup><img src={imgConfirm} /></Popup>);
+      popup = (
+        <Confirm>
+          <div className="contents">
+            <img src={imgConfirm} />
+          </div>
+        </Confirm>
+      );
       break;
+
+    case 'confirm-off':
+      popup = (
+        <Confirm>
+          <div className="contents">
+          <img src={imgConfirmOff} />
+          </div>
+        </Confirm>
+      );
+      break;
+
+    case 'mail':
+      popup = (
+        <Popup>
+          <div className="contents">
+            <img src={imgMail} />
+          </div>
+        </Popup>
+      );
+      break;
+
+    case 'mail-direction':
+      popup = (
+        <Popup>
+          <div className="contents">
+            <img src={imgMailDirection} />
+          </div>
+        </Popup>
+      );
+      break;
+
+    case 'bidule-fabrication-debut':
+      popup = (
+        <Popup>
+          <div className="contents">
+            <img src={imgPopupBiduleBuild} />
+          </div>
+        </Popup>
+      );
+      break;
+
+    case 'bidule-envoi-debut':
+      popup = (
+        <Popup>
+          <div className="contents">
+            <img src={imgPopupBiduleSend} />
+          </div>
+        </Popup>
+      );
+      break;
+
+    case 'score':
+      const min = Math.ceil((game.completedAt - game.startedAt) / 60000);
+      popup = (
+        <Popup>
+          <div className="contents">
+            <img src={imgScore} />
+            <Digits style={{ position: 'absolute', left: '210px', top: '155px', transform: 'scale(.8) translateX(-50%)' }} value={min} />
+          </div>
+        </Popup>
+      );
+      break;
+
     default:
       popup = null;
   }
@@ -175,6 +265,7 @@ BiduleOTron.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   nav: makeSelectNav(),
+  game: makeSelectGame(),
 });
 
 function mapDispatchToProps(dispatch) {

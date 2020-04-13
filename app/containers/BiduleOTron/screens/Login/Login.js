@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -7,6 +7,7 @@ import { compose } from 'redux';
 import styled, { keyframes } from 'styled-components';
 
 import { makeSelectLogin } from '../../selectors';
+import { gameStarted } from '../../actions';
 
 import imgBackground from './img/accueil_fond.png';
 import imgFocus from './img/focus.png';
@@ -61,12 +62,19 @@ const Digit = styled.div`
   background: center center no-repeat url('${props => digitImages[props.digit]}');
 `;
 
-function Login({ login }) {
+function Login({ dispatch, login }) {
+
+  useEffect(() => {
+    dispatch(gameStarted());
+  }, []);
+
   return (
     <Wrapper>
       <Focus />
       {login.password.map((d, i) => (
-        d >= 0 && d <= 9 ? (<Digit key={`d${i}`} digit={d} />) : null
+        d >= 0 && d <= 9
+          ? (<Digit key={`d${i}`} digit={d} />)
+          : null
       ))}
     </Wrapper>
   );

@@ -1,20 +1,14 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import styled, { keyframes } from 'styled-components';
 
-import MachineBidule from './Bidule/Bidule';
-import MachinePieces from './Pieces/Pieces';
-import MachinePipes from './Pipes/Pipes';
-import MachineLights from './Lights/Lights';
-import MachineBinary from './Binary/Binary';
-import MachineFuses from './Fuses/Fuses';
-import MachineSimon from './Simon/Simon';
-import MachineWires from './Wires/Wires';
-import Indicators from './Indicators/Indicators';
+import { SFX } from 'BOT/SoundManager';
+import { popup } from 'BOT/actions';
+import { focus } from 'BOT/reducers/focus';
 
 import {
   makeSelectBidule,
@@ -26,12 +20,25 @@ import {
   makeSelectSimon,
   makeSelectWires,
   makeSelectBiduleOTron,
-} from '../../selectors';
+} from 'BOT/selectors';
+
+import MachineBidule from './Bidule/Bidule';
+import MachinePieces from './Pieces/Pieces';
+import MachinePipes from './Pipes/Pipes';
+import MachineLights from './Lights/Lights';
+import MachineBinary from './Binary/Binary';
+import MachineFuses from './Fuses/Fuses';
+import MachineSimon from './Simon/Simon';
+import MachineWires from './Wires/Wires';
+import Indicators from './Indicators/Indicators';
+
+import imgBackground from 'BOT/img/fond_machine.png';
 
 import imgCacheBidule from './img/cache_bidule.png';
 import imgPancarte from './img/pancarte.png';
 import imgMachine from './img/machine_squelette.png';
-import imgBackground from 'BOT/img/fond_machine.png';
+import imgFabrication from './img/fin_fabrication_bidule.png';
+import { setControlPanelFocus } from '../../actions';
 
 const openCacheBiduleAnimation = keyframes`
   from {
@@ -51,7 +58,56 @@ const openCacheBiduleAnimation = keyframes`
   }
 `;
 
-const CacheBiduleContainer = styled.div`
+const shakeCacheBiduleAnimation = keyframes`
+  from {
+    transform: translateX(0);
+  }
+  10% {
+    transform: translateX(1px);
+  }
+  20% {
+    transform: translateX(-1px);
+  }
+  30% {
+    transform: translateX(1px);
+  }
+  40% {
+    transform: translateX(-2px);
+  }
+  50% {
+    transform: translateX(2px);
+  }
+  60% {
+    transform: translateX(-2px);
+  }
+  70% {
+    transform: translateX(1px);
+  }
+  80% {
+    transform: translateX(-1px);
+  }
+  90% {
+    transform: translateX(1px);
+  }
+  to {
+    transform: translateX(0);
+  }
+`;
+
+const cacheBiduleAnimations = {
+  open: {
+    name: openCacheBiduleAnimation,
+    duration: '1700ms',
+    iterations: 1,
+  },
+  shake: {
+    name: shakeCacheBiduleAnimation,
+    duration: '500ms',
+    iterations: 'infinite',
+  },
+};
+
+const CacheBidule = styled.div`
   position: absolute;
   left: 954px;
   top: 236px;
@@ -59,17 +115,12 @@ const CacheBiduleContainer = styled.div`
   height: 215px;
   background: no-repeat top left url('${imgCacheBidule}');
 
-  &.opened {
-    animation: 1700ms ease-out ${openCacheBiduleAnimation};
-    animation-fill-mode: forwards;
-  }
+  animation-name: ${props => props.animation ? cacheBiduleAnimations[props.animation].name : 'none'};
+  animation-timing-function: ease-out;
+  animation-duration: ${props => props.animation ? cacheBiduleAnimations[props.animation].duration : 0};
+  animation-iteration-count: ${props => props.animation ? cacheBiduleAnimations[props.animation].iterations : 0};
+  animation-fill-mode: forwards;
 `;
-
-function CacheBidule({ opened }) {
-return (
-  <CacheBiduleContainer className={opened ? 'opened' : ''} />
-);
-}
 
 const rotateX = keyframes`
   from {
@@ -95,7 +146,52 @@ const Pancarte = styled.div`
   animation: ${rotateX} 3s linear infinite;
 `;
 
-function Machine({ store, bidule, pieces, pipes, lights, binary, fuses, simon, wires }) {
+const BuiltMessage = styled.div`
+  background: url('${imgFabrication}');
+  width: 138px;
+  height: 109px;
+  position: absolute;
+  left: 980px;
+  top: 160px;
+  opacity: ${props => props.opacity};
+  transition: opacity 250ms ease-in;
+`;
+
+function Machine({ dispatch, store, bidule, pieces, pipes, lights, binary, fuses, simon, wires }) {
+
+  const [cacheBiduleAnimation, setCacheBiduleAnimation] = useState(null);
+  const [endMessageOpacity, setEndMessageOpacity] = useState(0);
+
+  const biduleSolvedFX = () => {
+    dispatch(setControlPanelFocus(null));
+
+    SFX.play('machine');
+    setCacheBiduleAnimation('shake');
+
+    window.setTimeout(() => {
+      SFX.play('visseuse');
+    }, 4000);
+
+    window.setTimeout(() => {
+      SFX.play('biduleBuilt');
+      setCacheBiduleAnimation('open');
+    }, 10000);
+
+    window.setTimeout(() => {
+      setEndMessageOpacity(1);
+      dispatch(setControlPanelFocus('Submit'));
+    }, 12000);
+  };
+
+  useEffect(() => {
+    if (bidule.SOLVED) {
+      dispatch(popup(
+        'bidule-fabrication-debut',
+        () => setImmediate(biduleSolvedFX),
+      ));
+    }
+  }, [bidule.SOLVED]);
+
   return (
     <div style={{
       position: 'relative',
@@ -125,8 +221,8 @@ function Machine({ store, bidule, pieces, pipes, lights, binary, fuses, simon, w
         <MachineSimon focusId="simon" simon={simon} />
         <MachineWires focusId="wires" wires={wires} />
         <Indicators store={store} />
-        <CacheBidule opened={bidule.SOLVED} />
-
+        <CacheBidule animation={cacheBiduleAnimation} />
+        <BuiltMessage opacity={endMessageOpacity} />
       </div>
     </div>
   );

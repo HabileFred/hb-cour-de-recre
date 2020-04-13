@@ -22,43 +22,66 @@ class ReducerRadar {
 
   handlePadDown() {
     const draft = getDraft();
-    const y = draft.radar.cursor.y;
-    draft.radar.cursor.y = betweenValue(y, 1, 0, 3);
-    SFX[draft.radar.cursor.y === y ? 'wrong' : 'click']();
+    if (draft.bidule.SOLVED) {
+      const y = draft.radar.cursor.y;
+      draft.radar.cursor.y = betweenValue(y, 1, 0, 3);
+      SFX.play(draft.radar.cursor.y === y ? 'wrong' : 'radar');
+    } else {
+      SFX.wrong();
+    }
   }
 
   handlePadUp() {
     const draft = getDraft();
-    const y = draft.radar.cursor.y;
-    draft.radar.cursor.y = betweenValue(y, -1, 0, 3);
-    SFX[draft.radar.cursor.y === y ? 'wrong' : 'click']();
-  }
-
-  handlePadLeft() {
-    SFX.click();
-    const draft = getDraft();
-    const x = draft.radar.cursor.x;
-    draft.radar.cursor.x = betweenValue(x, -1, 0, 3);
-    SFX[draft.radar.cursor.x === x ? 'wrong' : 'click']();
-  }
-
-  handlePadRight() {
-    SFX.click();
-    const draft = getDraft();
-    const x = draft.radar.cursor.x;
-    draft.radar.cursor.x = betweenValue(x, 1, 0, 3);
-    SFX[draft.radar.cursor.x === x ? 'wrong' : 'click']();
-  }
-
-  handlePadSubmit() {
-    const { radar } = getDraft();
-    radar.SOLVED = radar.cursor.x === radar.solution.x && radar.cursor.y === radar.solution.y;
-    if (radar.SOLVED) {
-      SFX.click();
-      focus.from('radar').next();
+    if (draft.bidule.SOLVED) {
+      const y = draft.radar.cursor.y;
+      draft.radar.cursor.y = betweenValue(y, -1, 0, 3);
+      SFX.play(draft.radar.cursor.y === y ? 'wrong' : 'radar');
     } else {
       SFX.wrong();
     }
+  }
+
+  handlePadLeft() {
+    const draft = getDraft();
+    if (draft.bidule.SOLVED) {
+      const x = draft.radar.cursor.x;
+      draft.radar.cursor.x = betweenValue(x, -1, 0, 3);
+      SFX.play(draft.radar.cursor.x === x ? 'wrong' : 'radar');
+    } else {
+      SFX.wrong();
+    }
+  }
+
+  handlePadRight() {
+    const draft = getDraft();
+    if (draft.bidule.SOLVED) {
+      const x = draft.radar.cursor.x;
+      draft.radar.cursor.x = betweenValue(x, 1, 0, 3);
+      SFX.play(draft.radar.cursor.x === x ? 'wrong' : 'radar');
+    } else {
+      SFX.wrong();
+    }
+  }
+
+  handlePadSubmit() {
+    const draft = getDraft();
+    if (draft.bidule.SOLVED) {
+      const { radar } = draft;
+      radar.SOLVED = radar.cursor.x === radar.solution.x && radar.cursor.y === radar.solution.y;
+      if (radar.SOLVED) {
+        SFX.play('radar');
+        focus.from('radar').next();
+      } else {
+        SFX.wrong();
+      }
+    } else {
+      SFX.wrong();
+    }
+  }
+
+  handlePadMailbox() {
+    focus.popup('mail-direction');
   }
 }
 

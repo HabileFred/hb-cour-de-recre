@@ -53,6 +53,10 @@ export class ReducerLogin {
   handlePadCancel() {
     this.reset();
   }
+
+  handlePadMailbox() {
+    focus.popup('mail');
+  }
 }
 
 export const loginReducer = new ReducerLogin();
