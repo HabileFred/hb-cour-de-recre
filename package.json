@@ -65,6 +65,8 @@
   },
   "dependencies": {
     "@babel/polyfill": "7.4.3",
+    "@svgr/cli": "^5.3.1",
+    "@svgr/webpack": "^5.3.1",
     "chalk": "^2.4.2",
     "classnames": "^2.2.6",
     "compression": "1.7.4",

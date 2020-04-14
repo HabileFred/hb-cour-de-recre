@@ -24,7 +24,6 @@ import Home from './screens/Home/Home';
 import Credits from './screens/Credits/Credits';
 import Off from './screens/Off/Off';
 
-import imgComputer from './img/ordinateur.png';
 import imgMouseCursor from './img/cursor.png';
 
 import imgShadow from './img/lueur.png';
@@ -37,6 +36,10 @@ import imgScore from './img/popups/fin_score.png';
 import imgConfirmOff from './img/popups/confirmation_eteindre.png';
 import imgPopupBiduleBuild from './img/popups/fabrication_bidule.png';
 import imgPopupBiduleSend from './img/popups/envoi_bidule.png';
+
+import ComputerScreen from './img/ordi_ecran.svg';
+
+import globalStyles from './styles.scss';
 
 import { Digits } from './Digits';
 
@@ -54,7 +57,6 @@ const Wrapper = styled.div`
   position: relative;
   width: 1280px;
   height: 750px;
-  background: url('${imgComputer}') no-repeat;
   z-index: 0;
   flex-shrink: 0;
 `;
@@ -63,7 +65,6 @@ const Computer = styled.div`
   position: absolute;
   width: 1280px;
   height: 750px;
-  background: url('${imgComputer}') no-repeat;
   color: black;
   z-index: 0;
 
@@ -133,8 +134,6 @@ const BiduleOTronContainer = styled.div`
   align-items: center;
   justify-content: center;
 `;
-
-import globalStyles from './styles.scss';
 
 export function BiduleOTron({ nav, game }) {
   useInjectReducer({ key: 'biduleOTron', reducer });
@@ -250,6 +249,7 @@ export function BiduleOTron({ nav, game }) {
       <Wrapper>
         <Shadow />
         <Computer>
+          <ComputerScreen style={{ position: 'absolute', zIndex: -1 }} />
           {screen}
           {popup}
         <ControlPanel />

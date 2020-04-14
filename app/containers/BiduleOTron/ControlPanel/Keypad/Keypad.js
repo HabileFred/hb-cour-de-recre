@@ -9,21 +9,6 @@ import {
   keypadInput,
 } from '../../actions';
 
-function importKeyImages() {
-  const r = require.context('./img/', false, /numero_.+\.png$/);
-  const images = {};
-  r.keys().forEach(key => {
-    const l = key.match(/_([^.]+)\.png/)[1];
-    images[l] = r(key);
-  });
-  return images;
-}
-const keyImages = importKeyImages();
-
-import btnImageOn from './img/bouton_numero_on.png';
-import btnImageOff from './img/bouton_numero_off.png';
-import imgFocus from './img/focus.png';
-
 const Wrapper = styled.section`
   display: grid;
   grid-template-columns: repeat(4,42px);
@@ -33,43 +18,6 @@ const Wrapper = styled.section`
   top: 54px;
   left: 638px;
 
-  &::before {
-    pointer-events: none;
-    content: "";
-    position: absolute;
-    width: 253px;
-    height: 140px;
-    left: -14px;
-    top: -13px;
-    opacity: ${props => props.focused ? 1 : 0};
-    transition: opacity 250ms ease;
-    background: top left no-repeat url('${imgFocus}');
-  }
-`;
-
-const Key = styled.button`
-  position: relative;
-  border: none;
-  outline: none;
-  background: center center no-repeat url('${btnImageOff}');
-
-  &:active {
-    background-image: url('${btnImageOn}');
-  }
-
-  &::after {
-    position: absolute;
-    top: 1px;
-    left: 14px;
-    content: "";
-    width: 15px;
-    height: 13px;
-    background: center center no-repeat url('${props => keyImages[props.code]}');
-  }
-
-  &:active::after {
-    top: 3px;
-  }
 `;
 
 const keys = [
@@ -78,6 +26,8 @@ const keys = [
   8, 2, 0, 6,
   1, 5, 7, 4,
 ];
+
+import Button from './Button';
 
 /**
  *
@@ -114,7 +64,7 @@ function ButtonGroupKeypad({ dispatch, focused }) {
   return (
     <Wrapper focused={focused}>
       {keys.map((k, i) => (
-        <Key key={`k${i}`} code={k === '*' ? 'depart' : k} type="button" onClick={() => dispatch(keypadInput(k))} />
+        <Button key={`k${i}`} code={k === '*' ? '.' : k} onClick={() => dispatch(keypadInput(k))} />
       ))}
     </Wrapper>
   );

@@ -11,24 +11,6 @@ import {
   padMailbox,
 } from '../../actions';
 
-import imgBill from './img/bill.png';
-import imgFocus from './img/focus.png';
-
-function importAllImages() {
-  const r = require.context('./img/', false, /bouton_.*\.png$/);
-  const images = {};
-  r.keys().forEach(key => {
-    const l = key.match(/_(annuler|valider|message)_/)[1];
-    const s = key.match(/_(on|off)\.png/)[1];
-    if (!images[l]) {
-      images[l] = [];
-    }
-    images[l][s === 'on' ? 1 : 0] = r(key);
-  });
-  return images;
-}
-const images = importAllImages();
-
 const Wrapper = styled.section`
   display: grid;
   grid-template-columns: 73px;
@@ -39,48 +21,12 @@ const Wrapper = styled.section`
   left: 1177px;
 `;
 
-const Button = styled.button`
-  position: relative;
-  border: none;
-  outline: none;
-  background: center center no-repeat url('${props => images[props.action][0]}');
-  &:active {
-    background-image: url('${props => images[props.action][1]}');
-  }
-  &:after {
-    opacity: ${props => props.focused ? 1 : 0};
-    transition: opacity 250ms ease;
-    content: "";
-    position: absolute;
-    top: -10px;
-    left: -13px;
-    width: 94px;
-    height: 56px;
-    background: center center no-repeat url('${imgFocus}');
-  }
-`;
-
-const MailButton = styled(Button)`
-  position: absolute;
-  width: 73px;
-  height: 34px;
-  top: 165px;
-  left: 1079px;
-`;
-
-const Bill = styled.div`
-  position: absolute;
-  width: 71px;
-  height: 53px;
-  top: 91px;
-  left: 1079px;
-  background: center center no-repeat url('${imgBill}');
-`;
+import { SubmitButton, CancelButton, MailboxButton, BillButton } from './Buttons';
 
 /**
  *
  */
-function ButtonGroupSubmitCancel({ dispatch, submitFocused, cancelFocused, mailboxFocused }) {
+function ButtonGroupSubmitCancel({ dispatch }) {
 
   const keyListener = event => {
     if (event.isComposing || event.keyCode === 229) {
@@ -106,12 +52,12 @@ function ButtonGroupSubmitCancel({ dispatch, submitFocused, cancelFocused, mailb
 
   return (
     <React.Fragment>
-      <Bill />
+      <BillButton style={{ position: 'absolute', left: '1079px', top: '91px' }} />
       <Wrapper>
-        <Button focused={cancelFocused} type="button" action="annuler" onClick={() => dispatch(padCancel())} />
-        <Button focused={submitFocused} type="button" action="valider" onClick={() => dispatch(padSubmit())} />
+        <CancelButton onClick={() => dispatch(padCancel())} />
+        <SubmitButton onClick={() => dispatch(padSubmit())} />
       </Wrapper>
-      <MailButton focused={mailboxFocused} type="button" action="message" onClick={() => dispatch(padMailbox())} />
+      <MailboxButton style={{ position: 'absolute', left: '1078px', top: '165px' }} onClick={() => dispatch(padMailbox())} />
     </React.Fragment>
   );
 }

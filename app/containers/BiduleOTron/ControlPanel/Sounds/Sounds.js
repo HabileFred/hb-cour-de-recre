@@ -7,10 +7,6 @@ import { compose } from 'redux';
 
 import { makeSelectSounds, makeSelectStatus } from '../../selectors';
 
-import imgOff from './img/bouton_son_off.png';
-import imgMusicOn from './img/bouton_son_ambiance_on.png';
-import imgSfxOn from './img/bouton_son_bruitage_on.png';
-
 import {
   musicToggle,
   sfxToggle,
@@ -18,30 +14,16 @@ import {
   confirm,
 } from '../../actions';
 
+import Button from './Button';
+
 const ButtonGroupWrapper = styled.section`
   display: grid;
-  grid-template-columns: repeat(3, 46px);
-  grid-gap: 15px;
+  grid-template-columns: repeat(3, 43px);
+  grid-gap: 10px;
   grid-auto-rows: 36px;
   position: absolute;
   bottom: 146px;
-  left: 300px;
-`;
-
-const ButtonMusic = styled.button`
-  border: none;
-  outline: none;
-  background: center center no-repeat url('${props => props.on ? imgMusicOn : imgOff}');
-`;
-const ButtonSFX = styled.button`
-  border: none;
-  outline: none;
-  background: center center no-repeat url('${props => props.on ? imgSfxOn : imgOff}');
-`;
-const ButtonOnOff = styled.button`
-  border: none;
-  outline: none;
-  padding: 2px;
+  left: 291px;
 `;
 
 /**
@@ -63,9 +45,9 @@ function ButtonGroupSounds({ dispatch, sounds, status }) {
 
   return (
     <ButtonGroupWrapper>
-      <ButtonOnOff type="button" onClick={confirmOnOff}>{status === 'on' ? 'OFF' : 'ON'}</ButtonOnOff>
-      <ButtonSFX title="Activer les super effets sonores gratuits" type="button" onClick={() => dispatch(sfxToggle())} on={sounds.sfx} />
-      <ButtonMusic title="Activer la super musique d'ambiance d'Anthony" type="button" onClick={() => dispatch(musicToggle())} on={sounds.music} />
+      <Button action="onOff" onClick={confirmOnOff} pushed={status === 'on'} />
+      <Button action="sfx" title="Activer les super effets sonores gratuits" type="button" onClick={() => dispatch(sfxToggle())} pushed={sounds.sfx} />
+      <Button action="music" title="Activer la super musique d'ambiance d'Anthony" type="button" onClick={() => dispatch(musicToggle())} pushed={sounds.music} />
     </ButtonGroupWrapper>
   );
 }

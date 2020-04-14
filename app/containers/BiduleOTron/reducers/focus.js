@@ -63,7 +63,7 @@ class Focus {
           'machine/bidule': ['Arrows', 'Submit', 'Cancel', 'Mailbox'],
           'machine/pieces': ['Arrows', 'ColoredButtons', 'Cancel'],
           'machine/pipes': ['Pipes', 'Cancel'],
-          'machine/binary': ['Keypad', 'Cancel'],
+          'machine/binary': ['Keypad', 'Cancel', 'Arrows'],
           'machine/wires': ['Wires', 'Cancel'],
           'machine/fuses': ['Fuses', 'Submit', 'Cancel'],
           'machine/lights': ['ColoredButtons', 'Cancel'],

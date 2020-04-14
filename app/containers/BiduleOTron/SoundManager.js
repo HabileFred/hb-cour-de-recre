@@ -51,7 +51,7 @@ class SoundManager {
       electricity: new Howl({
         src: sndElectricity,
         autoplay: false,
-        volume: 0.4,
+        volume: 0.2,
       }),
       toggleSwitch: new Howl({
         src: sndToggleSwitch,

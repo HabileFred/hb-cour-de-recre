@@ -12,6 +12,8 @@ import { gameStarted } from '../../actions';
 import imgBackground from './img/accueil_fond.png';
 import imgFocus from './img/focus.png';
 
+import BiduleOTron from '../../img/bidule_o_tron.svg';
+
 function importDigitsImages() {
   const r = require.context('./img/', false, /\d\.png$/);
   const images = new Array(10);

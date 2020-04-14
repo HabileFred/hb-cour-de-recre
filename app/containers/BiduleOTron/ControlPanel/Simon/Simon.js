@@ -9,21 +9,7 @@ import { makeSelectSimon } from '../../selectors';
 
 import { buttonSimonPressed } from '../../actions';
 
-function importAllImages() {
-  const r = require.context('./img/', false, /bouton_simon_.*\.png$/);
-  const images = {};
-  r.keys().forEach(key => {
-    const l = key.match(/_([yuiop])_/)[1];
-    const s = key.match(/_(on|off)\.png/)[1];
-    if (!images[l]) {
-      images[l] = [];
-    }
-    images[l][s === 'on' ? 1 : 0] = r(key);
-  });
-  return images;
-}
-const images = importAllImages();
-import imgFocus from './img/focus.png';
+import Button from './Button';
 
 const Wrapper = styled.section`
   display: grid;
@@ -33,28 +19,6 @@ const Wrapper = styled.section`
   position: absolute;
   bottom: 19px;
   left: 930px;
-
-  &::before {
-    pointer-events: none;
-    content: "";
-    position: absolute;
-    width: 151px;
-    height: 163px;
-    left: -18px;
-    top: -16px;
-    opacity: ${props => props.focused ? 1 : 0};
-    transition: opacity 250ms ease;
-    background: top left no-repeat url('${imgFocus}');
-  }
-`;
-
-const Button = styled.button`
-  border: none;
-  outline: none;
-  background: center center no-repeat url('${props => images[props.letter][0]}');
-  &:active {
-    background-image: url('${props => images[props.letter][1]}');
-  }
 `;
 
 const keys = {
@@ -63,6 +27,14 @@ const keys = {
   '73': 'i',
   '79': 'o',
   '80': 'p',
+};
+
+const colors = {
+  'y': 'orange',
+  'u': 'blue',
+  'i': 'yellow',
+  'o': 'pink',
+  'p': 'purple',
 };
 
 /**
@@ -92,7 +64,7 @@ function ButtonGroupSimon({ dispatch, focused }) {
   return (
     <Wrapper focused={focused}>
       {['y', 'u', 'i', 'o', 'p'].map(l => (
-        <Button key={l} type="button" letter={l} onClick={() => dispatch(buttonSimonPressed(l))} />
+        <Button key={l} color={colors[l]} onClick={() => dispatch(buttonSimonPressed(l))} />
       ))}
     </Wrapper>
   );
