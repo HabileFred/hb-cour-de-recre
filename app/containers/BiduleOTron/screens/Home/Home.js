@@ -49,9 +49,9 @@ const Wrapper = styled.section`
   }
 
   .menu-item.active path[class$="fill-selected"] {
-    stroke-width: 2px;
-    stroke: ${theme.focus};
-    fill: ${theme.focus};
+    stroke-width: ${theme.focus.strokeWidth};
+    stroke: ${theme.focus.color};
+    fill: ${theme.focus.color};
   }
 `;
 

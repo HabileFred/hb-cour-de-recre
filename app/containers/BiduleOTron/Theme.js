@@ -27,7 +27,10 @@ const theme = {
   buttonSFX: "#17c0eb",
   buttonMusic: "#18dcff",
 
-  focus: "#42fd84",
+  focus: {
+    color: "#42fd84",
+    strokeWidth: '1px',
+  },
 };
 
 export default theme;

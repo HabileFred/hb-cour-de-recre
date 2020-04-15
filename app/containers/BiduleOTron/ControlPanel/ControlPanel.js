@@ -38,7 +38,7 @@ const Wrapper = styled.section`
   bottom: 0;
   ${focusKeys.reduce((acc, key) => {
     const k = key.toLowerCase();
-    acc += '&.focus-' + k + ' path[class$="_focus_' + k + '"]{stroke-width:2px;stroke:' + theme.focus + ';fill:' + theme.focus + ';}\n';
+    acc += '&.focus-' + k + ' path[class$="_focus_' + k + '"]{stroke-width:' + theme.focus.strokeWidth + ';stroke:' + theme.focus.color + ';fill:' + theme.focus.color + ';}\n';
     return acc;
   }, '')}
 `;
