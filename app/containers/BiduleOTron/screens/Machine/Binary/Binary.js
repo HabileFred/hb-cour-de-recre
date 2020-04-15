@@ -3,23 +3,15 @@ import styled from 'styled-components';
 import classnames from 'classnames';
 
 import withFocus from 'BOT/withFocus';
+import theme from 'BOT/Theme';
+import { Digits } from 'BOT/components/Digits/Digits';
 
-import imgBinary from './img/binaire.png';
-import imgFocusText from './img/focus_champs.png';
-import imgPastille1 from './img/pastille_1.png';
-import imgPastille1ok from './img/pastille_1_ok.png';
-import imgPastille2 from './img/pastille_2.png';
-import imgPastille2ok from './img/pastille_2_ok.png';
-import imgPastille3 from './img/pastille_3.png';
-import imgPastille3ok from './img/pastille_3_ok.png';
-
-import imgDigit0 from './img/0.png';
-import imgDigit1 from './img/1.png';
+import Background from './img/binaire.svg';
 
 const MachineBinaryContainer = styled.div`
   position: absolute;
   top: 102px;
-  left: 597px;
+  left: 599px;
   width: 113px;
   height: 176px;
   display: flex;
@@ -31,6 +23,24 @@ const MachineBinaryContainer = styled.div`
 
   &.focused {
     opacity: 1;
+  }
+
+  &.focused.selected-0 path[class$="step-1-field"],
+  &.focused.selected-1 path[class$="step-2-field"],
+  &.focused.selected-2 path[class$="step-3-field"] {
+    fill: ${theme.focus.color};
+    stroke: ${theme.focus.color};
+    stroke-width: ${theme.focus.strokeWidth};
+  }
+
+  &.focused.step-ok-0 path[class$="step-1-pastille"],
+  &.solved.step-ok-0 path[class$="step-1-pastille"],
+  &.focused.step-ok-1 path[class$="step-2-pastille"],
+  &.solved.step-ok-1 path[class$="step-2-pastille"],
+  &.focused.step-ok-2 path[class$="step-3-pastille"],
+  &.solved.step-ok-2 path[class$="step-3-pastille"] {
+    fill: ${theme.focus.color};
+    stroke: ${theme.focus.color};
   }
 
   &.solved {
@@ -45,58 +55,30 @@ const Field = styled.div`
   left: 37px;
   padding: 11px 4px 11px 7px;
   display: flex;
-  background: ${props => props.focused ? 'no-repeat top left url(\'' + imgFocusText + '\')' : 'none'};
+
 `;
 const Field1 = styled(Field)`
-  top: 38px;
+  top: 30px;
 `;
 const Field2 = styled(Field)`
-  top: 78px;
+  top: 70px;
 `;
 const Field3 = styled(Field)`
-  top: 119px;
+  top: 111px;
 `;
-
-const Pastille = styled.div`
-  position: absolute;
-  width: 16px;
-  height: 17px;
-  left: 14px;
-`;
-const Pastille1 = styled(Pastille)`
-  top: 38px;
-  background: no-repeat top left url('${props => props.solved ? imgPastille1ok : imgPastille1}');
-`;
-const Pastille2 = styled(Pastille)`
-  top: 78px;
-  background: no-repeat top left url('${props => props.solved ? imgPastille2ok : imgPastille2}');
-`;
-const Pastille3 = styled(Pastille)`
-  top: 119px;
-  background: no-repeat top left url('${props => props.solved ? imgPastille3ok : imgPastille3}');
-`;
-
-const BinaryDigit = styled.div`
-  width: ${props => props.value === '1' ? 5 : 7}px;
-  margin-right: 1px;
-  height: 17px;
-  background: no-repeat top center url('${props => props.value === '1' ? imgDigit1 : imgDigit0}');
-`;
-
-const BinaryDigits = function({ value }) {
-  return (<React.Fragment>{String(value).split('').map((c,i) => <BinaryDigit key={i} value={c} />)}</React.Fragment>);
-};
 
 const MachineBinary = function({ binary, focused, solved }) {
+  const cls = { focused, solved };
+  cls[`selected-${binary.index}`] = true;
+  cls['step-ok-0'] = binary.values[0] === binary.solution[0];
+  cls['step-ok-1'] = binary.values[1] === binary.solution[1];
+  cls['step-ok-2'] = binary.values[2] === binary.solution[2];
   return (
-    <MachineBinaryContainer className={classnames({ focused, solved })}>
-      <img src={imgBinary} />
-      <Field1 focused={!solved && binary.index === 0}><BinaryDigits value={binary.values[0]} /></Field1>
-      <Field2 focused={!solved && binary.index === 1}><BinaryDigits value={binary.values[1]} /></Field2>
-      <Field3 focused={!solved && binary.index === 2}><BinaryDigits value={binary.values[2]} /></Field3>
-      <Pastille1 solved={binary.values[0] === binary.solution[0]} />
-      <Pastille2 solved={binary.values[1] === binary.solution[1]} />
-      <Pastille3 solved={binary.values[2] === binary.solution[2]} />
+    <MachineBinaryContainer className={classnames(cls)}>
+      <Background />
+      <Field1 focused={!solved && binary.index === 0}><Digits margins={'-1.75px'} size={11} value={binary.values[0]} /></Field1>
+      <Field2 focused={!solved && binary.index === 1}><Digits margins={'-1.75px'} size={11} value={binary.values[1]} /></Field2>
+      <Field3 focused={!solved && binary.index === 2}><Digits margins={'-1.75px'} size={11} value={binary.values[2]} /></Field3>
     </MachineBinaryContainer>
   );
 };
