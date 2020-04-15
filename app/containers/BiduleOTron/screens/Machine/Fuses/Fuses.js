@@ -4,13 +4,13 @@ import classnames from 'classnames';
 
 import withFocus from 'BOT/withFocus';
 
-import imgError from './img/indicateur_erreur.png';
-import imgOK from './img/indicateur_juste.png';
+import FuseRight from './img/fusible_carre_juste.svg';
+import FuseWrong from './img/fusible_carre_faux.svg';
 
 const MachineFusesContainer = styled.div`
   position: absolute;
-  top: 126px;
-  left: 749px;
+  top: 124px;
+  left: 750px;
   width: 176px;
   height: 68px;
   display: flex;
@@ -29,18 +29,10 @@ const MachineFusesContainer = styled.div`
   }
 `;
 
-const Fuse = styled.div`
-  width: 35px;
-  height: 31px;
-  background: top left no-repeat url('${props => props.on ? imgOK : imgError}');
-`;
-
 const MachineFuses = function({ fuses, focused, solved }) {
   return (
     <MachineFusesContainer className={classnames({ focused, solved })}>
-      {fuses.feedback.map((on, i) => (
-        <Fuse key={`f${i}`} on={on}/>
-      ))}
+      {fuses.feedback.map((on, i) => on ? <FuseRight /> : <FuseWrong />)}
     </MachineFusesContainer>
   );
 };

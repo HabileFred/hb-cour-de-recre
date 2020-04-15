@@ -11,21 +11,28 @@ import imgFiole4 from './img/fiole_4.gif';
 import imgFiole5 from './img/fiole_5.gif';
 import imgFiole6 from './img/fiole_6.gif';
 
-import imgPipeWhite from './img/tuyau_blanc.png';
-import imgPipeBlack from './img/tuyau_noir.png';
+import Pipe from './img/tuyaux_blanc.svg';
+import PipeFixed from './img/tuyaux_noir.svg';
 
-import imgGaugeEmpty from './img/jauge.png';
-import imgGauge1 from './img/jauge_2.gif';
-import imgGauge2 from './img/jauge_3.gif';
-import imgGauge3 from './img/jauge_4.gif';
-import imgSymbols from './img/symboles.png';
+import GaugeEmpty from './img/tuyaux_jauge_vide.svg'
+import Gauge2 from './img/tuyaux_jauge_2.svg'
+import Gauge3 from './img/tuyaux_jauge_3.svg'
+import Gauge4 from './img/tuyaux_jauge_4.svg'
 
-const imgGaugesFilled = [
-  null,
-  imgGauge1,
-  imgGauge2,
-  imgGauge3,
-];
+function Gauge({ g, filled }) {
+  switch (g) {
+    case 1:
+      return filled ? <Gauge2/> : <GaugeEmpty />;
+    case 2:
+      return filled ? <Gauge3/> : <GaugeEmpty />;
+    case 3:
+      return filled ? <Gauge4/> : <GaugeEmpty />;
+    default:
+      return <GaugeEmpty />;
+  }
+}
+
+import ImageSymbols from './img/tuyaux_signes.svg';
 
 const Fioles = styled.div`
   opacity: ${props => props.focused ? 1 : 0.5};
@@ -96,17 +103,21 @@ const Pipes = styled.div`
   position: absolute;
   top: 73px;
   left: 16px;
-`;
 
-const Pipe = styled.div`
-  width: 18px;
-  height: 18px;
-  transition: transform 250ms ease-out;
-  transform: rotate(${props => (props.rotation - 1) * 90}deg);
-  background: url('${imgPipeWhite}') no-repeat center center;
-  color: red;
-  &.fixed {
-    background: url('${imgPipeBlack}') no-repeat center center;
+  .pipe {
+    transition: transform 250ms ease-in-out;
+  }
+  .pipe.r1 {
+    transform: rotate(0deg);
+  }
+  .pipe.r2 {
+    transform: rotate(90deg);
+  }
+  .pipe.r3 {
+    transform: rotate(180deg);
+  }
+  .pipe.r4 {
+    transform: rotate(270deg);
   }
 `;
 
@@ -122,19 +133,6 @@ const Gauges = styled.div`
   transition: opacity 250ms ease;
 `;
 
-const Gauge = styled.div`
-  width: 12px;
-  height: 21px;
-`;
-
-const GaugeEmpty = styled(Gauge)`
-  background: url('${imgGaugeEmpty}') no-repeat center center;
-`;
-
-const GaugeFilled = styled(Gauge)`
-  background: url('${props => imgGaugesFilled[props.index]}') no-repeat center center;
-`;
-
 const MachinePipes = function({ focused, solved, pipes }) {
   return (
     <MachinePipesContainer className={classnames({ focused, solved })}>
@@ -147,18 +145,15 @@ const MachinePipes = function({ focused, solved, pipes }) {
         <Fiole className="fiole-5" />
       </Fioles>
       <Pipes>
-        {pipes.pipes.map((p, i) => (
-          <Pipe key={`p${i}`} className={p === 9 ? 'fixed' : ''} rotation={p === 9 ? 1 : p} />
-        ))}
+        {pipes.pipes.map((p, i) => p === 9
+          ? <PipeFixed key={`p${i}`}/>
+          : <Pipe key={`p${i}`} className={`pipe r${p}`} />
+        )}
       </Pipes>
       <Gauges focused={focused}>
-        {pipes.gauges.map((g, i) => {
-          return g && g.SOLVED
-            ? (<GaugeFilled key={`g${i}`} index={i} />)
-            : (<GaugeEmpty key={`g${i}`}/>)
-          })}
+        {pipes.gauges.map((g, i) => <Gauge key={`g${i}`} g={i} filled={g && g.SOLVED} />)}
       </Gauges>
-      <img src={imgSymbols} style={{ position: 'absolute', bottom: '22px', left: '11px' }} />
+      <ImageSymbols style={{ position: 'absolute', bottom: '22px', left: '11px' }} />
     </MachinePipesContainer>
   );
 }
