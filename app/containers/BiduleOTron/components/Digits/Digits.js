@@ -20,8 +20,8 @@ const DigitWrapper = styled.div`
   }
 `;
 
-export const Digit = function({d, size, ...props}) {
-  const style = { width: `${size || 18}px` };
+export const Digit = function({d, size, margin, ...props}) {
+  const style = { width: `${size || 18}px`, margin: `0 ${margin || 0}` };
   switch (String(d)) {
     case '0':
       return (<DigitWrapper style={style} {...props}><D0/></DigitWrapper>);
@@ -55,10 +55,10 @@ const Wrapper = styled.div`
   flex-flow: row;
 `;
 
-export const Digits = function({ value, size, ...props }) {
+export const Digits = function({ value, size, margins, ...props }) {
   return (
     <Wrapper {...props}>
-      {String(value).split('').map((d, i) => <Digit size={size} key={i} d={d} />)}
+      {String(value).split('').map((d, i) => <Digit margin={margins} size={size} key={i} d={d} />)}
     </Wrapper>
   );
 };
