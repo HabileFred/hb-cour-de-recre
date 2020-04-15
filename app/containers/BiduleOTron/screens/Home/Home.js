@@ -7,22 +7,12 @@ import { compose } from 'redux';
 import styled, { keyframes } from 'styled-components';
 import classnames from 'classnames';
 
-import { makeSelectHome } from '../../selectors';
+import { makeSelectHome } from 'BOT/selectors';
+import theme from 'BOT/Theme';
 
-import imgBackground from './img/home.png';
-import imgMachineOff from './img/biduleotron_off.png';
-import imgMachineOn from './img/biduleotron_on.png';
-import imgLauncherOff from './img/lancebidule_off.png';
-import imgLauncherOn from './img/lancebidule_on.png';
-
-const Wrapper = styled.section`
-  width: 100%;
-  flex: 1;
-  background: url('${imgBackground}') top left no-repeat;
-  display: flex;
-  flex-flow: row;
-  padding: 230px 466px;
-`;
+import Background from './img/menu.svg';
+import ImageMenuItem1 from './img/menu_selection_bidulo.svg';
+import ImageMenuItem2 from './img/menu_selection_lance.svg';
 
 const animation = keyframes`
   from {
@@ -36,41 +26,45 @@ const animation = keyframes`
   }
 `;
 
-const MenuItem1 = styled.div`
-  width: 245px;
-  height: 311px;
-  position: absolute;
-  left: 80px;
-  top: 90px;
-  background-image: url('${imgMachineOff}');
-  transform: scale(.95);
+const Wrapper = styled.section`
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-flow: row;
 
-  &.active {
-    animation: ${animation} 1300ms ease-in-out infinite;
-    background-image: url('${imgMachineOn}');
+  .menu-item {
+    position: absolute;
+    top: 90px;
+    transform: scale(.95);
+    &.active {
+      animation: ${animation} 1300ms ease-in-out infinite;
+    }
   }
-`;
 
-const MenuItem2 = styled.div`
-  width: 245px;
-  height: 311px;
-  position: absolute;
-  left: 365px;
-  top: 90px;
-  background-image: url('${imgLauncherOff}');
-  transform: scale(.95);
+  .menu-item-1 {
+    left: 80px;
+  }
+  .menu-item-2 {
+    left: 365px;
+  }
 
-  &.active {
-    animation: ${animation} 1300ms ease-in-out infinite;
-    background-image: url('${imgLauncherOn}');
+  .menu-item.active path[class$="fill-selected"] {
+    stroke-width: 2px;
+    stroke: ${theme.focus};
+    fill: ${theme.focus};
   }
 `;
 
 function Home({ home }) {
   return (
     <Wrapper>
-      <MenuItem1 className={classnames({ active: home.cursor === 0 })} />
-      <MenuItem2 className={classnames({ active: home.cursor === 1 })} />
+      <Background style={{ position: 'absolute', top: 0, left: 0 }} />
+      <div className={classnames('menu-item', 'menu-item-1', { active: home.cursor === 0 })}>
+        <ImageMenuItem1 />
+      </div>
+      <div className={classnames('menu-item', 'menu-item-2', { active: home.cursor === 1 })}>
+        <ImageMenuItem2 />
+      </div>
     </Wrapper>
   );
 }

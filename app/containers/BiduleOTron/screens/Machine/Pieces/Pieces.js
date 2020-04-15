@@ -60,11 +60,11 @@ const MachinePiecesContainer = styled.div`
     }
   }
 
-  &.focus-piece-0 .piece-0 path[class$="focus-piece"],
-  &.focus-piece-1 .piece-1 path[class$="focus-piece"],
-  &.focus-piece-2 .piece-2 path[class$="focus-piece"],
-  &.focus-piece-3 .piece-3 path[class$="focus-piece"],
-  &.focus-piece-4 .piece-4 path[class$="focus-piece"] {
+  &.focused.selected-piece-0 .piece-0 path[class$="focus-piece"],
+  &.focused.selected-piece-1 .piece-1 path[class$="focus-piece"],
+  &.focused.selected-piece-2 .piece-2 path[class$="focus-piece"],
+  &.focused.selected-piece-3 .piece-3 path[class$="focus-piece"],
+  &.focused.selected-piece-4 .piece-4 path[class$="focus-piece"] {
     fill: ${theme.focus};
     stroke: ${theme.focus};
     stroke-width: 3px;
@@ -73,7 +73,7 @@ const MachinePiecesContainer = styled.div`
 
 const MachinePieces = function({ pieces, focused, solved }) {
   const cls = { focused, solved };
-  cls[`focus-piece-${pieces.cursor}`] = true;
+  cls[`selected-piece-${pieces.cursor}`] = true;
   return (
     <MachinePiecesContainer className={classnames(cls)}>
       {pieces.current.map((v, i) => (
