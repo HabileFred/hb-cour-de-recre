@@ -17,7 +17,7 @@ const Wrapper = styled.section`
   grid-gap: 24px;
   grid-auto-rows: 34px;
   position: absolute;
-  bottom: 34px;
+  bottom: 37px;
   left: 1177px;
 `;
 
@@ -57,7 +57,7 @@ function ButtonGroupSubmitCancel({ dispatch }) {
         <CancelButton onClick={() => dispatch(padCancel())} />
         <SubmitButton onClick={() => dispatch(padSubmit())} />
       </Wrapper>
-      <MailboxButton style={{ position: 'absolute', left: '1078px', top: '165px' }} onClick={() => dispatch(padMailbox())} />
+      <MailboxButton style={{ position: 'absolute', left: '1078px', top: '162px' }} onClick={() => dispatch(padMailbox())} />
     </React.Fragment>
   );
 }

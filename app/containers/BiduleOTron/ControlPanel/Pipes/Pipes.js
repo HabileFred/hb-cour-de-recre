@@ -21,7 +21,7 @@ const Wrapper = styled.section`
   row-gap: 6px;
   grid-auto-rows: 32px;
   position: absolute;
-  bottom: 27px;
+  bottom: 28px;
   left: 213px;
 `;
 

@@ -11,7 +11,6 @@ import imgFiole4 from './img/fiole_4.gif';
 import imgFiole5 from './img/fiole_5.gif';
 import imgFiole6 from './img/fiole_6.gif';
 
-import imgMachineFiolesFocus from './img/focus_tuyaux.png';
 import imgPipeWhite from './img/tuyau_blanc.png';
 import imgPipeBlack from './img/tuyau_noir.png';
 
@@ -87,17 +86,6 @@ const MachinePipesContainer = styled.div`
   left: 583px;
   width: 145px;
   height: 210px;
-
-  &.focused::before {
-    content: " ";
-    z-index: 1;
-    position: absolute;
-    width: 151px;
-    height: 71px;
-    top: 152px;
-    left: -3px;
-    background: url(${imgMachineFiolesFocus}) no-repeat top left;
-  }
 `;
 
 const Pipes = styled.div`

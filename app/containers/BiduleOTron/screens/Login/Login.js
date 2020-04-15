@@ -9,31 +9,24 @@ import styled, { keyframes } from 'styled-components';
 import { makeSelectLogin } from '../../selectors';
 import { gameStarted } from '../../actions';
 
-import imgBackground from './img/accueil_fond.png';
-import imgFocus from './img/focus.png';
-
-import BiduleOTron from '../../img/bidule_o_tron.svg';
-
-function importDigitsImages() {
-  const r = require.context('./img/', false, /\d\.png$/);
-  const images = new Array(10);
-  r.keys().forEach(key => {
-    const l = parseInt(key.match(/\d\.png$/), 10);
-    images[l] = r(key);
-  });
-  return images;
-}
-const digitImages = importDigitsImages();
+import { Digit } from 'BOT/components/Digits/Digits';
+import LoginBackground from './img/mot_de_passe.svg';
 
 const Wrapper = styled.section`
   top: 0;
   left: 0;
   width: 100%;
   height: 530px;
-  background: url('${imgBackground}') top left no-repeat;
   display: flex;
   flex-flow: row;
-  padding: 230px 466px;
+  padding: 234px 466px;
+
+  .digits {
+    margin-left: 20px;
+    display: grid;
+    grid-template-columns: repeat(4, 44px);
+    grid-gap: 40px;
+  }
 `;
 
 const animation = keyframes`
@@ -48,21 +41,6 @@ const animation = keyframes`
   }
 `;
 
-const Focus = styled.div`
-  position: absolute;
-  width: 447px;
-  height: 114px;
-  top: 192px;
-  left: 410px;
-  background: url('${imgFocus}') top left no-repeat;
-  animation: ${animation} 2s ease-in-out infinite;
-  `;
-
-const Digit = styled.div`
-  width: 82px;
-  height: 38px;
-  background: center center no-repeat url('${props => digitImages[props.digit]}');
-`;
 
 function Login({ dispatch, login }) {
 
@@ -72,12 +50,14 @@ function Login({ dispatch, login }) {
 
   return (
     <Wrapper>
-      <Focus />
-      {login.password.map((d, i) => (
-        d >= 0 && d <= 9
-          ? (<Digit key={`d${i}`} digit={d} />)
-          : null
-      ))}
+      <LoginBackground style={{ position: 'absolute', top: 0, left: 0, zIndex: -1 }} />
+      <div className="digits">
+        {login.password.map((d, i) => (
+          d >= 0 && d <= 9
+            ? (<Digit key={`d${i}`} size={40} color="rgb(131,98,247)" d={d}/>)
+            : null
+        ))}
+      </div>
     </Wrapper>
   );
 }

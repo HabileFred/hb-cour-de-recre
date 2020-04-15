@@ -4,50 +4,16 @@ import classnames from 'classnames';
 
 import withFocus from 'BOT/withFocus';
 
-import imgFrame from './img/cadre_bidule.png';
-import imgArrowLeft from './img/fleche_gauche.png';
-import imgArrowRight from './img/fleche_droite.png';
-import imgBtnSubmit from './img/bouton_valider.png';
-import imgBtnCancel from './img/bouton_annuler.png';
+import ImageFrame from './img/selection_bidule.svg';
+import ImageSubmit from './img/valider.svg';
+import ImageCancel from './img/annuler.svg';
 
-function importBiduleImages() {
-  const r = require.context('./img/bidules/', false, /bidule_\d+\.png$/);
-  const images = new Array(r.keys().length + 1);
-  r.keys().forEach(key => {
-    const l = key.match(/_(\d+)\.png$/)[1];
-    images[l] = r(key);
-  });
-  return images;
-}
-const biduleImages = importBiduleImages();
+import ImageLeftArrow from './img/fleche_gauche.svg'
+import ImageRightArrow from './img/fleche_droite.svg'
 
-function importCodesImages() {
-  const r = require.context('./img/codes/', false, /\.png$/);
-  const images = {};
-  r.keys().forEach(key => {
-    const name = key.match(/\.\/([^.]+)\.png$/)[1];
-    images[name] = r(key);
-  });
-  return images;
-}
-const codeImages = importCodesImages();
-
-function importProtocolImages() {
-  const r = require.context('./img/protocoles/', false, /protocole_\d+\.png$/);
-  const images = new Array(r.keys().length);
-  r.keys().forEach(key => {
-    const l = key.match(/_(\d+)\.png$/)[1];
-    images[l - 1] = r(key);
-  });
-  return images;
-}
-const protocoleImages = importProtocolImages();
-// On réutilise les mêmes images plusieurs fois s'il y a moins de protocoles que de bidules.
-let i = 0;
-while (protocoleImages.length < biduleImages.length) {
-  protocoleImages.push(protocoleImages[i]);
-  i += 1;
-}
+import Bidule from 'BOT/components/Bidules/Bidules';
+import BiduleCode from 'BOT/components/Bidules/Codes';
+import BiduleProtocol from 'BOT/components/Bidules/Protocols';
 
 const MachineBiduleContainer = styled.div`
   position: absolute;
@@ -74,7 +40,6 @@ const MachineBiduleContainer = styled.div`
     position: absolute;
     left: 17px;
     top: 50px;
-    background: url(${imgFrame}) no-repeat top left;
     width: 195px;
     height: 190px;
   }
@@ -94,11 +59,10 @@ const MachineBiduleContainer = styled.div`
 
     &.left {
       left: -12px;
-      background: url(${imgArrowLeft}) no-repeat top left;
     }
     &.right {
+      transform: rotate(10deg);
       left: 195px;
-      background: url(${imgArrowRight}) no-repeat top left;
     }
   }
 
@@ -113,7 +77,7 @@ const MachineBiduleContainer = styled.div`
   }
 
   .buttons {
-    margin-top: -10px;
+    margin-top: 0;
     display: flex;
     flew-flow: row no-wrap;
     justify-content: center;
@@ -126,47 +90,42 @@ const MachineBiduleContainer = styled.div`
 
 const BidulesView = styled.div`
   position: relative;
-  width: 167px;
-  height: 166px;
+  width: 166px;
+  height: 167px;
   overflow: hidden;
   flex-shrink: 0;
 
   .bidules {
     position: absolute;
     top: 0;
-    left: ${props => -props.index * 167}px;
+    left: ${props => -props.index * 166}px;
     display: flex;
     flex-flow: row no-wrap;
-    transition: left 250ms ease-out;
+    transition: left 250ms ease-in-out;
   }
-`;
-
-const BiduleCodeName = styled.div`
-  width: 122px;
-  height: 58px;
-  background: top left no-repeat url('${props => codeImages[props.name]}');
 `;
 
 const MachineBidule = function({ bidule, focused, solved }) {
   const biduleName = bidule.biduleNames[bidule.index];
   return (
     <MachineBiduleContainer className={classnames({ focused, solved })}>
-      <div className="frame"></div>
-      <div className="ui-element arrow left"></div>
-      <div className="ui-element arrow right"></div>
-      <BiduleCodeName name={biduleName} />
+      <ImageFrame className="frame" />
+      <ImageLeftArrow className="ui-element arrow left"/>
+      <ImageRightArrow className="ui-element arrow right"/>
+
+      <BiduleCode name={biduleName} />
       <BidulesView index={bidule.index}>
         <div className="bidules">
-          {biduleImages.map((img, i) => <img key={i} src={img} />)}
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map(b => (<Bidule key={b} b={b} />))}
         </div>
       </BidulesView>
       <div className="ui-element buttons">
-        <img src={imgBtnSubmit} />
-        <img src={imgBtnCancel} />
+        <ImageSubmit />
+        <ImageCancel />
       </div>
       <div className="bidule-info-img">
         {bidule.submitted
-        ? (<img src={protocoleImages[bidule.index]} />)
+        ? (<BiduleProtocol p={bidule.index} />)
         : null
         }
       </div>

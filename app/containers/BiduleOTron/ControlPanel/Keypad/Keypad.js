@@ -15,9 +15,8 @@ const Wrapper = styled.section`
   grid-gap: 0px;
   grid-auto-rows: 20px;
   position: absolute;
-  top: 54px;
+  top: 53px;
   left: 638px;
-
 `;
 
 const keys = [

@@ -10,7 +10,6 @@ import imgOnGreen from './img/led_verte.png';
 import imgOnRed from './img/led_rouge.png';
 import imgOnYellow from './img/led_jaune.png';
 import imgOnPurple from './img/led_violette.png';
-import imgmachineOnOffFocus from './img/on_off_focus.png';
 
 const MachineLightbulbsContainer = styled.div`
   position: absolute;
@@ -24,13 +23,6 @@ const MachineLightbulbsContainer = styled.div`
   &.focused,
   &.solved {
     opacity: 1;
-  }
-  &.focused::before {
-    content: " ";
-    position: absolute;
-    width: 77px;
-    height: 122px;
-    background: url(${imgmachineOnOffFocus}) no-repeat top left;
   }
 `;
 

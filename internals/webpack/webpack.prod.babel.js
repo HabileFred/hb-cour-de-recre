@@ -116,13 +116,17 @@ module.exports = require('./webpack.base.babel')({
     }),
 
     new WebpackPwaManifest({
-      name: 'React Boilerplate',
-      short_name: 'React BP',
-      description: 'My React Boilerplate-based project!',
-      background_color: '#fafafa',
+      name: 'Bidule-o-tron',
+      short_name: 'Bidule-o-tron',
+      description: 'Bidule-o-tron | Habile Bill',
+      background_color: 'black',
       theme_color: '#b1624d',
+      orientation: 'landscape',
       inject: true,
-      ios: true,
+      ios: {
+        'apple-mobile-web-app-title': 'Bidule-o-tron',
+        'apple-mobile-web-app-status-bar-style': 'black-translucent'
+      },
       icons: [
         {
           src: path.resolve('app/images/icon-512x512.png'),

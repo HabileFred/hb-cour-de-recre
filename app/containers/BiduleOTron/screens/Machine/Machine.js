@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
@@ -33,12 +34,11 @@ import MachineWires from './Wires/Wires';
 import Indicators from './Indicators/Indicators';
 
 import imgBackground from 'BOT/img/fond_machine.png';
+import BiduleOTron from './img/bidule_o_tron.svg';
 
-import imgCacheBidule from './img/cache_bidule.png';
+import ImageCacheBidule from './img/cache_bidule.svg';
 import imgPancarte from './img/pancarte.png';
-import imgMachine from './img/machine_squelette.png';
-import imgFabrication from './img/fin_fabrication_bidule.png';
-import { setControlPanelFocus } from '../../actions';
+import { setControlPanelFocus, setScreen } from '../../actions';
 
 const openCacheBiduleAnimation = keyframes`
   from {
@@ -113,8 +113,6 @@ const CacheBidule = styled.div`
   top: 236px;
   width: 190px;
   height: 215px;
-  background: no-repeat top left url('${imgCacheBidule}');
-
   animation-name: ${props => props.animation ? cacheBiduleAnimations[props.animation].name : 'none'};
   animation-timing-function: ease-out;
   animation-duration: ${props => props.animation ? cacheBiduleAnimations[props.animation].duration : 0};
@@ -146,21 +144,29 @@ const Pancarte = styled.div`
   animation: ${rotateX} 3s linear infinite;
 `;
 
-const BuiltMessage = styled.div`
-  background: url('${imgFabrication}');
-  width: 138px;
-  height: 109px;
+import theme from 'BOT/Theme';
+import { makeSelectNav } from '../../selectors';
+
+const focusKeys = ['binary', 'pieces', 'wires', 'fuses', 'lights', 'simon', 'pipes'];
+const Wrapper = styled.div`
   position: absolute;
-  left: 980px;
-  top: 160px;
-  opacity: ${props => props.opacity};
-  transition: opacity 250ms ease-in;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointerEvents: none;
+  ${focusKeys.reduce((acc, key) => {
+    const k = key.toLowerCase();
+    acc += '&.focus-' + k + ' path[class$="focus-' + k + '"]{stroke-width:2px;stroke:' + theme.green + ';fill:' + theme.green + ';}\n';
+    return acc;
+  }, '')}
 `;
 
-function Machine({ dispatch, store, bidule, pieces, pipes, lights, binary, fuses, simon, wires }) {
+function Machine({ dispatch, store, bidule, pieces, pipes, lights, binary, fuses, simon, wires, nav }) {
 
   const [cacheBiduleAnimation, setCacheBiduleAnimation] = useState(null);
-  const [endMessageOpacity, setEndMessageOpacity] = useState(0);
+
+  const goHome = () => dispatch(setScreen('home'));
 
   const biduleSolvedFX = () => {
     dispatch(setControlPanelFocus(null));
@@ -178,19 +184,27 @@ function Machine({ dispatch, store, bidule, pieces, pipes, lights, binary, fuses
     }, 10000);
 
     window.setTimeout(() => {
-      setEndMessageOpacity(1);
-      dispatch(setControlPanelFocus('Submit'));
-    }, 12000);
+      dispatch(popup(
+        { id: 'bidule-fabrication-fin', closeButton: 'Submit' },
+        () => setImmediate(goHome),
+      ));
+    }, 14000);
   };
 
   useEffect(() => {
     if (bidule.SOLVED) {
       dispatch(popup(
-        'bidule-fabrication-debut',
+        { id: 'bidule-fabrication-debut', closeButton: 'Submit' },
         () => setImmediate(biduleSolvedFX),
       ));
     }
   }, [bidule.SOLVED]);
+
+
+  const focused = (id) => nav.focus.indexOf(id) !== -1;
+
+  const classNames ={};
+  focusKeys.forEach(key => classNames[`focus-${key.toLowerCase()}`] = focused(key));
 
   return (
     <div style={{
@@ -198,17 +212,10 @@ function Machine({ dispatch, store, bidule, pieces, pipes, lights, binary, fuses
       width: '100%',
       height: '530px',
       cursor: 'not-allowed',
-      background: `url('${imgBackground}') top left no-repeat`
+      //background: `url('${imgBackground}') top left no-repeat`
     }}>
-      <div style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        pointerEvents: 'none',
-        background: `url('${imgMachine}') top left no-repeat`
-      }}>
+      <Wrapper className={classnames(classNames)}>
+        <BiduleOTron />
         <Pancarte>
           <img style={{ position: 'absolute' }} src={imgPancarte} />
         </Pancarte>
@@ -221,9 +228,10 @@ function Machine({ dispatch, store, bidule, pieces, pipes, lights, binary, fuses
         <MachineSimon focusId="simon" simon={simon} />
         <MachineWires focusId="wires" wires={wires} />
         <Indicators store={store} />
-        <CacheBidule animation={cacheBiduleAnimation} />
-        <BuiltMessage opacity={endMessageOpacity} />
-      </div>
+        <CacheBidule animation={cacheBiduleAnimation}>
+          <ImageCacheBidule/>
+        </CacheBidule>
+      </Wrapper>
     </div>
   );
 }
@@ -242,6 +250,7 @@ const mapStateToProps = createStructuredSelector({
   fuses: makeSelectFuses(),
   simon: makeSelectSimon(),
   wires: makeSelectWires(),
+  nav: makeSelectNav(),
 });
 
 function mapDispatchToProps(dispatch) {

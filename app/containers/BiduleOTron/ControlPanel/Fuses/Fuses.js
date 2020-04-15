@@ -15,7 +15,7 @@ const Wrapper = styled.section`
   position: absolute;
   display: flex;
   flex-flow: column;
-  bottom: 24px;
+  bottom: 27px;
   left: 846px;
   height: 146px;
 `;

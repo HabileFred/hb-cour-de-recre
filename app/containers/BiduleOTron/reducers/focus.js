@@ -4,8 +4,8 @@ import { getDraft } from './draft';
 
 class Focus {
   constructor() {
-    const initialScreen = 'login'; // FIXME 'login'
-    const initialFocus = ['password'];  // FIXME 'password'
+    const initialScreen = 'machine'; // FIXME 'login'
+    const initialFocus = ['bidule'];  // FIXME 'password'
 
     initialState.nav = {
       popup: {
@@ -186,13 +186,23 @@ class Focus {
     }
   }
 
-  popup(popupId, closeHandler) {
+  popup(popup, closeHandler) {
+    let popupId;
+    let popupCloseButton = 'Cancel';
+    if (typeof popup === 'string') {
+      popupId = popup;
+    } else if (popup.id) {
+      popupId = popup.id;
+      if (popup.closeButton) {
+        popupCloseButton = popup.closeButton;
+      }
+    }
     const { nav } = getDraft();
     nav.popup.id = popupId;
     nav.popup.reject = closeHandler;
     const { controlPanel } = nav;
     this.prevControlPanelFocus = controlPanel.focus.slice();
-    controlPanel.focus.splice(0, controlPanel.focus.length, 'Cancel');
+    controlPanel.focus.splice(0, controlPanel.focus.length, popupCloseButton);
     document.activeElement.blur();
   }
 

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import SVGImageDefault from './img/bouton_chiffre.svg';
 import SVGImageActive from './img/bouton_chiffre_on.svg';
 
-import { Digit } from 'BOT/Digits';
+import { Digit } from 'BOT/components/Digits/Digits';
 
 const Wrapper = styled.button`
   border: none;
@@ -53,7 +53,7 @@ function Button({ onClick, code }) {
     <Wrapper type="button" onClick={onClick}>
       <SVGImageDefault className={`default`}/>
       <SVGImageActive className={`active`}/>
-      <Digit className="digit" color="white" d={code}/>
+      <Digit className="digit" color="white" size={15} d={code}/>
     </Wrapper>
   );
 }

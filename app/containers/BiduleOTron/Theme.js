@@ -26,6 +26,8 @@ const theme = {
 
   buttonSFX: "#17c0eb",
   buttonMusic: "#18dcff",
+
+  focus: "#3ae374",
 };
 
 export default theme;

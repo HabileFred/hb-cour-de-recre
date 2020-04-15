@@ -5,25 +5,23 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import styled from 'styled-components';
 
-import { gameStarted } from '../../actions';
-
-import imgBackground from './img/off_fond.png';
+import OffScreen from './img/ecran_eteint.svg';
 
 const Wrapper = styled.section`
   top: 0;
   left: 0;
   width: 100%;
   height: 530px;
-  background: url('${imgBackground}') top left no-repeat;
   display: flex;
   flex-flow: row;
   padding: 230px 466px;
 `;
 
 function Off({ dispatch }) {
-
   return (
-    <Wrapper />
+    <Wrapper>
+      <OffScreen style={{ position: 'absolute', top: 0, left: 0 }}/>
+    </Wrapper>
   );
 }
 

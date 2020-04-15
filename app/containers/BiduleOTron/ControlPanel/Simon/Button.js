@@ -24,63 +24,46 @@ const Wrapper = styled.button`
   }
 
   .color-red {
-    path[class$=fill-color]   { fill: ${props => props.theme.red}; }
+    path[class$=fill-color]   { fill: ${props => props.theme.redLight}; }
   }
 
   .color-pink {
-    path[class$=fill-color]   { fill: ${props => props.theme.pink}; }
+    path[class$=fill-color]   { fill: ${props => props.theme.pinkLight}; }
   }
 
   .color-purple {
-    path[class$=fill-color]   { fill: ${props => props.theme.purple}; }
+    path[class$=fill-color]   { fill: ${props => props.theme.purpleLight}; }
   }
 
   .color-orange {
-    path[class$=fill-color]   { fill: ${props => props.theme.orange}; }
+    path[class$=fill-color]   { fill: ${props => props.theme.orangeLight}; }
   }
 
   .color-yellow {
-    path[class$=fill-color]   { fill: ${props => props.theme.yellow}; }
+    path[class$=fill-color]   { fill: ${props => props.theme.yellowLight}; }
   }
 
   .color-blue {
-    path[class$=fill-color]   { fill: ${props => props.theme.blue}; }
+    path[class$=fill-color]   { fill: ${props => props.theme.electricBlueLight}; }
   }
 
   .color-green {
-    path[class$=fill-color]   { fill: ${props => props.theme.green}; }
+    path[class$=fill-color]   { fill: ${props => props.theme.greenLight}; }
   }
 
   .color-gray {
-    path[class$=fill-color]   { fill: ${props => props.theme.gray}; }
+    path[class$=fill-color]   { fill: ${props => props.theme.grayLight}; }
   }
 `;
 
 Wrapper.defaultProps = {
   theme: {
-    red: "#ff3838",
     redLight: "#ff4d4d",
-
-    blue: "#17c0eb",
-    blueLight: "#18dcff",
-
-    purple: "#c56cf0",
+    electricBlueLight: "#7efff5",
     purpleLight: "#cd84f1",
-
-    green: "#3ae374",
-    greenLight: "#32ff7e",
-
-    pink: "#ffb8b8",
     pinkLight: "#ffcccc",
-
-    orange: "#ff9f1a",
     orangeLight: "#ffaf40",
-
-    yellow: "#fff200",
     yellowLight: "#fffa65",
-
-    gray: "#dddddd",
-    grayLight: "#eeeeee",
   }
 };
 

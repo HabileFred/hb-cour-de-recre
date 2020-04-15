@@ -6,7 +6,7 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import styled, { keyframes } from 'styled-components';
 
-import imgBackground from './img/credits_fond.png';
+import ScreenCredits from './img/credits_fond.svg';
 import imgDesign from './img/credits_design.png';
 import imgCode from './img/credits_programmation.png';
 import imgMusic from './img/credits_musique.png';
@@ -55,13 +55,13 @@ const Wrapper = styled.section`
   width: 100%;
   height: 100%;
   cursor: not-allowed;
-  background: url('${imgBackground}') top left no-repeat;
 `;
 
 function Credits({ dispatch }) {
 
   return (
     <Wrapper>
+      <ScreenCredits style={{ position: 'absolute', top: 0, left: 0 }} />
       <CreditsIconDesign />
       <CreditsIconCode />
       <CreditsIconMusic />

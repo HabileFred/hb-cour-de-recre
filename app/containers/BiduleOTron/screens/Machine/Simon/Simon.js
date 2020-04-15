@@ -23,8 +23,6 @@ function importImages() {
 }
 const images = importImages();
 
-import imgFocus from './img/simon_focus.png';
-
 const MachineSimonContainer = styled.div`
   position: absolute;
   top: 256px;
@@ -40,16 +38,6 @@ const MachineSimonContainer = styled.div`
   &.focused,
   &.solved {
     opacity: 1;
-  }
-
-  &.focused::before {
-    content: " ";
-    position: absolute;
-    left 0;
-    top: 0;
-    width: 119px;
-    height: 253px;
-    background: url(${imgFocus}) no-repeat top left;
   }
 `;
 

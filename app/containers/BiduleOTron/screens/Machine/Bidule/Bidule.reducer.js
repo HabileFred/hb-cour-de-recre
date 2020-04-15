@@ -24,12 +24,12 @@ export class ReducerBidule {
         'transmetteur',
         'recepteur',
         'aspi_fausses_idees',
-        'annule_parole',
-        'aspitruc', // solution
+        'annule_paroles',
+        'aspi_truc', // solution
         'encodeur',
-        'antibug',
+        'anti_bug',
         'ramasse_clou',
-        'attrape_eternuement',
+        'attrape_eternuements',
         'geolocalisateur',
         'souffle_rien',
         'ramasse_vide',

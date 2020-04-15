@@ -17,7 +17,7 @@ const Wrapper = styled.section`
   grid-gap: 0px;
   grid-auto-rows: 27px;
   position: absolute;
-  bottom: 19px;
+  bottom: 22px;
   left: 930px;
 `;
 

@@ -6,7 +6,6 @@ import withFocus from 'BOT/withFocus';
 
 import imgBinary from './img/binaire.png';
 import imgFocusText from './img/focus_champs.png';
-import imgFocusMachine from './img/focus_binaire.png';
 import imgPastille1 from './img/pastille_1.png';
 import imgPastille1ok from './img/pastille_1_ok.png';
 import imgPastille2 from './img/pastille_2.png';
@@ -32,15 +31,6 @@ const MachineBinaryContainer = styled.div`
 
   &.focused {
     opacity: 1;
-  }
-  &.focused::before {
-    content: " ";
-    position: absolute;
-    left 0;
-    top: 0;
-    width: 113px;
-    height: 176px;
-    background: url(${imgFocusMachine}) no-repeat top left;
   }
 
   &.solved {
