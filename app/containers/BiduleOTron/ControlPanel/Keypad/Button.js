@@ -22,7 +22,7 @@ const Wrapper = styled.button`
 
   .digit {
     position: absolute;
-    top: -4px;
+    top: -3px;
     left: 14px;
   }
 
@@ -42,7 +42,7 @@ const Wrapper = styled.button`
     }
     .digit {
       position: absolute;
-      top: -2px;
+      top: -1px;
       left: 14px;
     }
   }
