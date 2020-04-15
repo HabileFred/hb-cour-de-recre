@@ -65,9 +65,9 @@ const MachinePiecesContainer = styled.div`
   &.focused.selected-piece-2 .piece-2 path[class$="focus-piece"],
   &.focused.selected-piece-3 .piece-3 path[class$="focus-piece"],
   &.focused.selected-piece-4 .piece-4 path[class$="focus-piece"] {
-    fill: ${theme.focus};
-    stroke: ${theme.focus};
-    stroke-width: 3px;
+    fill: ${theme.focus.color};
+    stroke: ${theme.focus.color};
+    stroke-width: ${theme.focus.strokeWidth};
   }
 `;
 
