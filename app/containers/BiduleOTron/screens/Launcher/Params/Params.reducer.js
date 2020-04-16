@@ -30,7 +30,8 @@ class ReducerParams {
           'g': 4,
           'h': 1,
           'j': 3,
-          'k': 2,
+          'k': 5,
+          'l': 2,
         }
       },
       direction: {
@@ -49,7 +50,7 @@ class ReducerParams {
 
   handleButtonPressed(button) {
     const { params } = getDraft();
-    if ('ghjk'.indexOf(button) !== -1) {
+    if ('ghjkl'.indexOf(button) !== -1) {
       const { stability: s } = params;
       if (s.cursor === s.solution.length) {
         s.values.splice(0, 6, 0, 0, 0, 0, 0, 0);

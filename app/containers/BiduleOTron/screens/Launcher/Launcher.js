@@ -8,34 +8,38 @@ import styled from 'styled-components';
 
 import { SFX } from 'BOT/SoundManager';
 import { focus } from 'BOT/reducers/focus';
-import Radar from './Radar/Radar';
-import Params from './Params/Params';
 
 import {
   makeSelectBidule,
   makeSelectRadar,
   makeSelectParams,
   makeSelectGame,
-} from '../../selectors';
+} from 'BOT/selectors';
 
-import { Cable1, Cable2, Pipe, Barometer, Propellant, Porthole, Transmission, Antenna } from './Animations';
+import Radar from './Radar/Radar';
+import Params from './Params/Params';
 
-import imgBidulePresent from './img/bidule_aspitruc.png';
-import imgBiduleAbsent from './img/bidule_aucun.png';
-import imgLauncher from './img/launcher.png';
+import Barometer from './Animations/Barometer/Barometer';
+import Antenna from './Animations/Antenna/Antenna';
+import Pipe from './Animations/Pipe/Pipe';
+import ElectricWire from './Animations/ElectricWire/ElectricWire';
+
+import { Cable1, Cable2, Propellant, Porthole, Transmission } from './Animations.js';
+
+import ImageBidulePresent from './img/bidule_nom.svg';
+import ImageBiduleAbsent from './img/bidule_aucun.svg';
+
+import ImageLauncher from './img/lance_bidule.svg';
 import imgBiduleOK from './img/bidule_ok.png';
 import imgBackground from 'BOT/img/fond_machine.png';
 import { popup, gameCompleted } from '../../actions';
 
-const BiduleInfos = styled.div`
-  position: absolute;
-  left: 663px;
-  top: 359px;
-  width: 141px;
-  height: 31px;
-  z-index: 3;
-  background: top left no-repeat url('${props => props.present ? imgBidulePresent : imgBiduleAbsent}');
-`;
+function BiduleName({ present, ...props }) {
+  return present
+    ? (<ImageBidulePresent className="bidule-name" {...props}/>)
+    : (<ImageBiduleAbsent className="bidule-name" {...props}/>)
+  ;
+}
 
 const BiduleOK = styled.div`
   position: absolute;
@@ -55,6 +59,15 @@ const Wrapper = styled.section`
   flex-flow: row;
   cursor: not-allowed;
   background: no-repeat url('${imgBackground}');
+
+  .bidule-name {
+    position: absolute;
+    left: 663px;
+    top: 359px;
+    width: 141px;
+    height: 31px;
+    z-index: 2;
+  }
 `;
 
 function Launcher({ dispatch, game, params, bidule, radar }) {
@@ -97,18 +110,18 @@ function Launcher({ dispatch, game, params, bidule, radar }) {
         height: '100%',
         pointerEvents: 'none',
         zIndex: 2,
-        background: `url('${imgLauncher}') top left no-repeat`,
       }}>
+        <ImageLauncher />
       </div>
       <Barometer />
       <Antenna />
       <Radar radar={radar} focusId="radar" enabled={bidule.SOLVED} />
       <Params params={params} focusId="params" />
-      <Cable1 animated={radar.SOLVED} />
-      <Cable2 animated={params.direction.SOLVED} />
+      <ElectricWire w={1} animated={radar.SOLVED} />
+      <ElectricWire w={2} animated={radar.SOLVED} />
       <Pipe animated={params.stability.SOLVED} />
       <Propellant animated={params.SOLVED} />
-      <BiduleInfos present={bidule.SOLVED} />
+      <BiduleName present={bidule.SOLVED} />
       <BiduleOK present={bidule.SOLVED} />
       <Porthole status={bidule.SOLVED ? 'bidule' : 'empty'} animation={animation}/>
       <Transmission animated={params.velocity.SOLVED} />

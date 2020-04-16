@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import classnames from 'classnames';
 
 import withFocus from 'BOT/withFocus';
@@ -7,15 +7,6 @@ import withFocus from 'BOT/withFocus';
 import ImageWire11 from './img/cable_11.svg';
 import ImageWire24 from './img/cable_24.svg';
 import ImageWire32 from './img/cable_32.svg';
-
-import imgFocusTop from './img/focus_branchement_haut.png';
-import imgFocusBottom from './img/focus_branchement_bas.png';
-
-const dash = keyframes`
-to {
-  stroke-dashoffset: 100;
-}
-`;
 
 const MachineWiresContainer = styled.div`
   position: absolute;

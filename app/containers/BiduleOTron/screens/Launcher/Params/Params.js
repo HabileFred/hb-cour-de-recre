@@ -3,47 +3,41 @@ import styled from 'styled-components';
 import classnames from 'classnames';
 import withFocus from '../../../withFocus';
 
-import imgStability1 from './img/stabilite_1.png';
-import imgStability2 from './img/stabilite_2.png';
-import imgStability3 from './img/stabilite_3.png';
-import imgStability4 from './img/stabilite_4.png';
-const imgStability = [
-  null,
-  imgStability1,
-  imgStability2,
-  imgStability3,
-  imgStability4,
-];
+import { Digits } from 'BOT/components/Digits/Digits';
+import theme from 'BOT/Theme';
 
-import imgVelocity0 from './img/carre_vide.png';
-import imgVelocity1 from './img/carre_orange.png';
-import imgVelocity2 from './img/carre_bleu.png';
-import imgVelocity3 from './img/carre_jaune.png';
-import imgVelocity4 from './img/carre_rose.png';
-import imgVelocity5 from './img/carre_violet.png';
-const imgVelocity = [
-  imgVelocity0,
-  imgVelocity1,
-  imgVelocity2,
-  imgVelocity3,
-  imgVelocity4,
-  imgVelocity5,
-];
+import ImageStability1 from './img/stabilite_1.svg';
+import ImageStability2 from './img/stabilite_2.svg';
+import ImageStability3 from './img/stabilite_3.svg';
+import ImageStability4 from './img/stabilite_4.svg';
+import ImageStability5 from './img/stabilite_5.svg';
 
-function importDigitsImages() {
-  const r = require.context('./img/', false, /\d\.png$/);
-  const images = {};
-  r.keys().forEach(key => {
-    const l = key.match(/^\.\/(\d)\.png/);;
-    if (l) {
-      images[l[1]] = r(key);
-    }
-  });
-  return images;
+function StabilityItem({ value }) {
+  switch (value) {
+    case 1:
+      return (<ImageStability1 />);
+    case 2:
+      return (<ImageStability2 />);
+    case 3:
+      return (<ImageStability3 />);
+    case 4:
+      return (<ImageStability4 />);
+    case 5:
+      return (<ImageStability5 />);
+    default:
+      return null;
+  }
 }
-const digitsImages = importDigitsImages();
-import imgP from './img/p.png';
-digitsImages['*'] = imgP;
+
+import ImageVelocity from './img/carre_vitesse.svg';
+
+function VelocityItem({ value }) {
+  return (
+    <div className={`velocity-item value-${value}`}>
+      <ImageVelocity />
+    </div>
+  );
+}
 
 const Wrapper = styled.div`
   position: absolute;
@@ -52,6 +46,22 @@ const Wrapper = styled.div`
   width: 175px;
   height: 310px;
   z-index: 5;
+
+  .velocity-item.value-1 path[class$="fill-color"] {
+    fill: ${theme.orangeLight};
+  }
+  .velocity-item.value-2 path[class$="fill-color"] {
+    fill: ${theme.electricBlueLight};
+  }
+  .velocity-item.value-3 path[class$="fill-color"] {
+    fill: ${theme.yellowLight};
+  }
+  .velocity-item.value-4 path[class$="fill-color"] {
+    fill: ${theme.pinkLight};
+  }
+  .velocity-item.value-5 path[class$="fill-color"] {
+    fill: ${theme.purpleLight};
+  }
 `;
 
 const ParamsInfos = styled.div`
@@ -65,28 +75,28 @@ const ParamsInfos = styled.div`
   opacity: ${props => props.revealed ? 0 : 1};
 `;
 
-const StabilityItem = styled.div`
+const Stability = styled.div`
   position: absolute;
-  left: ${props => 23 + props.index * 12}px;
+  left: 23px;
   top: 52px;
-  width: 14px;
-  height: 38px;
-  background: top center no-repeat url('${props => imgStability[props.value]}');
+  display: flex;
+  flex-flow: row;
 `;
 
-const VelocityItem = styled.div`
+const Velocity = styled.div`
   position: absolute;
-  left: ${props => 16 + props.index * 15}px;
+  left: 16px;
   top: 19px;
   width: 14px;
   height: 15px;
-  background: top center no-repeat url('${props => imgVelocity[props.value]}');
+  display: flex;
+  flex-flow: row;
 `;
 
 const Direction = styled.div`
   position: absolute;
   left: 20px;
-  top: 107px;
+  top: 106px;
   width: 82px;
   height: 20px;
   display: flex;
@@ -95,23 +105,18 @@ const Direction = styled.div`
   justify-content: center;
 `;
 
-const Digit = styled.div`
-  width: 18px;
-  height: 18px;
-  background: no-repeat url('${props => digitsImages[props.value]}');
-  background-size: contain;
-  transform: ${props => props.value === '*' ? 'none' : 'scale(.8)'};
-`;
-
-
 const Params = function({ params, focused, solved }) {
   return (
     <Wrapper className={classnames({ focused, solved })}>
       <ParamsInfos revealed={focused} />
-      {params.stability.values.map((v, i) => (<StabilityItem key={i} index={i} value={v} />))}
-      {params.velocity.values.map((v, i) => (<VelocityItem key={i} index={i} value={v} />))}
+      <Stability>
+        {params.stability.values.map((v, i) => (<StabilityItem key={i} value={v} />))}
+      </Stability>
+      <Velocity>
+        {params.velocity.values.map((v, i) => (<VelocityItem key={i} index={i} value={v} />))}
+      </Velocity>
       <Direction>
-        {params.direction.values.map((c,i) => <Digit key={i} value={c} />)}
+        <Digits margins={'-1.75px'} size={18} value={params.direction.values.join('')} />
       </Direction>
     </Wrapper>
   );

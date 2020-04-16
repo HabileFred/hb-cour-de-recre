@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="143px" height="151px" viewBox="0 0 143 151" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:2;">
+  <g>
+    <g>
+      <path
+        id="sparkle1" class="sparkle"
+        d="M52.396,38.479L54.05,42.478L57.357,40.703L57.029,43.311L63.445,41.568L59.09,44.812L63.543,45.207L59.826,46.684L66.174,48.51L59.09,48.555L61.335,50.823L57.029,50.056L58.528,54.076L54.05,50.889L52.396,53.322L50.743,50.889L46.264,54.076L47.764,50.056L43.457,50.823L45.702,48.555L38.618,48.51L44.966,46.684L41.25,45.207L45.702,44.812L41.347,41.568L47.764,43.311L47.436,40.703L50.743,42.478L52.396,38.479Z"
+        style="fill:rgb(125,101,251);stroke:rgb(100,241,251);stroke-width:0.59px;stroke-miterlimit:1.5;"
+        transform="translate(-52.396 -45.479)">
+        <animateMotion
+            xlink:href="#sparkle1"
+            dur="1s"
+            repeatCount="indefinite"
+            rotate="auto"
+            fill="freeze">
+          <mpath xlink:href="#fil1" />
+        </animateMotion>
+      </path>
+    </g>
+  </g>
+  <g>
+    <g>
+      <path
+        id="sparkle2" class="sparkle"
+        d="M52.396,38.479L54.05,42.478L57.357,40.703L57.029,43.311L63.445,41.568L59.09,44.812L63.543,45.207L59.826,46.684L66.174,48.51L59.09,48.555L61.335,50.823L57.029,50.056L58.528,54.076L54.05,50.889L52.396,53.322L50.743,50.889L46.264,54.076L47.764,50.056L43.457,50.823L45.702,48.555L38.618,48.51L44.966,46.684L41.25,45.207L45.702,44.812L41.347,41.568L47.764,43.311L47.436,40.703L50.743,42.478L52.396,38.479Z"
+        style="fill:rgb(125,101,251);stroke:rgb(100,241,251);stroke-width:0.59px;stroke-miterlimit:1.5;"
+        transform="translate(-52.396 -45.479)">
+        <animateMotion
+            xlink:href="#sparkle2"
+            dur="1s"
+            repeatCount="indefinite"
+            rotate="auto"
+            fill="freeze">
+          <mpath xlink:href="#fil2" />
+        </animateMotion>
+      </path>
+    </g>
+  </g>
+  <g>
+    <g>
+      <path
+        id="sparkle3" class="sparkle"
+        d="M52.396,38.479L54.05,42.478L57.357,40.703L57.029,43.311L63.445,41.568L59.09,44.812L63.543,45.207L59.826,46.684L66.174,48.51L59.09,48.555L61.335,50.823L57.029,50.056L58.528,54.076L54.05,50.889L52.396,53.322L50.743,50.889L46.264,54.076L47.764,50.056L43.457,50.823L45.702,48.555L38.618,48.51L44.966,46.684L41.25,45.207L45.702,44.812L41.347,41.568L47.764,43.311L47.436,40.703L50.743,42.478L52.396,38.479Z"
+        style="fill:rgb(125,101,251);stroke:rgb(100,241,251);stroke-width:0.59px;stroke-miterlimit:1.5;"
+        transform="translate(-52.396 -45.479)">
+        <animateMotion
+            xlink:href="#sparkle3"
+            dur="1s"
+            repeatCount="indefinite"
+            rotate="auto"
+            fill="freeze">
+          <mpath xlink:href="#fil3" />
+        </animateMotion>
+      </path>
+    </g>
+  </g>
+
+  <g>
+    <path id="fil1" d="M135.857,1.096C130.266,2.999 127.631,10.155 125.685,15.128C121.918,24.756 119.545,34.953 117.117,44.98C111.623,67.67 107.589,91.661 97.706,112.973C93.789,121.422 86.527,133.495 75.624,127.94C68.693,124.409 63.666,117.178 59.471,110.903C51.63,99.174 45.53,86.264 39.795,73.411" style="fill:none;fill-rule:nonzero;stroke:rgb(125,101,251);stroke-width:3.5px;"/>
+  </g>
+  <g>
+    <path id="fil2" d="M138.38,11.755C126.82,25.809 126.041,47.498 123.69,64.714C122.227,75.428 120.681,86.164 117.854,96.618C114.787,107.959 109.362,116.693 101.73,125.564C96.415,131.742 89.187,139.875 80.514,140.807C74.458,141.458 69.594,136.89 65.822,132.774C54.806,120.755 46.745,106.9 32.916,97.598C29.296,95.163 25.369,93.254 21.319,91.656" style="fill:none;fill-rule:nonzero;stroke:rgb(125,101,251);stroke-width:3.5px;"/>
+  </g>
+  <g>
+    <path id="fil3" d="M138.025,23.326C134.685,41.572 136.099,60.567 134.996,79.016C133.845,98.266 131.207,120.891 115.675,134.253C106.385,142.244 94.96,147.309 82.616,147.232C72.109,147.166 62.036,142.938 53.005,137.915C35.595,128.232 21.34,113.881 4.094,103.981" style="fill:none;fill-rule:nonzero;stroke:rgb(125,101,251);stroke-width:3.5px;"/>
+  </g>
+</svg>

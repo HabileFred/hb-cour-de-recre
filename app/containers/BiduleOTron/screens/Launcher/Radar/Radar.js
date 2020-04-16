@@ -3,43 +3,12 @@ import styled, { keyframes } from 'styled-components';
 import classnames from 'classnames';
 
 import withFocus from 'BOT/withFocus';
-import { focus } from 'BOT/reducers/focus';
 
-import imgPointer from './img/aiguille.png';
+import ImagePointer from './img/aiguille.svg';
 import imgCursor from './img/curseur.png';
 
-import imgOff from './img/ampoule_off.png';
-import imgOn from './img/ampoule_on.png';
-
-const Wrapper = styled.div`
-  position: absolute;
-  left: 600px;
-  top: 170px;
-  width: 120px;
-  height: 116px;
-`;
-
-const rotatingPointer = keyframes`
-  from {
-    transform: rotate(360deg);
-  }
-  to {
-    transform: rotate(0deg);
-  }
-`;
-
-const Pointer = styled.div`
-  position: absolute;
-  display: ${props => props.enabled ? 'block' : 'none'};
-  left: 48px;
-  top: 51px;
-  width: 56px;
-  height: 40px;
-  background: no-repeat center center url('${imgPointer}');
-  animation: ${rotatingPointer} 2s linear infinite;
-  transform-origin: 10px 10px;
-  z-index: 5;
-`;
+import ImageIndicatorOn from './img/ampoule_on.svg';
+import ImageIndicatorOff from './img/ampoule_off.svg';
 
 const onAnimation = keyframes`
   from {
@@ -71,18 +40,44 @@ const onAnimation = keyframes`
   }
 `;
 
-const IndicatorOff = styled.div`
+const Wrapper = styled.div`
   position: absolute;
-  left: 829px;
-  top: 66px;
-  width: 54px;
-  height: 62px;
-  background: center center no-repeat url('${imgOff}');
+  left: 600px;
+  top: 170px;
+  width: 120px;
+  height: 116px;
+
+  .indicator {
+    position: absolute;
+    left: 232px;
+    top: -108px;
+    width: 54px;
+    height: 62px;
+    z-index: 5;
+  }
+  .indicator.on {
+    animation: ${onAnimation} 800ms ease-in;
+  }
 `;
 
-const IndicatorOn = styled(IndicatorOff)`
-  animation: ${onAnimation} 800ms ease-in;
-  background: center center no-repeat url('${imgOn}');
+const rotatingPointer = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+const PointerWrapper = styled.div`
+  position: absolute;
+  left: 4px;
+  top: 7px;
+  width: 107px;
+  height: 107px;
+  animation: ${rotatingPointer} 2s linear infinite;
+  transform-origin: 53px 53px;
+  z-index: 5;
 `;
 
 const cursorX = [16, 37, 68, 92];
@@ -110,11 +105,13 @@ const Radar = function({ radar, focused, solved, enabled }) {
 
   return (
     <React.Fragment>
-      <IndicatorOff />
-      {solved ? <IndicatorOn /> : null}
       <Wrapper className={classnames({ focused, solved })}>
+        <ImageIndicatorOff className="indicator" />
+        {solved ? <ImageIndicatorOn className="indicator on" /> : null}
         <Cursor enabled={enabled} x={radar.cursor.x} y={radar.cursor.y} />
-        <Pointer enabled={enabled} />
+        <PointerWrapper enabled={true}>
+          <ImagePointer />
+        </PointerWrapper>
       </Wrapper>
     </React.Fragment>
   );
