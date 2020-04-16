@@ -123,7 +123,7 @@ const Pipes = styled.div`
 
 const Gauges = styled.div`
   display: grid;
-  grid-template-columns: repeat(6,19.3px);
+  grid-template-columns: repeat(6, 19px);
   grid-gap: 0;
   grid-auto-rows: 30px;
   position: absolute;
