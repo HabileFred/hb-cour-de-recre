@@ -4,12 +4,12 @@ import classnames from 'classnames';
 
 import withFocus from 'BOT/withFocus';
 
-import imgOff from './img/led_eteinte.png';
-import imgOnBlue from './img/led_bleue.png';
-import imgOnGreen from './img/led_verte.png';
-import imgOnRed from './img/led_rouge.png';
-import imgOnYellow from './img/led_jaune.png';
-import imgOnPurple from './img/led_violette.png';
+import LightbulbOff from './img/off.svg';
+import LightbulbRed from './img/light_red.svg';
+import LightbulbGreen from './img/light_green.svg';
+import LightbulbBlue from './img/light_blue.svg';
+import LightbulbPurple from './img/light_violet.svg';
+import LightbulbYellow from './img/light_yellow.svg';
 
 const MachineLightbulbsContainer = styled.div`
   position: absolute;
@@ -40,53 +40,44 @@ const Lightbulbs = styled.div`
 /**
  * A single Lightbulb representation.
  */
-export const Lightbulb = styled.div`
-  width: 20px;
-  height: 20px;
-  background: transparent no-repeat center center url('${imgOff}');
-
-  &.red.on {
-    background-image: url('${imgOnRed}');
+function Lightbulb({ color, on }) {
+  if (!on) {
+    return (<LightbulbOff />);
   }
-  &.green.on {
-    background-image: url('${imgOnGreen}');
+  switch (color) {
+    case 'red':
+      return (<LightbulbRed />);
+    case 'green':
+      return (<LightbulbGreen />);
+    case 'blue':
+      return (<LightbulbBlue />);
+    case 'purple':
+      return (<LightbulbPurple />);
+    case 'yellow':
+      return (<LightbulbYellow />);
+    default:
+      return (<LightbulbOff />);
   }
-  &.blue.on {
-    background-image: url('${imgOnBlue}');
-  }
-  &.yellow.on {
-    background-image: url('${imgOnYellow}');
-  }
-  &.purple.on {
-    background-image: url('${imgOnPurple}');
-  }
-`;
+}
 
 /**
  * The Machine with the Lightbulbs.
  * @param {Object} props
  */
 const MachineLightbulbs = function({ focused, solved, lights }) {
-  const cls = {
-    blue: `blue ${lights.values.blue ? 'on' : 'off'}`,
-    green: `green ${lights.values.green ? 'on' : 'off'}`,
-    red: `red ${lights.values.red ? 'on' : 'off'}`,
-    yellow: `yellow ${lights.values.yellow ? 'on' : 'off'}`,
-    purple: `purple ${lights.values.purple ? 'on' : 'off'}`,
-  };
   return (
     <MachineLightbulbsContainer className={classnames({ focused, solved })}>
       <Lightbulbs>
-        <Lightbulb className={cls.yellow} />
-        <Lightbulb className={cls.purple} />
-        <Lightbulb className={cls.green} />
-        <Lightbulb className={cls.red} />
-        <Lightbulb className={cls.blue} />
-        <Lightbulb className={cls.yellow} />
-        <Lightbulb className={cls.purple} />
-        <Lightbulb className={cls.red} />
-        <Lightbulb className={cls.blue} />
-        <Lightbulb className={cls.green} />
+        <Lightbulb color="yellow" on={lights.values.yellow} />
+        <Lightbulb color="purple" on={lights.values.purple} />
+        <Lightbulb color="green" on={lights.values.green} />
+        <Lightbulb color="red" on={lights.values.red} />
+        <Lightbulb color="blue" on={lights.values.blue} />
+        <Lightbulb color="yellow" on={lights.values.yellow} />
+        <Lightbulb color="purple" on={lights.values.purple} />
+        <Lightbulb color="red" on={lights.values.red} />
+        <Lightbulb color="blue" on={lights.values.blue} />
+        <Lightbulb color="green" on={lights.values.green} />
       </Lightbulbs>
     </MachineLightbulbsContainer>
   );
