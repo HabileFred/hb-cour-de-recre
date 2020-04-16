@@ -44,6 +44,7 @@ export const Digit = function({d, size, margin, ...props}) {
     case '9':
       return (<DigitWrapper style={style} {...props}><D9/></DigitWrapper>);
     case '.':
+    case '*':
       return (<DigitWrapper style={style} {...props}><DP/></DigitWrapper>);
     default:
       return null;
