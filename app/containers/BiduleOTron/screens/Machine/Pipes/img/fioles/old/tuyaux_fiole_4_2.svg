@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 17.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="21.69px"
-	 height="21.24px" viewBox="0 0 21.69 21.24" enable-background="new 0 0 21.69 21.24" xml:space="preserve">
+<svg version="1.1" id="Calque_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="21.69px" height="21.24px" viewBox="0 0 21.69 21.24" enable-background="new 0 0 21.69 21.24" xml:space="preserve">
 <g id="Calque_2">
 	<g id="contenu">
-		<path fill="#FC3B40" d="M7.383,18.849c0.222,0-1.334,0-2.001-0.532c-0.445-3.723-1.077-8.644-1.077-8.644
-			C8.318,10.234,12.29,8.696,17.506,5.9l-0.54,4.722c-0.445,4.433-0.245,3.439-2.024,7.695l0.222,0.355
+		<path fill="#FC3B40" d="M7.383,18.849c0.222,0-1.334,0-2.001-0.532c-0.445-3.723-0.865-6.978-0.865-6.978
+			c4.013,0.561,7.49,1.293,12.706-1.503l-0.47,1.857c-0.445,4.433-0.032,2.368-1.811,6.624l0.222,0.355
 			c-0.222,0.177-0.445,0.177-0.889,0.177"/>
 	</g>
 </g>
@@ -24,7 +24,7 @@
 		</g>
 	</g>
 </g>
-<g id="Calque_1">
+<g id="Calque_1_1_">
 	<g>
 		<g>
 			<path d="M7.383,18.465c-2.246-0.187-1.974-3.52-2.191-5.12c-0.435-3.202-0.89-6.399-1.205-9.615

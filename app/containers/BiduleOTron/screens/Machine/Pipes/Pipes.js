@@ -11,6 +11,13 @@ import imgFiole4 from './img/fiole_4.gif';
 import imgFiole5 from './img/fiole_5.gif';
 import imgFiole6 from './img/fiole_6.gif';
 
+import Fiole1 from './img/fioles/fiole_1.svg';
+import Fiole2 from './img/fioles/fiole_2.svg';
+import Fiole3 from './img/fioles/fiole_3.svg';
+import Fiole4 from './img/fioles/fiole_4.svg';
+import Fiole5 from './img/fioles/fiole_5.svg';
+import Fiole6 from './img/fioles/fiole_6.svg';
+
 import Pipe from './img/tuyaux_blanc.svg';
 import PipeFixed from './img/tuyaux_noir.svg';
 
@@ -48,42 +55,36 @@ const Fiole = styled.div`
     left: 13px;
     width: 26px;
     height: 27px;
-    background-image: url('${imgFiole1}');
   }
   &.fiole-1 {
     top: 15px;
     left: 39px;
     width: 11px;
     height: 40px;
-    background-image: url('${imgFiole2}');
   }
   &.fiole-2 {
     top: 23px;
     left: 51px;
     width: 27px;
     height: 34px;
-    background-image: url('${imgFiole3}');
   }
   &.fiole-3 {
     top: 33px;
     left: 73px;
     width: 22px;
     height: 22px;
-    background-image: url('${imgFiole4}');
   }
   &.fiole-4 {
     top: 19px;
     left: 94px;
     width: 15px;
     height: 36px;
-    background-image: url('${imgFiole5}');
   }
   &.fiole-5 {
     top: 0px;
     left: 108px;
     width: 25px;
     height: 56px;
-    background-image: url('${imgFiole6}');
   }
 `;
 
@@ -93,6 +94,46 @@ const MachinePipesContainer = styled.div`
   left: 583px;
   width: 145px;
   height: 210px;
+
+  .fiole {
+    position: absolute;
+  }
+  .fiole.f1 {
+    top: 28px;
+    left: 13px;
+    width: 26px;
+    height: 27px;
+  }
+  .fiole.f2 {
+    top: 15px;
+    left: 39px;
+    width: 11px;
+    height: 40px;
+  }
+  .fiole.f3 {
+    top: 23px;
+    left: 51px;
+    width: 27px;
+    height: 34px;
+  }
+  .fiole.f4 {
+    top: 33px;
+    left: 73px;
+    width: 22px;
+    height: 22px;
+  }
+  .fiole.f5 {
+    top: 19px;
+    left: 94px;
+    width: 15px;
+    height: 36px;
+  }
+  .fiole.f6 {
+    top: 0px;
+    left: 108px;
+    width: 25px;
+    height: 56px;
+  }
 `;
 
 const Pipes = styled.div`
@@ -137,12 +178,12 @@ const MachinePipes = function({ focused, solved, pipes }) {
   return (
     <MachinePipesContainer className={classnames({ focused, solved })}>
       <Fioles focused={focused || solved}>
-        <Fiole className="fiole-0" />
-        <Fiole className="fiole-1" />
-        <Fiole className="fiole-2" />
-        <Fiole className="fiole-3" />
-        <Fiole className="fiole-4" />
-        <Fiole className="fiole-5" />
+        <Fiole1 className="fiole f1" />
+        <Fiole2 className="fiole f2" />
+        <Fiole3 className="fiole f3" />
+        <Fiole4 className="fiole f4" />
+        <Fiole5 className="fiole f5" />
+        <Fiole6 className="fiole f6" />
       </Fioles>
       <Pipes>
         {pipes.pipes.map((p, i) => p === 9
