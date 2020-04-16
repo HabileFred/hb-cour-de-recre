@@ -5,6 +5,7 @@ const theme = {
 
   blue: "#17c0eb",
   blueLight: "#18dcff",
+  electricBlueLight: "#7efff5",
 
   purple: "#c56cf0",
   purpleLight: "#cd84f1",
@@ -21,8 +22,8 @@ const theme = {
   yellow: "#fff200",
   yellowLight: "#fffa65",
 
-  gray: "#dddddd",
-  grayLight: "#eeeeee",
+  gray: "#bbbbbb",
+  grayLight: "#cccccc",
 
   buttonSFX: "#17c0eb",
   buttonMusic: "#18dcff",

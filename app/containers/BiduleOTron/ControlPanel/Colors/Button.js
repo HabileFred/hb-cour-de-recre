@@ -79,8 +79,8 @@ Wrapper.defaultProps = {
     orange: "#ff9f1a",
     orangeLight: "#ffaf40",
 
-    gray: "#dddddd",
-    grayLight: "#eeeeee",
+    gray: "#bbbbbb",
+    grayLight: "#cccccc",
   }
 };
 
