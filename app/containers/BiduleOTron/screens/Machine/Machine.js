@@ -160,6 +160,12 @@ const Wrapper = styled.div`
     acc += '&.focus-' + k + ' path[class$="focus-' + k + '"]{stroke-width:' + theme.focus.strokeWidth + ';stroke:' + theme.focus.color + ';fill:' + theme.focus.color + ';}\n';
     return acc;
   }, '')}
+  &.focus-wires-top path[class$="focus-wires-top"],
+  &.focus-wires-bottom path[class$="focus-wires-bottom"] {
+    stroke-width:${theme.focus.strokeWidth};
+    stroke:${theme.focus.color};
+    fill:${theme.focus.color};
+  }
 `;
 
 function Machine({ dispatch, store, bidule, pieces, pipes, lights, binary, fuses, simon, wires, nav }) {
@@ -205,6 +211,9 @@ function Machine({ dispatch, store, bidule, pieces, pipes, lights, binary, fuses
 
   const classNames ={};
   focusKeys.forEach(key => classNames[`focus-${key.toLowerCase()}`] = focused(key));
+
+  classNames['focus-wires-top'] = wires.readiness.top;
+  classNames['focus-wires-bottom'] = wires.readiness.bottom;
 
   return (
     <div style={{
