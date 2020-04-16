@@ -4,13 +4,6 @@ import classnames from 'classnames';
 
 import withFocus from 'BOT/withFocus';
 
-import imgFiole1 from './img/fiole_1.gif';
-import imgFiole2 from './img/fiole_2.gif';
-import imgFiole3 from './img/fiole_3.gif';
-import imgFiole4 from './img/fiole_4.gif';
-import imgFiole5 from './img/fiole_5.gif';
-import imgFiole6 from './img/fiole_6.gif';
-
 import Fiole1 from './img/fioles/fiole_1.svg';
 import Fiole2 from './img/fioles/fiole_2.svg';
 import Fiole3 from './img/fioles/fiole_3.svg';
@@ -46,48 +39,6 @@ const Fioles = styled.div`
   transition: opacity 250ms ease;
 `;
 
-const Fiole = styled.div`
-  position: absolute;
-  background: transparent no-repeat center center;
-
-  &.fiole-0 {
-    top: 28px;
-    left: 13px;
-    width: 26px;
-    height: 27px;
-  }
-  &.fiole-1 {
-    top: 15px;
-    left: 39px;
-    width: 11px;
-    height: 40px;
-  }
-  &.fiole-2 {
-    top: 23px;
-    left: 51px;
-    width: 27px;
-    height: 34px;
-  }
-  &.fiole-3 {
-    top: 33px;
-    left: 73px;
-    width: 22px;
-    height: 22px;
-  }
-  &.fiole-4 {
-    top: 19px;
-    left: 94px;
-    width: 15px;
-    height: 36px;
-  }
-  &.fiole-5 {
-    top: 0px;
-    left: 108px;
-    width: 25px;
-    height: 56px;
-  }
-`;
-
 const MachinePipesContainer = styled.div`
   position: absolute;
   top: 275px;
@@ -99,13 +50,13 @@ const MachinePipesContainer = styled.div`
     position: absolute;
   }
   .fiole.f1 {
-    top: 28px;
+    top: 29px;
     left: 13px;
     width: 26px;
     height: 27px;
   }
   .fiole.f2 {
-    top: 15px;
+    top: 16px;
     left: 39px;
     width: 11px;
     height: 40px;
@@ -117,19 +68,19 @@ const MachinePipesContainer = styled.div`
     height: 34px;
   }
   .fiole.f4 {
-    top: 33px;
+    top: 34px;
     left: 73px;
     width: 22px;
     height: 22px;
   }
   .fiole.f5 {
-    top: 19px;
+    top: 20px;
     left: 94px;
     width: 15px;
     height: 36px;
   }
   .fiole.f6 {
-    top: 0px;
+    top: -1px;
     left: 108px;
     width: 25px;
     height: 56px;
