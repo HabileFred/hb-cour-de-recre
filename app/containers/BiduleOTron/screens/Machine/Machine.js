@@ -37,7 +37,7 @@ import imgBackground from 'BOT/img/fond_machine.png';
 import BiduleOTron from './img/bidule_o_tron.svg';
 
 import ImageCacheBidule from './img/cache_bidule.svg';
-import imgPancarte from './img/pancarte.png';
+import ImagePancarte from './img/pancarte.svg';
 import { setControlPanelFocus, setScreen } from '../../actions';
 
 const openCacheBiduleAnimation = keyframes`
@@ -135,15 +135,6 @@ const rotateX = keyframes`
   }
 `;
 
-const Pancarte = styled.div`
-  position: absolute;
-  left: 442px;
-  top: 90px;
-  height: 89px;
-  width: 164px;
-  animation: ${rotateX} 3s linear infinite;
-`;
-
 import theme from 'BOT/Theme';
 import { makeSelectNav } from '../../selectors';
 
@@ -165,6 +156,15 @@ const Wrapper = styled.div`
     stroke-width:${theme.focus.strokeWidth};
     stroke:${theme.focus.color};
     fill:${theme.focus.color};
+  }
+
+  .pancarte {
+    position: absolute;
+    left: 436px;
+    top: 92px;
+    height: 89px;
+    width: 164px;
+    animation: ${rotateX} 3s linear infinite;  
   }
 `;
 
@@ -225,9 +225,7 @@ function Machine({ dispatch, store, bidule, pieces, pipes, lights, binary, fuses
     }}>
       <Wrapper className={classnames(classNames)}>
         <BiduleOTron />
-        <Pancarte>
-          <img style={{ position: 'absolute' }} src={imgPancarte} />
-        </Pancarte>
+        <ImagePancarte className="pancarte" />
         <MachineBidule focusId="bidule" bidule={bidule} />
         <MachinePieces focusId="pieces" pieces={pieces} />
         <MachinePipes focusId="pipes" pipes={pipes} />
