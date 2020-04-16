@@ -4,8 +4,8 @@ import { getDraft } from './draft';
 
 class Focus {
   constructor() {
-    const initialScreen = 'machine'; // FIXME 'login'
-    const initialFocus = ['bidule'];  // FIXME 'password'
+    const initialScreen = 'login'; // FIXME 'login'
+    const initialFocus = ['password'];  // FIXME 'password'
 
     initialState.nav = {
       popup: {
