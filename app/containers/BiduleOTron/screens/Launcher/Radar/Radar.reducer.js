@@ -81,7 +81,11 @@ class ReducerRadar {
   }
 
   handlePadMailbox() {
-    focus.popup('mail-direction');
+    if (draft.bidule.SOLVED) {
+      focus.popup('mail-direction');
+    } else {
+      SFX.wrong();
+    }
   }
 }
 
