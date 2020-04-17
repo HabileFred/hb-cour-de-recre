@@ -23,8 +23,9 @@ import Barometer from './Animations/Barometer/Barometer';
 import Antenna from './Animations/Antenna/Antenna';
 import Pipe from './Animations/Pipe/Pipe';
 import ElectricWire from './Animations/ElectricWire/ElectricWire';
-
-import { Cable1, Cable2, Propellant, Porthole, Transmission } from './Animations.js';
+import Propellant from './Animations/Propellant/Propellant';
+import Porthole from './Animations/Porthole/Porthole';
+import Transmission from './Animations/Transmission/Transmission';
 
 import ImageBidulePresent from './img/bidule_nom.svg';
 import ImageBiduleAbsent from './img/bidule_aucun.svg';
@@ -32,7 +33,7 @@ import ImageBiduleAbsent from './img/bidule_aucun.svg';
 import ImageLauncher from './img/lance_bidule.svg';
 import imgBiduleOK from './img/bidule_ok.png';
 import imgBackground from 'BOT/img/fond_machine.png';
-import { popup, gameCompleted } from '../../actions';
+import { popup, gameCompleted, removeControlPanelFocus } from '../../actions';
 
 function BiduleName({ present, ...props }) {
   return present
@@ -70,24 +71,28 @@ const Wrapper = styled.section`
   }
 `;
 
-function Launcher({ dispatch, game, params, bidule, radar }) {
+function Launcher({ dispatch, params, bidule, radar }) {
 
-  const [animation, setAnimation] = useState(null);
+  const [portholeAnimation, setPortholeAnimation] = useState(null);
+  const [propellantAnimation, setPropellantAnimation] = useState(null);
 
   const visualFX = () => {
     SFX.play('fan');
+    setPropellantAnimation('starting');
     window.setTimeout(() => {
-      setAnimation('shake');
+      setPropellantAnimation('fast');
+      setPortholeAnimation('shake');
       window.setTimeout(() => {
         SFX.play('rocket');
-        setAnimation('launch');
+        setPortholeAnimation('launch');
         window.setTimeout(() => {
+          setPropellantAnimation('stopping');
           dispatch(popup('score', () => {
             focus.from('params').next();
           }));
-        }, 4000);
-      }, 4700);
-    }, 1500);
+        }, 4000); // score
+      }, 5000); // launch
+    }, 2500); // shake
   };
 
   useEffect(() => {
@@ -99,6 +104,14 @@ function Launcher({ dispatch, game, params, bidule, radar }) {
       ));
     }
   }, [params.SOLVED]);
+
+  const radarEnabled = bidule.SOLVED;
+
+  useEffect(() => {
+    if (!radarEnabled) {
+      dispatch(removeControlPanelFocus(['Arrows', 'Submit', 'Mailbox']));
+    }
+  }, [radarEnabled]);
 
   return (
     <Wrapper>
@@ -114,17 +127,17 @@ function Launcher({ dispatch, game, params, bidule, radar }) {
         <ImageLauncher />
       </div>
       <Barometer />
-      <Antenna />
-      <Radar radar={radar} focusId="radar" enabled={bidule.SOLVED} />
+      <Antenna animated={bidule.SOLVED} />
+      <Radar radar={radar} focusId="radar" enabled={radarEnabled} />
       <Params params={params} focusId="params" />
-      <ElectricWire w={1} animated={radar.SOLVED} />
-      <ElectricWire w={2} animated={radar.SOLVED} />
+      <ElectricWire w={1} animated={params.velocity.SOLVED} />
+      <ElectricWire w={2} animated={params.velocity.SOLVED} />
       <Pipe animated={params.stability.SOLVED} />
-      <Propellant animated={params.SOLVED} />
+      <Propellant animation={propellantAnimation} />
       <BiduleName present={bidule.SOLVED} />
       <BiduleOK present={bidule.SOLVED} />
-      <Porthole status={bidule.SOLVED ? 'bidule' : 'empty'} animation={animation}/>
-      <Transmission animated={params.velocity.SOLVED} />
+      <Porthole bidule={bidule.SOLVED ? bidule.index + 1 : 0} animation={portholeAnimation}/>
+      <Transmission animated={radar.SOLVED} />
     </Wrapper>
   );
 }

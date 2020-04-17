@@ -15,7 +15,7 @@ export class ReducerBidule {
   constructor() {
     initialState.bidule = {
       BIDULE_COUNT: 15,
-      index: 0,
+      index: 0, // FIXME PROD
       solution: 6,
       submitted: false,
       biduleNames: [
@@ -35,7 +35,7 @@ export class ReducerBidule {
         'ramasse_vide',
         'solution',
       ],
-      SOLVED: false,
+      SOLVED: false, // FIXME PROD
     };
   }
 
@@ -83,6 +83,7 @@ export class ReducerBidule {
     }
     // bidule.SOLVED = true; // FIXME
     focus.from('bidule').next();
+    SFX.click();
   }
 
   /**

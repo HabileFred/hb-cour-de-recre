@@ -15,6 +15,7 @@ import sndRadar from './sounds/radar.mp3';
 import sndVisseuse from './sounds/visseuse.mp3';
 import sndMachine from './sounds/machine.mp3';
 import sndBoot from './sounds/boot.mp3';
+import sndSparkle from './sounds/arc_electrique.mp3';
 
 class SoundManager {
   constructor() {
@@ -91,6 +92,11 @@ class SoundManager {
         src: sndBoot,
         autoplay: false,
         volume: 0.2,
+      }),
+      sparkle: new Howl({
+        src: sndSparkle,
+        autoplay: false,
+        volume: 0.1,
       }),
     };
   }

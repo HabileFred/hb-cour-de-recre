@@ -259,9 +259,18 @@ class Focus {
       removeFocus: (fid) => {
         const { nav } = getDraft();
         const { controlPanel } = nav;
-        const p = controlPanel.focus.indexOf(fid);
-        if (p !== -1) {
-          controlPanel.focus.splice(p, 1);
+        if (Array.isArray(fid)) {
+          fid.forEach(f => {
+            const p = controlPanel.focus.indexOf(f);
+            if (p !== -1) {
+              controlPanel.focus.splice(p, 1);
+            }
+          });
+        } else {
+          const p = controlPanel.focus.indexOf(fid);
+          if (p !== -1) {
+            controlPanel.focus.splice(p, 1);
+          }
         }
       }
     }

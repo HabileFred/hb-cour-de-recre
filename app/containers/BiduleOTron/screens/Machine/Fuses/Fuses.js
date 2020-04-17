@@ -32,7 +32,7 @@ const MachineFusesContainer = styled.div`
 const MachineFuses = function({ fuses, focused, solved }) {
   return (
     <MachineFusesContainer className={classnames({ focused, solved })}>
-      {fuses.feedback.map((on, i) => on ? <FuseRight /> : <FuseWrong />)}
+      {fuses.feedback.map((on, i) => on ? <FuseRight key={i} /> : <FuseWrong key={i} />)}
     </MachineFusesContainer>
   );
 };

@@ -32,6 +32,10 @@ const theme = {
     color: "#42fd84",
     strokeWidth: '1px',
   },
+
+  ui: {
+    violet: "rgb(131,98,247)",
+  },
 };
 
 export default theme;

@@ -29,6 +29,7 @@ import {
   GAME_COMPLETED,
   TURN_OFF,
   COMPUTER_ON_OFF,
+  REMOVE_CONTROL_PANEL_FOCUS,
 } from './constants';
 
 export function padUp() {
@@ -156,6 +157,13 @@ export function focusNext() {
 export function setControlPanelFocus(focus) {
   return {
     type: SET_CONTROL_PANEL_FOCUS,
+    focus,
+  };
+}
+
+export function removeControlPanelFocus(focus) {
+  return {
+    type: REMOVE_CONTROL_PANEL_FOCUS,
     focus,
   };
 }

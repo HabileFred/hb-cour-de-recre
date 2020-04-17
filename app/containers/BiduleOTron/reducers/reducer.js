@@ -23,7 +23,8 @@ import {
   TURN_OFF,
   TURN_ON,
   COMPUTER_ON_OFF,
-  SET_CONTROL_PANEL_FOCUS
+  SET_CONTROL_PANEL_FOCUS,
+  REMOVE_CONTROL_PANEL_FOCUS
 } from '../constants';
 
 import { SFX } from '../SoundManager';
@@ -92,6 +93,11 @@ function handlePadCancel() {
 const BiduleOTronReducer = (state = initialState, action) =>
   produce(state, (draft) => {
     setWorkingDraft(draft);
+
+    if (!draft.$game.startedAt) {
+      draft.$game.startedAt = Date.now();
+      draft.$game.completedAt = null;
+    }
 
     document.activeElement.blur();
 
@@ -330,6 +336,10 @@ const BiduleOTronReducer = (state = initialState, action) =>
 
       case SET_CONTROL_PANEL_FOCUS:
         focus.controlPanel().setFocus(action.focus);
+        break;
+
+      case REMOVE_CONTROL_PANEL_FOCUS:
+        focus.controlPanel().removeFocus(action.focus);
         break;
 
       default:

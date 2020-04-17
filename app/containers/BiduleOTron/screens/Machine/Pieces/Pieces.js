@@ -6,7 +6,7 @@ import withFocus from 'BOT/withFocus';
 
 import ImageArrows from './img/fleches.svg';
 import Piece from 'BOT/components/Pieces/Pieces';
-import theme from 'BOT/theme';
+import theme from 'BOT/Theme';
 
 const MachinePiecesContainer = styled.div`
   position: absolute;

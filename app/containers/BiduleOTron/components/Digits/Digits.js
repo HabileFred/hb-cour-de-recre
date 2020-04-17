@@ -56,10 +56,10 @@ const Wrapper = styled.div`
   flex-flow: row;
 `;
 
-export const Digits = function({ value, size, margins, ...props }) {
+export const Digits = function({ value, size, margins, color, ...props }) {
   return (
     <Wrapper {...props}>
-      {String(value).split('').map((d, i) => <Digit margin={margins} size={size} key={i} d={d} />)}
+      {String(value).split('').map((d, i) => <Digit color={color} margin={margins} size={size} key={i} d={d} />)}
     </Wrapper>
   );
 };

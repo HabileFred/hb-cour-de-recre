@@ -145,11 +145,12 @@ export function BiduleOTron({ nav, game, status }) {
       break;
 
     case 'score':
-      const min = Math.ceil((game.completedAt - game.startedAt) / 60000);
+      const minutes = Math.ceil((game.completedAt - game.startedAt) / 60000);
+      console.log(game.startedAt, game.completedAt, minutes);
       popup = (
         <Popup>
           <PopupScore />
-          <Digits style={{ position: 'absolute', left: '210px', top: '155px', transform: 'scale(.8) translateX(-50%)' }} value={min} />
+          <Digits size={20} color="#4B4B4B" style={{ position: 'absolute', left: '220px', top: '161px', transform: 'translateX(-50%)' }} value={minutes} />
         </Popup>
       );
       break;
