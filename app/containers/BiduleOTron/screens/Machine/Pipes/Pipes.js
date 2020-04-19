@@ -45,6 +45,7 @@ const MachinePipesContainer = styled.div`
   left: 583px;
   width: 145px;
   height: 210px;
+  z-index: 1;
 
   .fiole {
     position: absolute;

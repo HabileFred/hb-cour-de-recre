@@ -16,6 +16,7 @@ const MachinePiecesContainer = styled.div`
   height: 338px;
   opacity: 0.5;
   transition: opacity 250ms ease;
+  z-index: 1;
 
   .arrows {
     position: absolute;

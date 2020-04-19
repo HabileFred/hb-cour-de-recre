@@ -23,6 +23,7 @@ const MachineSimonContainer = styled.div`
   grid-gap: 16.5px;
   grid-auto-rows: 12px;
   padding: 80px 0 0 30px;
+  z-index: 1;
 
   &.focused .indicator,
   &.solved .indicator {
@@ -104,7 +105,7 @@ const MachineSimon = function({ dispatch, simon, focused, solved }) {
   };
 
   const startSequencer = () => {
-    timer = window.setInterval(sequencer, 1300);
+    timer = window.setInterval(sequencer, 1000);
   };
 
   const stopSequencer = () => {
@@ -119,13 +120,13 @@ const MachineSimon = function({ dispatch, simon, focused, solved }) {
   }, []);
 
   useEffect(() => {
-    if (simon.status === 'Sequence') {
+    if (focused && simon.status === 'Sequence') {
       startSequencer();
     } else {
       stopSequencer();
     }
     return stopSequencer;
-  }, [simon.status]);
+  }, [simon.status, focused]);
 
   const playingSeq = simon.status === 'Sequence';
 
@@ -133,7 +134,7 @@ const MachineSimon = function({ dispatch, simon, focused, solved }) {
     <MachineSimonContainer className={classnames({ focused, solved })}>
       <Antenna className={`antenna step-${simon.length - 1}`} />
       {[1, 2, 3, 4, 5].map(i => (
-        <Indicator key={i} className={classnames('indicator', `indicator-${i}`, { on: solved || (playingSeq && simon.desired[simon.cursor] === i) })} />
+        <Indicator key={i} className={classnames('indicator', `indicator-${i}`, { on: solved || (playingSeq && simon.cursor !== -1 && simon.desired[simon.cursor] === i) })} />
       ))}
     </MachineSimonContainer>
   );

@@ -20,6 +20,7 @@ const MachineBinaryContainer = styled.div`
   opacity: 0;
   padding-top: 5px;
   transition: opacity 250ms ease;
+  z-index: 1;
 
   &.focused {
     opacity: 1;

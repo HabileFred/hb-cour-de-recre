@@ -19,6 +19,7 @@ const MachineFusesContainer = styled.div`
   opacity: 0;
   transition: opacity 250ms ease;
   padding-left: 17px;
+  z-index: 1;
 
   &.focused {
     opacity: 1;

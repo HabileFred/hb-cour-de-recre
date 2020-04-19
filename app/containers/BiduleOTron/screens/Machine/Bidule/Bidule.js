@@ -23,6 +23,7 @@ const MachineBiduleContainer = styled.div`
   display: flex;
   flex-flow: column;
   align-items: center;
+  z-index: 1;
 
   @keyframes grow {
     from {

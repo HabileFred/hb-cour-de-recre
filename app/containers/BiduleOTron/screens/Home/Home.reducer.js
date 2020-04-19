@@ -33,8 +33,10 @@ export class ReducerHome {
   handlePadSubmit() {
     const { home } = getDraft();
     if (home.cursor === 0) {
+      SFX.click();
       focus.setScreen('machine');
     } else if (home.cursor === 1) {
+      SFX.click();
       focus.setScreen('launcher');
     } else {
       SFX.wrong();

@@ -42,7 +42,7 @@ const IndicatorsContainer = styled.div`
   left: 1116px;
   width: 60px;
   height: 260px;
-  z-index: -1;
+  z-index: 0;
 
   .i {
     position:absolute;

@@ -113,6 +113,7 @@ const CacheBidule = styled.div`
   top: 236px;
   width: 190px;
   height: 215px;
+  z-index: 2;
   animation-name: ${props => props.animation ? cacheBiduleAnimations[props.animation].name : 'none'};
   animation-timing-function: ease-out;
   animation-duration: ${props => props.animation ? cacheBiduleAnimations[props.animation].duration : 0};
@@ -145,7 +146,7 @@ const Wrapper = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  pointerEvents: none;
+  pointer-events: none;
   ${focusKeys.reduce((acc, key) => {
     const k = key.toLowerCase();
     acc += '&.focus-' + k + ' path[class$="focus-' + k + '"]{stroke-width:' + theme.focus.strokeWidth + ';stroke:' + theme.focus.color + ';fill:' + theme.focus.color + ';}\n';
@@ -164,6 +165,7 @@ const Wrapper = styled.div`
     top: 92px;
     height: 89px;
     width: 164px;
+    z-index: 1;
     animation: ${rotateX} 3s linear infinite;  
   }
 `;
@@ -221,10 +223,10 @@ function Machine({ dispatch, store, bidule, pieces, pipes, lights, binary, fuses
       width: '100%',
       height: '530px',
       cursor: 'not-allowed',
-      //background: `url('${imgBackground}') top left no-repeat`
+      background: `url('${imgBackground}') top left no-repeat`
     }}>
       <Wrapper className={classnames(classNames)}>
-        <BiduleOTron />
+        <BiduleOTron style={{ position: 'absolute', zIndex: 1 }}/>
         <ImagePancarte className="pancarte" />
         <MachineBidule focusId="bidule" bidule={bidule} />
         <MachinePieces focusId="pieces" pieces={pieces} />

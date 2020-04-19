@@ -19,6 +19,7 @@ const MachineLightbulbsContainer = styled.div`
   height: 122px;
   opacity: 0.5;
   transition: opacity 250ms ease;
+  z-index: 1;
 
   &.focused,
   &.solved {
