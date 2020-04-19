@@ -49,6 +49,9 @@ class ReducerBinary {
         v += String(value);
       }
       draft.binary.values[idx] = v;
+      if (v === draft.binary.solution[idx]) {
+        draft.binary.index += 1;
+      }
       this.check();
     } else {
       SFX.wrong();
