@@ -82,6 +82,7 @@ const BiduleOTronContainer = styled.div`
   flex-flow: column;
   align-items: center;
   justify-content: center;
+  padding: 12px;
 `;
 
 export function BiduleOTron({ nav, game, status }) {
