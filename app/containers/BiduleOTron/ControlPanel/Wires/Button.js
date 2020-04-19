@@ -2,12 +2,18 @@ import React from 'react';
 import classnames from 'classnames';
 import styled from 'styled-components';
 
+import theme from 'BOT/Theme';
+
 const Wrapper = styled.button`
   border: none;
   outline: none;
   padding: 0;
   background: none;
   margin-bottom: -8px;
+
+  &.selected path[class$="fill-color"] {
+    fill: ${theme.focus.color};
+  }
 `;
 
 import Socket1 from './img/bouton_cables_1_off.svg';
