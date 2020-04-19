@@ -4,6 +4,7 @@
  *
  */
 import { objectsEqual } from 'BOT/utils';
+import { SFX } from 'BOT/SoundManager';
 
 import { initialState } from 'BOT/reducers/initialState';
 import { focus } from 'BOT/reducers/focus';
@@ -44,6 +45,7 @@ export class ReducerLights {
    * @param {*} colors
    */
   lightsToggle(colors) {
+    SFX.click();
     const draft = getDraft();
     colors.forEach(c => draft.lights.values[c] = !draft.lights.values[c]);
     this.checkLights();
@@ -69,6 +71,8 @@ export class ReducerLights {
       case 'M':
         this.lightsToggle(['purple', 'yellow']);
         break;
+      default:
+        SFX.wrong();
     }
   }
 
