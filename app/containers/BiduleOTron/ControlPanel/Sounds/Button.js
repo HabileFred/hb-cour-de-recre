@@ -44,17 +44,17 @@ import SVGImageOn from './img/bouton_son_on.svg';
 import SVGMachineOn from './img/bouton_machine_on.svg';
 import SVGMachineOff from './img/bouton_machine_off.svg';
 
-function Button({ onClick, action, pushed }) {
+function Button({ onClick, action, pushed, ...props }) {
   if (action === 'onOff') {
     return (
-        <Wrapper type="button" onClick={onClick} className={classnames({ pushed })}>
+        <Wrapper type="button" onClick={onClick} className={classnames({ pushed })} {...props}>
           <SVGMachineOff className={`off`}/>
           <SVGMachineOn className={`on`}/>
         </Wrapper>
     );
   }
   return (
-      <Wrapper type="button" onClick={onClick} className={classnames({ pushed })}>
+      <Wrapper type="button" onClick={onClick} className={classnames({ pushed })} {...props}>
         <SVGImageOff className={`off button-${action}`}/>
         <SVGImageOn className={`on button-${action}`}/>
       </Wrapper>
