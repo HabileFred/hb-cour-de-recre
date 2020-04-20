@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 import { SFX } from 'BOT/SoundManager';
 import { focus } from 'BOT/reducers/focus';
@@ -30,6 +30,7 @@ import Lever from './Animations/Lever/Lever';
 
 import ImageBidulePresent from './img/bidule_nom.svg';
 import ImageBiduleAbsent from './img/bidule_aucun.svg';
+import ImagePancarte from './img/pancarte.svg';
 
 import ImageLauncher from './img/lance_bidule.svg';
 import imgBiduleOK from './img/bidule_ok.png';
@@ -56,6 +57,21 @@ const BiduleOK = styled.div`
   background-size: contain;
 `;
 
+const rotateX = keyframes`
+  from {
+    transform: rotateX(20deg);
+    transform-origin: bottom center;
+  }
+  50% {
+    transform: rotateX(0deg);
+    transform-origin: bottom center;
+  }
+  to {
+    transform: rotateX(-20deg);
+    transform-origin: bottom center;
+  }
+`;
+
 const Wrapper = styled.section`
   width: 100%;
   height: 530px;
@@ -72,8 +88,17 @@ const Wrapper = styled.section`
     height: 31px;
     z-index: 2;
   }
-`;
 
+  .pancarte {
+    position: absolute;
+    left: 601px;
+    top: 40px;
+    height: 89px;
+    width: 164px;
+    z-index: 3;
+    animation: ${rotateX} 3s linear infinite;
+  }
+`;
 
 const wait = async (ms) => new Promise((resolve) => {
   setTimeout(resolve, ms);
@@ -142,6 +167,7 @@ function Launcher({ dispatch, params, bidule, radar }) {
       }}>
         <ImageLauncher />
       </div>
+      <ImagePancarte className="pancarte" />
       <IconMailbox style={{ position: 'absolute', top: '30px', right: '50px', zIndex: 1, display: (bidule.SOLVED ? 'block' : 'none') }} />
       <Barometer />
       <Antenna animated={bidule.SOLVED} />
