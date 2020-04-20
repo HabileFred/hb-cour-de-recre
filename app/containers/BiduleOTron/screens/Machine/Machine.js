@@ -138,6 +138,7 @@ const rotateX = keyframes`
 
 import theme from 'BOT/Theme';
 import { makeSelectNav } from '../../selectors';
+import IconMailbox from 'BOT/img/icone_message.svg';
 
 const focusKeys = ['binary', 'pieces', 'wires', 'fuses', 'lights', 'simon', 'pipes'];
 const Wrapper = styled.div`
@@ -226,6 +227,7 @@ function Machine({ dispatch, store, bidule, pieces, pipes, lights, binary, fuses
       background: `url('${imgBackground}') top left no-repeat`
     }}>
       <Wrapper className={classnames(classNames)}>
+        <IconMailbox style={{ position: 'absolute', top: '30px', right: '50px', zIndex: 1 }} />
         <BiduleOTron style={{ position: 'absolute', zIndex: 1 }}/>
         <ImagePancarte className="pancarte" />
         <MachineBidule focusId="bidule" bidule={bidule} />

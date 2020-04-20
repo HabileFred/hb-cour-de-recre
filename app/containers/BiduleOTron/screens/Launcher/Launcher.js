@@ -34,6 +34,8 @@ import ImageBiduleAbsent from './img/bidule_aucun.svg';
 import ImageLauncher from './img/lance_bidule.svg';
 import imgBiduleOK from './img/bidule_ok.png';
 import imgBackground from 'BOT/img/fond_machine.png';
+import IconMailbox from 'BOT/img/icone_message.svg';
+
 import { popup, gameCompleted, removeControlPanelFocus } from '../../actions';
 
 function BiduleName({ present, ...props }) {
@@ -139,6 +141,7 @@ function Launcher({ dispatch, params, bidule, radar }) {
       }}>
         <ImageLauncher />
       </div>
+      <IconMailbox style={{ position: 'absolute', top: '30px', right: '50px', zIndex: 1 }} />
       <Barometer />
       <Antenna animated={bidule.SOLVED} />
       <Radar radar={radar} focusId="radar" enabled={radarEnabled} />
