@@ -8,10 +8,10 @@ import ImageLever from './levier_envoi.svg';
 
 const Wrapper = styled.div`
   position: absolute;
-  left: 220px;
-  top: 260px;
-  width: 137px;
-  height: 119px;
+  left: 247px;
+  top: 279px;
+  width: 100px;
+  height: 87px;
   z-index: 0;
 
   &.active path.levier_envoi_svg__fill-color {
