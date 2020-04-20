@@ -75,7 +75,10 @@ const PointerWrapper = styled.div`
   top: 7px;
   width: 107px;
   height: 107px;
-  animation: ${rotatingPointer} 2s linear infinite;
+  display: ${props => props.enabled ? 'block' : 'none'};
+  animation-name: ${props => props.enabled ? rotatingPointer : 'none'};
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
   transform-origin: 53px 53px;
   z-index: 5;
 `;
@@ -109,7 +112,7 @@ const Radar = function({ radar, focused, solved, enabled }) {
         <ImageIndicatorOff className="indicator" />
         {solved ? <ImageIndicatorOn className="indicator on" /> : null}
         <Cursor enabled={enabled} x={radar.cursor.x} y={radar.cursor.y} />
-        <PointerWrapper enabled={true}>
+        <PointerWrapper enabled={enabled}>
           <ImagePointer />
         </PointerWrapper>
       </Wrapper>
