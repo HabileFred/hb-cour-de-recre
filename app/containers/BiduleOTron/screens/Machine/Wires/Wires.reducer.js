@@ -53,6 +53,7 @@ export class ReducerWires {
       const v = `${draft.wires.sockets.top}${draft.wires.sockets.bottom}`;
       // Si fil attendu, on le place dans les fils correctement branchés (values).
       if (draft.wires.solution.indexOf(v) !== -1 && draft.wires.values.indexOf(v) === -1) {
+        SFX.electricity();
         draft.wires.values.push(v);
         // Résolu si 3 fils correctement branchés.
         draft.wires.SOLVED = draft.wires.values.length === 3;
@@ -60,8 +61,6 @@ export class ReducerWires {
           // On teste quand même encore ici si c'est le bidule attendu
           // qui a été choisi.
           draft.bidule.SOLVED = draft.bidule.index === draft.bidule.solution;
-        } else {
-          SFX.electricity();
         }
       }
       // Dès que deux prises ont été sélectionnées,
