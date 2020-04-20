@@ -18,12 +18,12 @@ import Button from './Button';
 
 const ButtonGroupWrapper = styled.section`
   display: grid;
-  grid-template-columns: repeat(3, 43px);
+  grid-template-columns: 60px 43px 43px;
   grid-gap: 10px;
   grid-auto-rows: 36px;
   position: absolute;
-  bottom: 146px;
-  left: 291px;
+  bottom: 144px;
+  left: 236px;
 `;
 
 /**
@@ -45,9 +45,22 @@ function ButtonGroupSounds({ dispatch, sounds, status }) {
 
   return (
     <ButtonGroupWrapper>
-      <Button action="onOff" title={status === 'on' ? 'Éteindre la machine' : 'Allumer la machine'} onClick={confirmOnOff} pushed={status === 'on'} />
-      <Button action="sfx" title="Activer les super effets sonores gratuits" type="button" onClick={() => dispatch(sfxToggle())} pushed={sounds.sfx} />
-      <Button action="music" title="Activer la super musique d'ambiance d'Anthony" type="button" onClick={() => dispatch(musicToggle())} pushed={sounds.music} />
+      <Button
+        style={{ marginTop: '3px' }}
+        action="onOff"
+        title={status === 'on' ? 'Éteindre la machine' : 'Allumer la machine'}
+        onClick={confirmOnOff} pushed={status === 'on'}
+      />
+      <Button
+        action="sfx"
+        title="Activer les super effets sonores gratuits"
+        onClick={() => dispatch(sfxToggle())} pushed={sounds.sfx}
+      />
+      <Button
+        action="music"
+        title="Activer la super musique d'ambiance d'Anthony"
+        onClick={() => dispatch(musicToggle())} pushed={sounds.music}
+      />
     </ButtonGroupWrapper>
   );
 }
