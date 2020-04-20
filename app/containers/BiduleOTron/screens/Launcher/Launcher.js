@@ -106,15 +106,16 @@ function Launcher({ dispatch, params, bidule, radar }) {
     setLeverStatus(false);
     await wait(1000);
     setPropellantAnimation('stopping');
-    dispatch(popup('score', () => {
-      focus.from('params').next();
-    }));
+    dispatch(popup(
+      { id: 'score', closeButton: 'Submit' },
+      () => focus.from('params').next()
+    ));
   };
 
   useEffect(() => {
     if (params.SOLVED) {
       dispatch(popup(
-        'bidule-envoi-debut',
+        { id: 'bidule-envoi-debut', closeButton: 'Submit' },
         () => setImmediate(visualFX),
       ));
     }
