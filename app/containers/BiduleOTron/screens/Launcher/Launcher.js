@@ -141,7 +141,7 @@ function Launcher({ dispatch, params, bidule, radar }) {
       }}>
         <ImageLauncher />
       </div>
-      <IconMailbox style={{ position: 'absolute', top: '30px', right: '50px', zIndex: 1 }} />
+      <IconMailbox style={{ position: 'absolute', top: '30px', right: '50px', zIndex: 1, display: (bidule.SOLVED ? 'block' : 'none') }} />
       <Barometer />
       <Antenna animated={bidule.SOLVED} />
       <Radar radar={radar} focusId="radar" enabled={radarEnabled} />
