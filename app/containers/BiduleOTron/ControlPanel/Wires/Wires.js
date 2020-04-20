@@ -1,11 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
+import classnames from 'classnames';
 
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 
-import { makeSelectWires } from '../../selectors';
+import { makeSelectWires } from 'BOT/selectors';
+import withFocus from 'BOT/withFocus';
 
 import {
   wireSelectTopSocket,
@@ -16,6 +18,7 @@ import {
 import ImgWire11 from './img/cable_11.svg';
 import ImgWire24 from './img/cable_24.svg';
 import ImgWire32 from './img/cable_32.svg';
+import ImgWireIndicator from './img/cable_indicatif.svg';
 
 const Wrapper = styled.section`
   position: absolute;
@@ -24,6 +27,17 @@ const Wrapper = styled.section`
   bottom: 108px;
   left: 441px;
   height: 60px;
+
+  .wire-indicator {
+    position: absolute;
+    top: -6px;
+    left: 30px;
+    display: none;
+  }
+
+  &.focused .wire-indicator {
+    display: block;
+  }
 `;
 
 const Line1 = styled.section`
@@ -86,7 +100,8 @@ import Button from './Button';
  */
 function ButtonGroupWires({ dispatch, wires, focused }) {
   return (
-    <Wrapper focused={focused}>
+    <Wrapper className={classnames({ focused })}>
+      <ImgWireIndicator  className="wire-indicator" />
       <Line1>
         <Button value={1} selected={wires.sockets.top === 1} onClick={() => dispatch(wireSelectTopSocket(1))} />
         <Button value={2} selected={wires.sockets.top === 2} onClick={() => dispatch(wireSelectTopSocket(2))} />
@@ -120,4 +135,4 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-export default compose(withConnect)(ButtonGroupWires);
+export default compose(withConnect, withFocus)(ButtonGroupWires);

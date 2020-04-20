@@ -60,7 +60,7 @@ function ControlPanel({ controlPanelFocus, nav }) {
       <ButtonGroupColors grayscale={nav.focus.indexOf('lights') !== -1} />
       <ButtonGroupFuses />
       <ButtonGroupPipes />
-      <ButtonGroupWires />
+      <ButtonGroupWires focusId="wires" />
       <ButtonGroupKeypad />
       <ButtonGroupSimon />
       <ButtonGroupSubmitCancel />
