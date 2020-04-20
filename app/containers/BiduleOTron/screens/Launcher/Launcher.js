@@ -26,6 +26,7 @@ import ElectricWire from './Animations/ElectricWire/ElectricWire';
 import Propellant from './Animations/Propellant/Propellant';
 import Porthole from './Animations/Porthole/Porthole';
 import Transmission from './Animations/Transmission/Transmission';
+import Lever from './Animations/Lever/Lever';
 
 import ImageBidulePresent from './img/bidule_nom.svg';
 import ImageBiduleAbsent from './img/bidule_aucun.svg';
@@ -71,33 +72,45 @@ const Wrapper = styled.section`
   }
 `;
 
+
+const wait = async (ms) => new Promise((resolve) => {
+  setTimeout(resolve, ms);
+});
+
 function Launcher({ dispatch, params, bidule, radar }) {
 
   const [portholeAnimation, setPortholeAnimation] = useState(null);
   const [propellantAnimation, setPropellantAnimation] = useState(null);
+  const [leverStatus, setLeverStatus] = useState(false);
 
-  const visualFX = () => {
+  const visualFX = async () => {
+    await wait(300);
+    setLeverStatus(true);
+    await wait(500);
+
     SFX.play('fan');
     setPropellantAnimation('starting');
-    window.setTimeout(() => {
-      setPropellantAnimation('fast');
-      setPortholeAnimation('shake');
-      window.setTimeout(() => {
-        SFX.play('rocket');
-        setPortholeAnimation('launch');
-        window.setTimeout(() => {
-          setPropellantAnimation('stopping');
-          dispatch(popup('score', () => {
-            focus.from('params').next();
-          }));
-        }, 4000); // score
-      }, 5000); // launch
-    }, 2500); // shake
+    await wait(2100);
+
+    setPropellantAnimation('fast');
+    setPortholeAnimation('shake');
+    await wait(5000);
+
+    dispatch(gameCompleted());
+    SFX.play('rocket');
+    setPortholeAnimation('launch');
+    await wait(3000);
+
+    setLeverStatus(false);
+    await wait(1000);
+    setPropellantAnimation('stopping');
+    dispatch(popup('score', () => {
+      focus.from('params').next();
+    }));
   };
 
   useEffect(() => {
     if (params.SOLVED) {
-      dispatch(gameCompleted());
       dispatch(popup(
         'bidule-envoi-debut',
         () => setImmediate(visualFX),
@@ -136,6 +149,7 @@ function Launcher({ dispatch, params, bidule, radar }) {
       <Propellant animation={propellantAnimation} />
       <BiduleName present={bidule.SOLVED} />
       <BiduleOK present={bidule.SOLVED} />
+      <Lever active={params.SOLVED} on={leverStatus} />
       <Porthole bidule={bidule.SOLVED ? bidule.index + 1 : 0} animation={portholeAnimation}/>
       <Transmission animated={radar.SOLVED} />
     </Wrapper>
