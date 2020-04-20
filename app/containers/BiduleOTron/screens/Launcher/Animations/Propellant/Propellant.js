@@ -5,19 +5,19 @@ import ImagePropellant from './propulseur.svg';
 
 const animation = keyframes`
 from {
-  transform: scaleY(1);
+  transform: scale(1, 1);
 }
 50% {
-  transform: scaleY(0.9);
+  transform: scale(1.02, 0.9)
 }
 to {
-  transform: scaleY(1);
+  transform: scale(1, 1);
 }
 `;
 
 const Wrapper = styled.div`
 position: absolute;
-left: 325px;
+left: 327px;
 top: 144px;
 width: 247px;
 height: 316px;

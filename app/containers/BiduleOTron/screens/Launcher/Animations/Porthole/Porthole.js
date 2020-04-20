@@ -66,7 +66,7 @@ const PortholeWrapper = styled.div`
     display: block;
     top: 0;
     left: 0;
-    width: 167px;
+    width: 152px;
     height: 166px;
     background: white;
   }
