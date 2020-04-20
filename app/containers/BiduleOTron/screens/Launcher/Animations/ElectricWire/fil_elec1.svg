@@ -26,7 +26,7 @@
       transform="translate(0 -6)">
       <animateMotion
           xlink:href="#sparkle2"
-          dur="800ms"
+          dur="900ms"
           repeatCount="indefinite"
           rotate="auto"
           fill="freeze">
@@ -42,7 +42,7 @@
       transform="translate(0 -6)">
       <animateMotion
           xlink:href="#sparkle3"
-          dur="800ms"
+          dur="700ms"
           repeatCount="indefinite"
           rotate="auto"
           fill="freeze">
