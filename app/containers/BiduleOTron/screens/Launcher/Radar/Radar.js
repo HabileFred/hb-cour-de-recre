@@ -78,6 +78,7 @@ const PointerWrapper = styled.div`
   display: ${props => props.enabled ? 'block' : 'none'};
   animation-name: ${props => props.enabled ? rotatingPointer : 'none'};
   animation-duration: 2s;
+  animation-timing-function: linear;
   animation-iteration-count: infinite;
   transform-origin: 53px 53px;
   z-index: 5;
