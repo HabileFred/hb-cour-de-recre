@@ -184,9 +184,9 @@ const BiduleOTronReducer = (state = initialState, action) =>
       case PAD_MAILBOX:
         if (focus.is('login/password')) {
           loginReducer.handlePadMailbox();
-        } else if (focus.is('launcher/radar')) {
+        } else if (focus.is('launcher/')) {
           radarReducer.handlePadMailbox();
-        } else if (focus.is('machine/bidule')) {
+        } else if (focus.is('machine/')) {
           biduleReducer.handlePadMailbox();
         } else {
           SFX.wrong();
