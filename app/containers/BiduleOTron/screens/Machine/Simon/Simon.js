@@ -88,14 +88,10 @@ const MachineSimonContainer = styled.div`
   }
 `;
 
-/*
-const Indicator = styled.div`
-  width: 52px;
-  height: 15px;
-  margin-bottom: 14px;
-  background: top left no-repeat url('${props => images[props.index][props.on ? 1 : 0]}');
-`;
-*/
+const MS = async (ms) => new Promise((resolve) => {
+  setTimeout(resolve, ms);
+});
+
 const MachineSimon = function({ dispatch, simon, focused, solved }) {
 
   let timer;
@@ -104,7 +100,7 @@ const MachineSimon = function({ dispatch, simon, focused, solved }) {
     dispatch({ type: 'SIMON_SEQ_PLAY_NEXT' });
   };
 
-  const startSequencer = () => {
+  const startSequencer = async () => {
     timer = window.setInterval(sequencer, 1000);
   };
 
@@ -115,10 +111,15 @@ const MachineSimon = function({ dispatch, simon, focused, solved }) {
     }
   };
 
+  // Appelée au montage du composant, pour générer une séquence aléatoire.
   useEffect(() => {
     dispatch({ type: 'SIMON_SEQ_GENERATE' });
   }, []);
 
+  // Appelée
+  // - quand le focus arrive sur le jeu de simon
+  // OU
+  // - quand on passe de la séquence jouée au joueur et vice versa.
   useEffect(() => {
     if (focused && simon.status === 'Sequence') {
       startSequencer();
@@ -127,6 +128,14 @@ const MachineSimon = function({ dispatch, simon, focused, solved }) {
     }
     return stopSequencer;
   }, [simon.status, focused]);
+
+  // Après que le joueur a terminé une séquence, il y a un temps d'attente
+  // qui est géré ici (une seconde).
+  useEffect(() => {
+    if (simon.waitingForNextSequence) {
+      setTimeout(() => dispatch({ type: 'SIMON_SEQ_NEXT' }), 1000);
+    }
+  }, [simon.waitingForNextSequence]);
 
   const playingSeq = simon.status === 'Sequence';
 

@@ -19,6 +19,7 @@ export class ReducerSimon {
       length: 1,
       progress: 0,
       desired: [1, 4, 3, 5, 2, 3, 2],
+      waitingForNextSequence: false,
     };
   }
 
@@ -31,13 +32,11 @@ export class ReducerSimon {
     SFX.wrong();
   }
 
-  playerSuccess() {
-    const { simon } = getDraft();
-    simon.cursor = 0;
-    simon.length += 1;
-    simon.status = 'Sequence';
-    focus.controlPanel().removeFocus('Simon');
+  async playerSuccess() {
     SFX.click();
+    const { simon } = getDraft();
+    simon.length += 1; // This will increment the visual counter on the UI.
+    simon.waitingForNextSequence = true;
   }
 
   handleButtonPressed(button) {
@@ -88,6 +87,11 @@ export class ReducerSimon {
       });
       simon.status = 'Sequence';
       simon.cursor = 0;
+    } else if (action.type === 'SIMON_SEQ_NEXT') {
+      simon.waitingForNextSequence = false;
+      simon.cursor = 0;
+      simon.status = 'Sequence';
+      focus.controlPanel().removeFocus('Simon');
     }
   }
 }
