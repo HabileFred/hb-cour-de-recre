@@ -167,7 +167,7 @@ const Wrapper = styled.div`
     height: 89px;
     width: 164px;
     z-index: 1;
-    animation: ${rotateX} 3s linear infinite;  
+    animation: ${rotateX} 3s linear infinite;
   }
 `;
 
