@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 
-import { makeSelectSounds, makeSelectStatus } from '../../selectors';
+import { makeSelectSounds, makeSelectStatus } from 'BOT/selectors';
+import theme from 'BOT/Theme';
 
 import {
   musicToggle,
@@ -15,6 +16,7 @@ import {
 } from '../../actions';
 
 import Button from './Button';
+import ImagePower from './img/allumer.svg';
 
 const ButtonGroupWrapper = styled.section`
   display: grid;
@@ -24,6 +26,16 @@ const ButtonGroupWrapper = styled.section`
   position: absolute;
   bottom: 144px;
   left: 236px;
+`;
+
+const PowerIcon = styled.div`
+  position: absolute;
+  top: 10px;
+  left: -22px;
+
+  &.off path {
+    fill: darkred;
+  }
 `;
 
 /**
@@ -45,6 +57,9 @@ function ButtonGroupSounds({ dispatch, sounds, status }) {
 
   return (
     <ButtonGroupWrapper>
+      <PowerIcon className={status}>
+        <ImagePower />
+      </PowerIcon>
       <Button
         style={{ marginTop: '3px' }}
         action="onOff"
