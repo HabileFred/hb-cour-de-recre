@@ -148,7 +148,6 @@ export function BiduleOTron({ nav, game, status }) {
 
     case 'score':
       const minutes = Math.ceil((game.completedAt - game.startedAt) / 60000);
-      console.log(game.startedAt, game.completedAt, minutes);
       popup = (
         <Popup>
           <PopupScore />

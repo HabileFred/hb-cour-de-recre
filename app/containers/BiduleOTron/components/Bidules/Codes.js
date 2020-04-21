@@ -50,7 +50,6 @@ const Code = function(props) {
     case 'transmetteur':
       return (<Transmetteur/>);
     default:
-      console.log(props.name, 'manquant');
       return null;
   }
 }
