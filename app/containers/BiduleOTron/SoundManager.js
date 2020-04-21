@@ -117,6 +117,12 @@ class SoundManager {
       this.sounds[name].stop();
     }
   }
+
+  stopAll() {
+    for (name in this.sounds) {
+      this.sounds[name].stop();
+    }
+  }
 }
 
 const soundManager = new SoundManager();
@@ -124,6 +130,8 @@ export default soundManager;
 
 export const SFX = {
   play: (s) => soundManager.play(s),
+  stop: (s) => soundManager.stop(s),
+  stopAll: () => soundManager.stopAll(),
   enableSFX: (b) => soundManager.enableSFX(b),
 
   click: (n = '') => soundManager.play(`click${n}`),

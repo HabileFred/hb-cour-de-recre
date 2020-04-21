@@ -321,15 +321,18 @@ const BiduleOTronReducer = (state = initialState, action) =>
 
       case COMPUTER_ON_OFF:
         if (draft.status == 'on') {
+          SFX.stopAll();
           localStorage.removeItem('state');
           const newState = { ...initialState, status: 'off' };
           newState.nav.screen = 'off';
           newState.nav.focus = ['off'];
           newState.nav.controlPanel.focus = ['On'];
+          SFX.enableSFX(newState.sounds.sfx);
           return newState;
         } else {
           draft.status = 'on';
           focus.setScreen('login');
+          SFX.enableSFX(draft.sounds.sfx);
           SFX.play('boot');
         }
         break;

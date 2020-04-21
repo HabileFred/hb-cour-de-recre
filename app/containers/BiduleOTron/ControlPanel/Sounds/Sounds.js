@@ -53,13 +53,15 @@ function ButtonGroupSounds({ dispatch, sounds, status }) {
       />
       <Button
         action="sfx"
+        disabled={status === 'off'}
         title="Activer les super effets sonores gratuits"
-        onClick={() => dispatch(sfxToggle())} pushed={sounds.sfx}
+        onClick={() => dispatch(sfxToggle())} pushed={status === 'on' && sounds.sfx}
       />
       <Button
         action="music"
+        disabled={status === 'off'}
         title="Activer la super musique d'ambiance d'Anthony"
-        onClick={() => dispatch(musicToggle())} pushed={sounds.music}
+        onClick={() => dispatch(musicToggle())} pushed={status === 'on' && sounds.music}
       />
     </ButtonGroupWrapper>
   );
