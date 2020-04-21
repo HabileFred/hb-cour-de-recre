@@ -4,8 +4,8 @@ import { getDraft } from './draft';
 
 class Focus {
   constructor() {
-    const initialScreen = 'login'; // FIXME 'login'
-    const initialFocus = ['password'];  // FIXME 'password'
+    const initialScreen = 'off'; // FIXME 'login'
+    const initialFocus = ['off'];  // FIXME 'password'
 
     initialState.nav = {
       popup: {
@@ -20,16 +20,16 @@ class Focus {
           $start: 'off',
           off: 'login/',
         },
+        loading: {
+          $start: 'loading',
+          loading: 'login/',
+        },
         login: {
           $start: 'password',
-          password: 'home/', // FIXME? 'loading/'
+          password: 'loading/',
         },
         home: {
           $start: 'menu',
-        },
-        loading: {
-          $start: 'loading',
-          loading: 'machine/',
         },
         machine: {
           $start: 'bidule',
@@ -61,13 +61,13 @@ class Focus {
           'home/menu': ['ColoredButtons', 'Submit', 'Cancel'],
 
           'machine/bidule': ['Arrows', 'Submit', 'Cancel', 'Mailbox'],
-          'machine/pieces': ['Arrows', 'ColoredButtons', 'Cancel'],
-          'machine/pipes': ['Pipes', 'Cancel'],
-          'machine/binary': ['Keypad', 'Cancel', 'Arrows'],
-          'machine/wires': ['Wires', 'Cancel'],
-          'machine/fuses': ['Fuses', 'Submit', 'Cancel'],
-          'machine/lights': ['ColoredButtons', 'Cancel'],
-          'machine/simon': ['Simon', 'Cancel'],
+          'machine/pieces': ['Arrows', 'ColoredButtons', 'Cancel', 'Mailbox'],
+          'machine/pipes': ['Pipes', 'Cancel', 'Mailbox'],
+          'machine/binary': ['Keypad', 'Cancel', 'Arrows', 'Mailbox'],
+          'machine/wires': ['Wires', 'Cancel', 'Mailbox'],
+          'machine/fuses': ['Fuses', 'Submit', 'Cancel', 'Mailbox'],
+          'machine/lights': ['ColoredButtons', 'Cancel', 'Mailbox'],
+          'machine/simon': ['Simon', 'Cancel', 'Mailbox'],
 
           'launcher/radar': ['Arrows', 'Submit', 'Cancel', 'Mailbox'],
           'launcher/params': ['Keypad', 'ColoredButtons', 'Simon', 'Cancel'],

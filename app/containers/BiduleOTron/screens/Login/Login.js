@@ -6,6 +6,8 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import styled, { keyframes } from 'styled-components';
 
+import { SFX } from 'BOT/SoundManager';
+
 import { makeSelectLogin } from '../../selectors';
 import { gameStarted } from '../../actions';
 
@@ -45,6 +47,7 @@ const animation = keyframes`
 function Login({ dispatch, login }) {
 
   useEffect(() => {
+    SFX.play('boot');
     dispatch(gameStarted());
   }, []);
 

@@ -331,9 +331,8 @@ const BiduleOTronReducer = (state = initialState, action) =>
           return newState;
         } else {
           draft.status = 'on';
-          focus.setScreen('login');
+          focus.setScreen('loading');
           SFX.enableSFX(draft.sounds.sfx);
-          SFX.play('boot');
         }
         break;
 

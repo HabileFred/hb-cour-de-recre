@@ -1,5 +1,5 @@
 export const initialState = {
-  status: 'on',
+  status: 'off',
   $game: {
     startedAt: null,
     completedAt: null,
