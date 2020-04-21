@@ -22,6 +22,7 @@ export class ReducerLogin {
   }
 
   reset() {
+    SFX.wrong();
     const { login } = getDraft();
     login.cursor = 0;
     login.password.forEach((v, i) => login.password[i] = -1);
@@ -30,7 +31,6 @@ export class ReducerLogin {
   handleKeypadInput(value) {
     const { login } = getDraft();
     if (value === '*' || login.cursor === 4) {
-      SFX.wrong();
       this.reset();
     } else {
       SFX.click(2);
@@ -42,10 +42,10 @@ export class ReducerLogin {
   handlePadSubmit() {
     const { login } = getDraft();
     if (arraysEqual(login.password, login.solution)) {
+      SFX.click();
       login.SOLVED = true;
       focus.from('password').next();
     } else {
-      SFX.wrong();
       this.reset();
     }
   }
@@ -55,6 +55,7 @@ export class ReducerLogin {
   }
 
   handlePadMailbox() {
+    SFX.click();
     focus.popup('mail');
   }
 }
