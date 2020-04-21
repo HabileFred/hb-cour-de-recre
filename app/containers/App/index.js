@@ -13,9 +13,12 @@ import { Switch, Route } from 'react-router-dom';
 import BiduleOTron from 'containers/BiduleOTron/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 
+import GlobalStyle from '../../global-styles';
+
 export default function App() {
   return (
     <React.Fragment>
+      <GlobalStyle />
       <Switch>
         <Route exact path="/" component={BiduleOTron} />
         <Route exact path="/bidule-o-tron/" component={BiduleOTron} />

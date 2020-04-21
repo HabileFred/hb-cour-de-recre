@@ -2,14 +2,10 @@ import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
   html {
-    transform: rotate(-90deg);
-    transform-origin: left top;
-    width: 100vh;
-    height: 100vw;
+    width: 100vw;
+    height: 100vh;
     overflow-x: hidden;
     position: absolute;
-    top: 100%;
-    left: 0;
   }
 
   * {
@@ -19,8 +15,6 @@ const GlobalStyle = createGlobalStyle`
 
   html,
   body {
-    height: 100%;
-    width: 100%;
     background: black;
   }
 
@@ -31,9 +25,26 @@ const GlobalStyle = createGlobalStyle`
     -webkit-user-select: none;
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: auto;
   }
 
   #app {
+    display: flex;
+    flex-flow: column;
+    justify-content: start;
+    height: 100%;
+  }
+
+  @media screen and (min-height: 780px) {
+    #app {
+      justify-content: center;
+    }
   }
 
   p,
