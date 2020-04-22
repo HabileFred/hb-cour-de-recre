@@ -85,7 +85,7 @@ const Stability = styled.div`
 
 const Velocity = styled.div`
   position: absolute;
-  left: 16px;
+  left: 36px;
   top: 19px;
   width: 14px;
   height: 15px;

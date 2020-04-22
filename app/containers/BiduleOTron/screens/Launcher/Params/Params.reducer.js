@@ -18,8 +18,8 @@ class ReducerParams {
       velocity: {
         SOLVED: false,
         cursor: 0,
-        values: [0, 0, 0, 0, 0, 0],
-        solution: [2, 2, 2, 2, 0, 0],
+        values: [0, 0, 0, 0],
+        solution: [2, 2, 2, 2],
       },
       stability: {
         SOLVED: false,
@@ -52,6 +52,7 @@ class ReducerParams {
     const { params } = getDraft();
     if ('ghjkl'.indexOf(button) !== -1) {
       const { stability: s } = params;
+      SFX.click();
       if (s.cursor === s.solution.length) {
         s.values.splice(0, 6, 0, 0, 0, 0, 0, 0);
         s.cursor = 0;
@@ -64,9 +65,10 @@ class ReducerParams {
     } else {
       const value = 'yuiop'.indexOf(button);
       if (value !== -1) {
+        SFX.click();
         const { velocity: v } = params;
         if (v.cursor === v.solution.length) {
-          v.values.splice(0, 6, 0, 0, 0, 0, 0, 0);
+          v.values.splice(0, v.solution.length, 0, 0, 0, 0, 0, 0);
           v.cursor = 0;
         } else {
           v.values[v.cursor] = value + 1;
