@@ -8,7 +8,7 @@ class ReducerFuses {
 
   constructor() {
     initialState.fuses = {
-      feedback: [false, false, false, false],
+      feedback: [true, true, false, false],
       values: ['D', 'D', 'D', 'D'],
       solution: ['D', 'G', 'G', 'D'],
       SOLVED: false,
@@ -47,6 +47,7 @@ class ReducerFuses {
       c = (c === 'D') ? 'G' : 'D';
       draft.fuses.values[index] = c;
       SFX.toggleSwitch();
+      this.checkFuses();
     }
   }
 }

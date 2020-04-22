@@ -32,13 +32,18 @@ export class ReducerLights {
     };
   }
 
+  checkWiresReadiness() {
+    const draft = getDraft();
+    if (draft.fuses.SOLVED && draft.lights.SOLVED) {
+      focus.set('wires', ['fuses', 'lights']);
+    }
+  }
+
   checkLights() {
     const draft = getDraft();
     draft.lights.SOLVED = objectsEqual(draft.lights.values, draft.lights.solution);
     draft.wires.readiness.bottom = draft.lights.SOLVED;
-    if (draft.lights.SOLVED) {
-      focus.from('lights').next();
-    }
+    this.checkWiresReadiness();
   }
 
   /**
