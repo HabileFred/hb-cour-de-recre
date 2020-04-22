@@ -8,8 +8,8 @@ import ImageFrame from './img/selection_bidule.svg';
 import ImageSubmit from './img/valider.svg';
 import ImageCancel from './img/annuler.svg';
 
-import ImageLeftArrow from './img/fleche_gauche.svg'
-import ImageRightArrow from './img/fleche_droite.svg'
+import ImageLeftArrow from './img/fleche_bidule.svg'
+import ImageRightArrow from './img/fleche_droite_bidule.svg'
 
 import Bidule from 'BOT/components/Bidules/Bidules';
 import BiduleCode from 'BOT/components/Bidules/Codes';
