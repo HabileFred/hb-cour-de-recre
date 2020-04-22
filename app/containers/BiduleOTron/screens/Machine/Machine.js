@@ -201,19 +201,26 @@ function Machine({ dispatch, store, bidule, pieces, pipes, lights, binary, fuses
         { id: 'bidule-fabrication-fin', closeButton: 'Submit' },
         () => window.setTimeout(goHome, 10),
       ));
-    }, 14000);
+    }, 13000);
+  };
+
+  const popupBiduleOK = () => {
+    dispatch(popup(
+      { id: 'bidule-fabrication-debut', closeButton: 'Submit' },
+      () => window.setTimeout(biduleSolvedFX, 10),
+    ));
   };
 
   /**
    * Check if the Bidule is ready to be built.
    */
   useEffect(() => {
+    let timer;
     if (bidule.SOLVED) {
-      dispatch(popup(
-        { id: 'bidule-fabrication-debut', closeButton: 'Submit' },
-        () => window.setTimeout(biduleSolvedFX, 10),
-      ));
+      window.clearTimeout(timer);
+      timer = window.setTimeout(popupBiduleOK, 1000);
     }
+    return () => window.clearTimeout(timer);
   }, [bidule.SOLVED]);
 
 

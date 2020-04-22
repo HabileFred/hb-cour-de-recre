@@ -37,7 +37,7 @@ import imgBiduleOK from './img/bidule_ok.png';
 import imgBackground from 'BOT/img/fond_machine.png';
 import MailNotification from 'BOT/components/MailNotification/MailNotification';
 
-import { popup, gameCompleted, removeControlPanelFocus } from '../../actions';
+import { popup, gameCompleted, removeControlPanelFocus, focusNext, replaceFocus } from '../../actions';
 
 function BiduleName({ present, ...props }) {
   return present
@@ -137,22 +137,33 @@ function Launcher({ dispatch, params, bidule, radar }) {
     ));
   };
 
+  const popupOK = () => {
+    dispatch(popup(
+      { id: 'bidule-envoi-debut', closeButton: 'Submit' },
+      () => setImmediate(visualFX),
+    ));
+  };
+
   useEffect(() => {
+    let timer;
     if (params.SOLVED) {
-      dispatch(popup(
-        { id: 'bidule-envoi-debut', closeButton: 'Submit' },
-        () => setImmediate(visualFX),
-      ));
+      window.clearTimeout(timer);
+      timer = window.setTimeout(popupOK, 1000);
     }
+    return () => window.clearTimeout(timer);
   }, [params.SOLVED]);
 
-  const radarEnabled = bidule.SOLVED;
+  useEffect(() => {
+    if (radar.SOLVED) {
+      dispatch(replaceFocus('params'));
+    }
+  }, [radar.SOLVED]);
 
   useEffect(() => {
-    if (!radarEnabled) {
+    if (!bidule.SOLVED) {
       dispatch(removeControlPanelFocus(['Arrows', 'Submit', 'Mailbox']));
     }
-  }, [radarEnabled]);
+  }, [bidule.SOLVED]);
 
   return (
     <Wrapper>
@@ -174,7 +185,7 @@ function Launcher({ dispatch, params, bidule, radar }) {
       }
       <Barometer />
       <Antenna animated={bidule.SOLVED} />
-      <Radar radar={radar} focusId="radar" enabled={radarEnabled} />
+      <Radar radar={radar} focusId="radar" enabled={radar.enabled} />
       <Params params={params} focusId="params" />
       <ElectricWire w={1} animated={params.velocity.SOLVED} />
       <ElectricWire w={2} animated={params.velocity.SOLVED} />
