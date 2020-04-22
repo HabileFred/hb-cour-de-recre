@@ -14,6 +14,7 @@ class ReducerRadar {
 
   constructor() {
     initialState.radar = {
+      enabled: false,
       SOLVED: false,
       cursor: { x: 0, y: 0 },
       solution: { x: 2, y: 2 },
@@ -22,7 +23,7 @@ class ReducerRadar {
 
   handlePadDown() {
     const draft = getDraft();
-    if (draft.bidule.SOLVED) {
+    if (draft.bidule.SOLVED && draft.radar.enabled) {
       const y = draft.radar.cursor.y;
       draft.radar.cursor.y = betweenValue(y, 1, 0, 3);
       SFX.play(draft.radar.cursor.y === y ? 'wrong' : 'radar');
@@ -33,7 +34,7 @@ class ReducerRadar {
 
   handlePadUp() {
     const draft = getDraft();
-    if (draft.bidule.SOLVED) {
+    if (draft.bidule.SOLVED && draft.radar.enabled) {
       const y = draft.radar.cursor.y;
       draft.radar.cursor.y = betweenValue(y, -1, 0, 3);
       SFX.play(draft.radar.cursor.y === y ? 'wrong' : 'radar');
@@ -44,7 +45,7 @@ class ReducerRadar {
 
   handlePadLeft() {
     const draft = getDraft();
-    if (draft.bidule.SOLVED) {
+    if (draft.bidule.SOLVED && draft.radar.enabled) {
       const x = draft.radar.cursor.x;
       draft.radar.cursor.x = betweenValue(x, -1, 0, 3);
       SFX.play(draft.radar.cursor.x === x ? 'wrong' : 'radar');
@@ -55,7 +56,7 @@ class ReducerRadar {
 
   handlePadRight() {
     const draft = getDraft();
-    if (draft.bidule.SOLVED) {
+    if (draft.bidule.SOLVED && draft.radar.enabled) {
       const x = draft.radar.cursor.x;
       draft.radar.cursor.x = betweenValue(x, 1, 0, 3);
       SFX.play(draft.radar.cursor.x === x ? 'wrong' : 'radar');
@@ -66,7 +67,7 @@ class ReducerRadar {
 
   handlePadSubmit() {
     const draft = getDraft();
-    if (draft.bidule.SOLVED) {
+    if (draft.bidule.SOLVED && draft.radar.enabled) {
       const { radar } = draft;
       radar.SOLVED = radar.cursor.x === radar.solution.x && radar.cursor.y === radar.solution.y;
       if (radar.SOLVED) {
@@ -81,8 +82,9 @@ class ReducerRadar {
   }
 
   handlePadMailbox() {
-    const { bidule } = getDraft();
+    const { bidule, radar } = getDraft();
     if (bidule.SOLVED) {
+      radar.enabled = true;
       focus.popup('mail-direction');
     } else {
       SFX.wrong();

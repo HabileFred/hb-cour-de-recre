@@ -35,7 +35,7 @@ import ImagePancarte from './img/pancarte.svg';
 import ImageLauncher from './img/lance_bidule.svg';
 import imgBiduleOK from './img/bidule_ok.png';
 import imgBackground from 'BOT/img/fond_machine.png';
-import IconMailbox from 'BOT/img/icone_message.svg';
+import MailNotification from 'BOT/components/MailNotification/MailNotification';
 
 import { popup, gameCompleted, removeControlPanelFocus } from '../../actions';
 
@@ -168,7 +168,10 @@ function Launcher({ dispatch, params, bidule, radar }) {
         <ImageLauncher />
       </div>
       <ImagePancarte className="pancarte" />
-      <IconMailbox style={{ position: 'absolute', top: '30px', right: '50px', zIndex: 1, display: (bidule.SOLVED ? 'block' : 'none') }} />
+      {bidule.SOLVED
+        ? (<MailNotification animated={!radar.enabled}/>)
+        : null
+      }
       <Barometer />
       <Antenna animated={bidule.SOLVED} />
       <Radar radar={radar} focusId="radar" enabled={radarEnabled} />

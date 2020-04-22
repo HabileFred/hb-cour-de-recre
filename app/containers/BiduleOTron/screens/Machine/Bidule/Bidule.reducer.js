@@ -14,6 +14,7 @@ export class ReducerBidule {
 
   constructor() {
     initialState.bidule = {
+      messageRead: false,
       BIDULE_COUNT: 15,
       index: 0, // FIXME PROD
       solution: 6,
@@ -96,6 +97,8 @@ export class ReducerBidule {
 
   handlePadMailbox() {
     focus.popup('mail');
+    const { bidule } = getDraft();
+    bidule.messageRead = true;
   }
 }
 
