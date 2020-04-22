@@ -178,6 +178,9 @@ function Machine({ dispatch, store, bidule, pieces, pipes, lights, binary, fuses
 
   const goHome = () => dispatch(setScreen('home'));
 
+  /**
+   * Special effects when bidule is being built.
+   */
   const biduleSolvedFX = () => {
     dispatch(setControlPanelFocus(null));
 
@@ -196,16 +199,19 @@ function Machine({ dispatch, store, bidule, pieces, pipes, lights, binary, fuses
     window.setTimeout(() => {
       dispatch(popup(
         { id: 'bidule-fabrication-fin', closeButton: 'Submit' },
-        () => setImmediate(goHome),
+        () => window.setTimeout(goHome, 10),
       ));
     }, 14000);
   };
 
+  /**
+   * Check if the Bidule is ready to be built.
+   */
   useEffect(() => {
     if (bidule.SOLVED) {
       dispatch(popup(
         { id: 'bidule-fabrication-debut', closeButton: 'Submit' },
-        () => setImmediate(biduleSolvedFX),
+        () => window.setTimeout(biduleSolvedFX, 10),
       ));
     }
   }, [bidule.SOLVED]);

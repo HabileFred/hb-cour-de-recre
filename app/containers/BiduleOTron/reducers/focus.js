@@ -199,7 +199,8 @@ class Focus {
     }
     const { nav } = getDraft();
     nav.popup.id = popupId;
-    nav.popup.reject = closeHandler;
+    nav.popup.resolve = closeHandler;
+    nav.popup.reject = null;
     const { controlPanel } = nav;
     this.prevControlPanelFocus = controlPanel.focus.slice();
     controlPanel.focus.splice(0, controlPanel.focus.length, popupCloseButton);
@@ -226,7 +227,11 @@ class Focus {
   confirmAccept() {
     const { nav } = getDraft();
     const { controlPanel } = nav;
-    controlPanel.focus.splice(0, controlPanel.focus.length, ...this.prevControlPanelFocus);
+    if (this.prevControlPanelFocus) {
+      controlPanel.focus.splice(0, controlPanel.focus.length, ...this.prevControlPanelFocus);
+    } else {
+      controlPanel.focus.splice(0, controlPanel.focus.length);
+    }
     if (nav.popup.resolve) {
       nav.popup.resolve.call(nav.popup.resolve);
     } else if (nav.popup.reject) {
@@ -238,7 +243,11 @@ class Focus {
   confirmReject() {
     const { nav } = getDraft();
     const { controlPanel } = nav;
-    controlPanel.focus.splice(0, controlPanel.focus.length, ...this.prevControlPanelFocus);
+    if (this.prevControlPanelFocus) {
+      controlPanel.focus.splice(0, controlPanel.focus.length, ...this.prevControlPanelFocus);
+    } else {
+      controlPanel.focus.splice(0, controlPanel.focus.length);
+    }
     if (nav.popup.reject) {
       nav.popup.reject.call(nav.popup.reject);
     }
