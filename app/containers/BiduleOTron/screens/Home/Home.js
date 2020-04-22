@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -14,6 +14,7 @@ import Background from './img/menu.svg';
 import ImageMenuItem1 from './img/menu_selection_bidulo.svg';
 import ImageMenuItem2 from './img/menu_selection_lance.svg';
 import ImageSubmit from 'BOT/img/valider.svg';
+import { musicToggle, homeFirstTime } from '../../actions';
 
 const animation = keyframes`
   from {
@@ -73,7 +74,12 @@ const Wrapper = styled.section`
   }
 `;
 
-function Home({ home }) {
+function Home({ dispatch, home }) {
+
+  useEffect(() => {
+    dispatch(homeFirstTime());
+  }, []);
+
   return (
     <Wrapper>
       <Background style={{ position: 'absolute', top: 0, left: 0 }} />

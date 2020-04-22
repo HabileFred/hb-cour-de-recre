@@ -24,7 +24,10 @@ import {
   TURN_ON,
   COMPUTER_ON_OFF,
   SET_CONTROL_PANEL_FOCUS,
-  REMOVE_CONTROL_PANEL_FOCUS
+  REMOVE_CONTROL_PANEL_FOCUS,
+  HOME_FIRST_TIME,
+  SET_FOCUS,
+  REPLACE_FOCUS
 } from '../constants';
 
 import { SFX } from '../SoundManager';
@@ -51,13 +54,6 @@ import { radarReducer } from 'BOT/screens/Launcher/Radar/Radar.reducer';
 import { paramsReducer } from 'BOT/screens/Launcher/Params/Params.reducer';
 
 import { setWorkingDraft } from './draft';
-
-function checkWiresReadiness() {
-  const draft = getDraft();
-  if (draft.fuses.SOLVED && draft.lights.SOLVED) {
-    focus.set('wires', ['fuses', 'lights']);
-  }
-}
 
 /**
  * Pad button 'cancel' has been pressed.
@@ -171,9 +167,6 @@ const BiduleOTronReducer = (state = initialState, action) =>
           loginReducer.handlePadSubmit();
         } else if (focus.is('machine/bidule')) {
           biduleReducer.handlePadSubmit();
-        } else if (focus.is('machine/fuses')) {
-          fusesReducer.checkFuses();
-          checkWiresReadiness();
         } else if (focus.is('launcher/radar')) {
           radarReducer.handlePadSubmit();
         } else {
@@ -231,7 +224,6 @@ const BiduleOTronReducer = (state = initialState, action) =>
         } else {
           if (focus.is('machine/lights')) {
             lightsReducer.handleButtonPressed(action.button);
-            checkWiresReadiness();
           }
           if (focus.is('machine/pieces')) {
             piecesReducer.handleButtonPressed(action.button);
@@ -299,6 +291,10 @@ const BiduleOTronReducer = (state = initialState, action) =>
         focus.setScreen(action.screen);
         break;
 
+      case REPLACE_FOCUS:
+        focus.replace(action.focusId);
+        break;
+
       case FOCUS_NEXT:
         focus.next();
         break;
@@ -343,6 +339,14 @@ const BiduleOTronReducer = (state = initialState, action) =>
 
       case REMOVE_CONTROL_PANEL_FOCUS:
         focus.controlPanel().removeFocus(action.focus);
+        break;
+
+      case HOME_FIRST_TIME:
+        if (!draft.$game.homeFirstTime) {
+          draft.sounds.music = true;
+          SFX.music();
+          draft.$game.homeFirstTime = true;
+        }
         break;
 
       default:

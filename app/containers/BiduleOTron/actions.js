@@ -30,6 +30,9 @@ import {
   TURN_OFF,
   COMPUTER_ON_OFF,
   REMOVE_CONTROL_PANEL_FOCUS,
+  HOME_FIRST_TIME,
+  SET_FOCUS,
+  REPLACE_FOCUS,
 } from './constants';
 
 export function padUp() {
@@ -148,6 +151,13 @@ export function setScreen(screen) {
   };
 }
 
+export function replaceFocus(focusId) {
+  return {
+    type: REPLACE_FOCUS,
+    focusId,
+  };
+}
+
 export function focusNext() {
   return {
     type: FOCUS_NEXT,
@@ -174,6 +184,12 @@ export function confirm(popupId, acceptHandler, denyHandler) {
     popupId,
     acceptHandler,
     denyHandler,
+  };
+}
+
+export function homeFirstTime() {
+  return {
+    type: HOME_FIRST_TIME,
   };
 }
 
