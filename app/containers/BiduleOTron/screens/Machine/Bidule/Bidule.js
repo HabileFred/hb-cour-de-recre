@@ -17,7 +17,7 @@ import BiduleProtocol from 'BOT/components/Bidules/Protocols';
 
 const MachineBiduleContainer = styled.div`
   position: absolute;
-  top: 40px;
+  top: 30px;
   left: 85px;
   width: 230px;
   display: flex;
@@ -40,7 +40,7 @@ const MachineBiduleContainer = styled.div`
   .frame {
     position: absolute;
     left: 17px;
-    top: 50px;
+    top: 60px;
     width: 195px;
     height: 190px;
   }
@@ -56,14 +56,14 @@ const MachineBiduleContainer = styled.div`
     position: absolute;
     width: 42px;
     height: 46px;
-    top: 118px;
+    top: 128px;
 
     &.left {
-      left: -12px;
+      left: -10px;
     }
     &.right {
       transform: rotate(10deg);
-      left: 195px;
+      left: 197px;
     }
   }
 
