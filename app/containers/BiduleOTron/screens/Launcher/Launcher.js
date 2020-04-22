@@ -181,7 +181,6 @@ function Launcher({ dispatch, params, bidule, radar }) {
       <Pipe animated={params.stability.SOLVED} />
       <Propellant animation={propellantAnimation} />
       <BiduleName present={bidule.SOLVED} />
-      <BiduleOK present={bidule.SOLVED} />
       <Lever active={params.SOLVED} on={leverStatus} />
       <Porthole bidule={bidule.SOLVED ? bidule.index + 1 : 0} animation={portholeAnimation}/>
       <Transmission animated={radar.SOLVED} />
