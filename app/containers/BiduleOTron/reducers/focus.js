@@ -26,7 +26,7 @@ class Focus {
         },
         login: {
           $start: 'password',
-          password: 'loading/',
+          password: 'home/',
         },
         home: {
           $start: 'menu',
