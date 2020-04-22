@@ -200,7 +200,7 @@ class Focus {
     const { nav } = getDraft();
     nav.popup.id = popupId;
     nav.popup.resolve = closeHandler;
-    nav.popup.reject = null;
+    nav.popup.reject = closeHandler;
     const { controlPanel } = nav;
     this.prevControlPanelFocus = controlPanel.focus.slice();
     controlPanel.focus.splice(0, controlPanel.focus.length, popupCloseButton);
