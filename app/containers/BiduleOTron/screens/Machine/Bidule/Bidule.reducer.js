@@ -14,6 +14,11 @@ export class ReducerBidule {
 
   constructor() {
     initialState.bidule = {
+      konami: {
+        expected: 'UUDDLRLRBA',
+        index: 0,
+        SOLVED: false,
+      },
       messageRead: false,
       BIDULE_COUNT: 15,
       index: 0, // FIXME PROD
@@ -38,6 +43,27 @@ export class ReducerBidule {
       ],
       SOLVED: false, // FIXME PROD
     };
+  }
+
+  handleKonami(code) {
+    const { bidule, pieces } = getDraft();
+    const exp = bidule.konami.expected;
+    if (code === exp.substr(bidule.konami.index, 1)) {
+      bidule.konami.index += 1;
+      if (bidule.konami.index === exp.length) {
+        bidule.konami.SOLVED = true;
+        // On offre :
+        // le bon bidule
+        bidule.index = bidule.solution;
+        bidule.submitted = true;
+        // et 3 bonnes pièces déjà séelctionnées
+        pieces.current[0] = pieces.desired[0];
+        pieces.current[2] = pieces.desired[2];
+        pieces.current[4] = pieces.desired[4];
+      }
+    } else {
+      bidule.konami.index = 0;
+    }
   }
 
   handlePadLeft() {

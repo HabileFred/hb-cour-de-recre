@@ -16,6 +16,7 @@ import sndVisseuse from './sounds/visseuse.mp3';
 import sndMachine from './sounds/machine.mp3';
 import sndBoot from './sounds/boot.mp3';
 import sndSparkle from './sounds/arc_electrique.mp3';
+import sndKonami from './sounds/konami.mp3';
 
 class SoundManager {
   constructor() {
@@ -27,6 +28,7 @@ class SoundManager {
         loop: true,
         html5: true,
         mute: true,
+        volume: 0.5,
       }),
       wrong: new Howl({
         src: sndButtonWrong,
@@ -95,6 +97,11 @@ class SoundManager {
       }),
       sparkle: new Howl({
         src: sndSparkle,
+        autoplay: false,
+        volume: 0.1,
+      }),
+      konami: new Howl({
+        src: sndKonami,
         autoplay: false,
         volume: 0.1,
       }),

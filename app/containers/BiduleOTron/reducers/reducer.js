@@ -115,6 +115,8 @@ const BiduleOTronReducer = (state = initialState, action) =>
       case PAD_UP:
         if (focus.is('machine/binary')) {
           binaryReducer.handlePadUp();
+        } else if (focus.is('machine/bidule')) {
+          biduleReducer.handleKonami('U'); // for Konami code ;)
         } else if (focus.is('launcher/radar')) {
           radarReducer.handlePadUp();
         } else {
@@ -125,6 +127,8 @@ const BiduleOTronReducer = (state = initialState, action) =>
       case PAD_DOWN:
         if (focus.is('machine/binary')) {
           binaryReducer.handlePadDown();
+        } else if (focus.is('machine/bidule')) {
+          biduleReducer.handleKonami('D'); // for Konami code ;)
         } else if (focus.is('launcher/radar')) {
           radarReducer.handlePadDown();
         } else {
@@ -136,6 +140,7 @@ const BiduleOTronReducer = (state = initialState, action) =>
         if (focus.is('machine/pieces')) {
           piecesReducer.handlePadLeft();
         } else if (focus.is('machine/bidule')) {
+          biduleReducer.handleKonami('L'); // for Konami code ;)
           biduleReducer.handlePadLeft();
         } else if (focus.is('launcher/radar')) {
           radarReducer.handlePadLeft();
@@ -148,6 +153,7 @@ const BiduleOTronReducer = (state = initialState, action) =>
         if (focus.is('machine/pieces')) {
           piecesReducer.handlePadRight();
         } else if (focus.is('machine/bidule')) {
+          biduleReducer.handleKonami('R'); // for Konami code ;)
           biduleReducer.handlePadRight();
         } else if (focus.is('launcher/radar')) {
           radarReducer.handlePadRight();
@@ -197,6 +203,8 @@ const BiduleOTronReducer = (state = initialState, action) =>
       case PIPE_ROTATE:
         if (focus.is('machine/pipes')) {
           pipesReducer.rotatePipe(action.index);
+        } else if (focus.is('machine/bidule') && (action.index === 0 || action.index === 16)) {
+          biduleReducer.handleKonami(action.index === 0 ? 'A' : 'B'); // for Konami code ;)
         } else {
           SFX.wrong();
         }

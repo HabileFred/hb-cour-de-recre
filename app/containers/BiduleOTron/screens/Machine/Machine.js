@@ -40,7 +40,7 @@ import BiduleOTron from './img/bidule_o_tron.svg';
 
 import ImageCacheBidule from './img/cache_bidule.svg';
 import ImagePancarte from './img/pancarte.svg';
-import { setControlPanelFocus, setScreen } from '../../actions';
+import { setControlPanelFocus, setScreen, replaceFocus } from '../../actions';
 
 const openCacheBiduleAnimation = keyframes`
   from {
@@ -140,6 +140,7 @@ const rotateX = keyframes`
 
 import theme from 'BOT/Theme';
 import { makeSelectNav } from '../../selectors';
+import { S_IFCHR } from 'constants';
 
 const focusKeys = ['binary', 'pieces', 'wires', 'fuses', 'lights', 'simon', 'pipes'];
 const Wrapper = styled.div`
@@ -223,6 +224,18 @@ function Machine({ dispatch, store, bidule, pieces, pipes, lights, binary, fuses
     return () => window.clearTimeout(timer);
   }, [bidule.SOLVED]);
 
+
+  useEffect(() => {
+    let timer;
+    if (bidule.konami.SOLVED) {
+      timer = window.setTimeout(() => SFX.play('konami'), 500);
+      dispatch(popup(
+        { id: 'konami', closeButton: 'Submit' },
+        () => window.setTimeout(() => dispatch(replaceFocus(['pieces', 'pipes'])))
+      ));
+    }
+    return () => window.clearTimeout(timer);
+  }, [bidule.konami.SOLVED]);
 
   const focused = (id) => nav.focus.indexOf(id) !== -1;
 
