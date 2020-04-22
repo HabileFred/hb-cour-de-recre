@@ -49,23 +49,28 @@ export const Wrapper = styled.div`
 
 function Transmission({ animated }) {
 
-  let timer;
+  let timer1;
+  let timer2;
 
   const [sparkling, setSparkling] = useState(false);
 
   function doSparkle() {
     setSparkling(true);
-    window.setTimeout(() => setSparkling(false), 300 + Math.random() * 500);
-    window.setTimeout(doSparkle, 7000 + Math.random() * 10000);
+    timer2 = window.setTimeout(() => setSparkling(false), 300 + Math.random() * 500);
+    timer1 = window.setTimeout(doSparkle, 7000 + Math.random() * 10000);
   }
 
   useEffect(() => {
     if (animated) {
       doSparkle();
     } else {
-      window.clearTimeout(timer);
+      window.clearTimeout(timer1);
+      window.clearTimeout(timer2);
     }
-    return () => window.clearTimeout(timer);
+    return () => {
+      window.clearTimeout(timer1);
+      window.clearTimeout(timer2);
+    };
   }, [animated]);
 
   return (
