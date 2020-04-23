@@ -27,20 +27,20 @@ const MachineBiduleContainer = styled.div`
 
   @keyframes grow {
     from {
-      transform: scale(1.1);
+      transform: scale(1);
     }
     50% {
-      transform: scale(0.9);
+      transform: scale(1.15);
     }
     to {
-      transform: scale(1.1);
+      transform: scale(1);
     }
   }
 
   .frame {
     position: absolute;
     left: 17px;
-    top: 60px;
+    top: 68px;
     width: 195px;
     height: 190px;
   }
@@ -56,7 +56,7 @@ const MachineBiduleContainer = styled.div`
     position: absolute;
     width: 42px;
     height: 46px;
-    top: 128px;
+    top: 136px;
 
     &.left {
       left: -10px;
@@ -79,6 +79,7 @@ const MachineBiduleContainer = styled.div`
 
   .buttons {
     margin-top: 0;
+    margin-right: 12px;
     display: flex;
     flew-flow: row no-wrap;
     justify-content: center;
