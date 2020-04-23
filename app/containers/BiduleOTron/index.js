@@ -75,6 +75,9 @@ const Computer = styled.div`
   button {
     cursor: url('${imgMouseCursor}') 10 2, auto;
   }
+  button:disabled {
+    cursor: not-allowed;
+  }
 `;
 
 const BiduleOTronContainer = styled.div`
@@ -161,7 +164,7 @@ export function BiduleOTron({ nav, game, status }) {
       popup = (
         <Popup>
           <PopupScore />
-          <Digits size={20} color="#4B4B4B" style={{ position: 'absolute', left: '260px', top: '227px', transform: 'translateX(-50%)' }} value={minutes} />
+          <Digits size={20} color="#4B4B4B" style={{ position: 'absolute', left: '277px', top: '220px', transform: 'translateX(-50%)' }} value={minutes} />
         </Popup>
       );
       break;
