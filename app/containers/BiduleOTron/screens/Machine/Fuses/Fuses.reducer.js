@@ -8,7 +8,7 @@ class ReducerFuses {
 
   constructor() {
     initialState.fuses = {
-      feedback: [true, true, false, false],
+      feedback: [true, false, false, false],
       values: ['G', 'G', 'D', 'G'],
       solution: ['D', 'G', 'G', 'D'],
       SOLVED: false,
