@@ -28,7 +28,8 @@ import {
   HOME_FIRST_TIME,
   SET_FOCUS,
   REPLACE_FOCUS,
-  RESET_STATE
+  RESET_STATE,
+  CLEAR_ERROR
 } from '../constants';
 
 import { SFX } from '../SoundManager';
@@ -365,6 +366,10 @@ const BiduleOTronReducer = (state = initialState, action) =>
           SFX.music();
           draft.$game.homeFirstTime = true;
         }
+        break;
+
+      case CLEAR_ERROR:
+        draft.error = null;
         break;
 
       default:

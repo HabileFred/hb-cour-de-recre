@@ -75,6 +75,7 @@ const MachinePiecesContainer = styled.div`
 const MachinePieces = function({ pieces, focused, solved }) {
   const cls = { focused, solved };
   cls[`selected-piece-${pieces.cursor}`] = true;
+
   return (
     <MachinePiecesContainer className={classnames(cls)}>
       {pieces.current.map((v, i) => (

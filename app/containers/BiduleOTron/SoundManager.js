@@ -17,6 +17,7 @@ import sndMachine from './sounds/machine.mp3';
 import sndBoot from './sounds/boot.mp3';
 import sndSparkle from './sounds/arc_electrique.mp3';
 import sndKonami from './sounds/konami.mp3';
+import sndError from './sounds/error.mp3';
 
 class SoundManager {
   constructor() {
@@ -104,6 +105,10 @@ class SoundManager {
         src: sndKonami,
         autoplay: false,
         volume: 0.1,
+      }),
+      error: new Howl({
+        src: sndError,
+        autoplay: false,
       }),
     };
   }

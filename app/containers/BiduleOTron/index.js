@@ -36,6 +36,7 @@ import PopupMail from './img/popups/lettre_debut.svg';
 import PopupMailDestination from './img/popups/lettre_destination.svg';
 import PopupScore from './img/popups/scoring.svg';
 import PopupKonami from './img/popups/habile_bill.svg';
+import PopupBiduleError from './img/popups/erreur_bidule.svg';
 
 import imgMouseCursor from './img/cursor.png';
 import imgShadow from './img/lueur.png';
@@ -145,6 +146,10 @@ export function BiduleOTron({ nav, game, status }) {
 
     case 'bidule-envoi-debut':
       popup = (<Popup><PopupBiduleSend /></Popup>);
+      break;
+
+    case 'erreur-bidule':
+      popup = (<Popup><PopupBiduleError /></Popup>);
       break;
 
     case 'konami':

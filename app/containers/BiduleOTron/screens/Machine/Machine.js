@@ -40,7 +40,7 @@ import BiduleOTron from './img/bidule_o_tron.svg';
 
 import ImageCacheBidule from './img/cache_bidule.svg';
 import ImagePancarte from './img/pancarte.svg';
-import { setControlPanelFocus, setScreen, replaceFocus } from '../../actions';
+import { setControlPanelFocus, setScreen, replaceFocus, clearError, resetState } from '../../actions';
 
 const openCacheBiduleAnimation = keyframes`
   from {
@@ -139,7 +139,7 @@ const rotateX = keyframes`
 `;
 
 import theme from 'BOT/Theme';
-import { makeSelectNav } from '../../selectors';
+import { makeSelectNav, makeSelectError } from '../../selectors';
 import { S_IFCHR } from 'constants';
 
 const focusKeys = ['binary', 'pieces', 'wires', 'fuses', 'lights', 'simon', 'pipes'];
@@ -173,7 +173,7 @@ const Wrapper = styled.div`
   }
 `;
 
-function Machine({ dispatch, store, bidule, pieces, pipes, lights, binary, fuses, simon, wires, nav }) {
+function Machine({ dispatch, store, bidule, pieces, pipes, lights, binary, fuses, simon, wires, nav, error }) {
 
   const [cacheBiduleAnimation, setCacheBiduleAnimation] = useState(null);
 
@@ -245,6 +245,20 @@ function Machine({ dispatch, store, bidule, pieces, pipes, lights, binary, fuses
   classNames['focus-wires-top'] = wires.readiness.top;
   classNames['focus-wires-bottom'] = wires.readiness.bottom;
 
+  useEffect(() => {
+    if (error) {
+      SFX.play('error');
+      dispatch(popup(
+        { id: `erreur-${error}`, closeButton: 'Submit' },
+        () => window.setTimeout(() => {
+          dispatch(clearError());
+          dispatch(resetState('pieces', { current: [0, 0, 0, 0, 0] }));
+          dispatch(replaceFocus('bidule'));
+        })
+      ));
+    }
+  }, [error]);
+
   return (
     <div style={{
       position: 'relative',
@@ -289,6 +303,7 @@ const mapStateToProps = createStructuredSelector({
   simon: makeSelectSimon(),
   wires: makeSelectWires(),
   nav: makeSelectNav(),
+  error: makeSelectError(),
 });
 
 function mapDispatchToProps(dispatch) {

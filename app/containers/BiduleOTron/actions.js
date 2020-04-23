@@ -34,6 +34,7 @@ import {
   SET_FOCUS,
   REPLACE_FOCUS,
   RESET_STATE,
+  CLEAR_ERROR,
 } from './constants';
 
 export function padUp() {
@@ -193,6 +194,12 @@ export function resetState(stateKey, data) {
     type: RESET_STATE,
     stateKey,
     data,
+  };
+}
+
+export function clearError() {
+  return {
+    type: CLEAR_ERROR,
   };
 }
 

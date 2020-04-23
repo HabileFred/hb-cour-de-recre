@@ -26,8 +26,15 @@ export class ReducerPieces {
         return;
       }
     }
-    draft.pieces.SOLVED = true;
-    focus.from('pieces').next();
+
+    if (draft.bidule.index !== draft.bidule.solution) {
+      draft.pieces.SOLVED = false;
+      draft.error = 'bidule';
+    } else {
+      delete draft.error;
+      draft.pieces.SOLVED = true;
+      focus.from('pieces').next();
+    }
   }
 
   handlePadLeft() {
