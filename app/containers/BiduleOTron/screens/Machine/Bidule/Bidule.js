@@ -67,6 +67,12 @@ const MachineBiduleContainer = styled.div`
     }
   }
 
+  .ui-element.arrow.left.disabled,
+  .ui-element.arrow.right.disabled {
+    opacity: 0;
+    transform: scale(0);
+  }
+
   .ui-element {
     opacity: 0;
     transform: scale(0);
@@ -112,8 +118,8 @@ const MachineBidule = function({ bidule, focused, solved }) {
   return (
     <MachineBiduleContainer className={classnames({ focused, solved })}>
       <ImageFrame className="frame" />
-      <ImageLeftArrow className="ui-element arrow left"/>
-      <ImageRightArrow className="ui-element arrow right"/>
+      <ImageLeftArrow className={classnames('ui-element', 'arrow', 'left', { disabled: !bidule.ui.canMoveLeft })}/>
+      <ImageRightArrow className={classnames('ui-element', 'arrow', 'right', { disabled: !bidule.ui.canMoveRight })}/>
 
       <BiduleCode name={biduleName} />
       <BidulesView index={bidule.index}>

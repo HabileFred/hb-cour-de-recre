@@ -21,7 +21,8 @@ export class ReducerBidule {
       },
       messageRead: false,
       BIDULE_COUNT: 15,
-      index: 0, // FIXME PROD
+      index: 3,
+      ui: { canMoveLeft: true, canMoveRight: true },
       solution: 6,
       submitted: false,
       biduleNames: [
@@ -66,6 +67,12 @@ export class ReducerBidule {
     }
   }
 
+  updateUiCapabilities() {
+    const { bidule } = getDraft();
+    bidule.ui.canMoveLeft = bidule.index > 0;
+    bidule.ui.canMoveRight = bidule.index < (bidule.BIDULE_COUNT - 1);
+  }
+
   handlePadLeft() {
     const { bidule } = getDraft();
     const v = betweenValue(
@@ -81,6 +88,7 @@ export class ReducerBidule {
     } else {
       SFX.wrong();
     }
+    this.updateUiCapabilities();
   }
 
   handlePadRight() {
@@ -98,6 +106,7 @@ export class ReducerBidule {
     } else {
       SFX.wrong();
     }
+    this.updateUiCapabilities();
   }
 
   /**
