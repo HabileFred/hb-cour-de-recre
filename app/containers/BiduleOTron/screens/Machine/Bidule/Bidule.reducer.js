@@ -21,8 +21,6 @@ export class ReducerBidule {
       },
       messageRead: false,
       BIDULE_COUNT: 15,
-      index: 3,
-      ui: { canMoveLeft: true, canMoveRight: true },
       solution: 6,
       submitted: false,
       biduleNames: [
@@ -42,7 +40,9 @@ export class ReducerBidule {
         'ramasse_vide',
         'solution',
       ],
-      SOLVED: false, // FIXME PROD
+      index: 6,
+      SOLVED: true, // FIXME PROD
+      ui: { canMoveLeft: true, canMoveRight: true },
     };
   }
 

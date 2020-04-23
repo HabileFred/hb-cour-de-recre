@@ -16,9 +16,14 @@ class ReducerRadar {
     initialState.radar = {
       enabled: false,
       SOLVED: false,
-      cursor: { x: 0, y: 0 },
+      cursor: { x: 0, y: 0, hasMoved: false },
       solution: { x: 2, y: 2 },
     };
+  }
+
+  updateHasMoved() {
+    const { radar } = getDraft();
+    radar.cursor.hasMoved = radar.cursor.x !== 0 || radar.cursor.y !== 0;
   }
 
   handlePadDown() {
@@ -26,6 +31,7 @@ class ReducerRadar {
     if (draft.bidule.SOLVED && draft.radar.enabled) {
       const y = draft.radar.cursor.y;
       draft.radar.cursor.y = betweenValue(y, 1, 0, 3);
+      this.updateHasMoved();
       SFX.play(draft.radar.cursor.y === y ? 'wrong' : 'radar');
     } else {
       SFX.wrong();
@@ -37,6 +43,7 @@ class ReducerRadar {
     if (draft.bidule.SOLVED && draft.radar.enabled) {
       const y = draft.radar.cursor.y;
       draft.radar.cursor.y = betweenValue(y, -1, 0, 3);
+      this.updateHasMoved();
       SFX.play(draft.radar.cursor.y === y ? 'wrong' : 'radar');
     } else {
       SFX.wrong();
@@ -48,6 +55,7 @@ class ReducerRadar {
     if (draft.bidule.SOLVED && draft.radar.enabled) {
       const x = draft.radar.cursor.x;
       draft.radar.cursor.x = betweenValue(x, -1, 0, 3);
+      this.updateHasMoved();
       SFX.play(draft.radar.cursor.x === x ? 'wrong' : 'radar');
     } else {
       SFX.wrong();
@@ -59,6 +67,7 @@ class ReducerRadar {
     if (draft.bidule.SOLVED && draft.radar.enabled) {
       const x = draft.radar.cursor.x;
       draft.radar.cursor.x = betweenValue(x, 1, 0, 3);
+      this.updateHasMoved();
       SFX.play(draft.radar.cursor.x === x ? 'wrong' : 'radar');
     } else {
       SFX.wrong();

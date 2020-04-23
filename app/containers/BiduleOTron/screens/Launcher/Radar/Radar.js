@@ -9,6 +9,7 @@ import imgCursor from './img/curseur.png';
 
 import ImageIndicatorOn from './img/ampoule_on.svg';
 import ImageIndicatorOff from './img/ampoule_off.svg';
+import ImageSubmit from 'BOT/img/valider.svg';
 
 const onAnimation = keyframes`
   from {
@@ -58,6 +59,19 @@ const Wrapper = styled.div`
   .indicator.on {
     animation: ${onAnimation} 800ms ease-in;
   }
+
+  .submit {
+    position: absolute;
+    transform: scale(.6);
+    left: 130px;
+    top: -62px;
+    opacity: 0;
+    transition: opacity 250ms ease;
+    z-index: 5;
+  }
+  .submit.on {
+    opacity: 1;
+  }
 `;
 
 const rotatingPointer = keyframes`
@@ -105,13 +119,28 @@ const Cursor = styled.div`
   z-index: 3;
 `;
 
+const CursorOrigin = styled.div`
+  display: ${props => props.enabled ? 'block' : 'none'};
+  position: absolute;
+  left: ${cursorX[0]}px;
+  top: ${cursorY[0]}px;
+  transition: left 250ms ease-in-out, top 250ms ease-in-out;
+  opacity: 0.2;
+  width: 7px;
+  height: 8px;
+  background: no-repeat center center url('${imgCursor}');
+  z-index: 3;
+`;
+
 const Radar = function({ radar, focused, solved, enabled }) {
 
   return (
     <React.Fragment>
       <Wrapper className={classnames({ focused, solved })}>
+        <ImageSubmit className={classnames('submit', { on: radar.cursor.hasMoved })} />
         <ImageIndicatorOff className="indicator" />
         {solved ? <ImageIndicatorOn className="indicator on" /> : null}
+        <CursorOrigin enabled={enabled} />
         <Cursor enabled={enabled} x={radar.cursor.x} y={radar.cursor.y} />
         <PointerWrapper enabled={enabled}>
           <ImagePointer />
