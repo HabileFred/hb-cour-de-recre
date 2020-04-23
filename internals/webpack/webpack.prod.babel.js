@@ -116,15 +116,15 @@ module.exports = require('./webpack.base.babel')({
     }),
 
     new WebpackPwaManifest({
-      name: 'Bidule-o-tron',
-      short_name: 'Bidule-o-tron',
-      description: 'Bidule-o-tron | Habile Bill',
+      name: 'Bill-o-tron',
+      short_name: 'Bill-o-tron',
+      description: 'Bill-o-tron | Habile Bill',
       background_color: 'black',
       theme_color: '#b1624d',
       orientation: 'landscape',
       inject: true,
       ios: {
-        'apple-mobile-web-app-title': 'Bidule-o-tron',
+        'apple-mobile-web-app-title': 'Bill-o-tron',
         'apple-mobile-web-app-status-bar-style': 'black-translucent'
       },
       icons: [

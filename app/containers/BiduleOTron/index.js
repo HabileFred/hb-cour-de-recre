@@ -95,7 +95,7 @@ export function BiduleOTron({ nav, game, status }) {
   useInjectReducer({ key: 'biduleOTron', reducer });
 
   useEffect(() => {
-    document.title = "Bidule-o-tron | Cour de récré | Habile Bill";
+    document.title = "Bill-o-tron | Cour de récré | Habile Bill";
   });
 
   let screen;
