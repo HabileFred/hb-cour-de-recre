@@ -37,7 +37,7 @@ import imgBiduleOK from './img/bidule_ok.png';
 import imgBackground from 'BOT/img/fond_machine.png';
 import MailNotification from 'BOT/components/MailNotification/MailNotification';
 
-import { popup, gameCompleted, removeControlPanelFocus, focusNext, replaceFocus } from '../../actions';
+import { popup, gameCompleted, removeControlPanelFocus, focusNext, replaceFocus, resetState } from '../../actions';
 
 function BiduleName({ present, ...props }) {
   return present
@@ -131,10 +131,12 @@ function Launcher({ dispatch, params, bidule, radar }) {
     setLeverStatus(false);
     await wait(1000);
     setPropellantAnimation('stopping');
+
     dispatch(popup(
       { id: 'score', closeButton: 'Submit' },
       () => focus.from('params').next()
     ));
+    SFX.play('konami');
   };
 
   const popupOK = () => {
@@ -165,6 +167,10 @@ function Launcher({ dispatch, params, bidule, radar }) {
     }
   }, [bidule.SOLVED]);
 
+  useEffect(() => {
+    dispatch(resetState('radar', { cursor: { x: 0, y: 0 } }));
+  }, []);
+
   return (
     <Wrapper>
       <div style={{
@@ -188,7 +194,7 @@ function Launcher({ dispatch, params, bidule, radar }) {
       <Radar radar={radar} focusId="radar" enabled={radar.enabled} />
       <Params params={params} focusId="params" />
       <ElectricWire w={1} animated={params.velocity.SOLVED} />
-      <ElectricWire w={2} animated={params.velocity.SOLVED} />
+      <ElectricWire w={2} animated={params.direction.SOLVED} />
       <Pipe animated={params.stability.SOLVED} />
       <Propellant animation={propellantAnimation} />
       <BiduleName present={bidule.SOLVED} />

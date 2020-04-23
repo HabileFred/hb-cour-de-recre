@@ -33,6 +33,7 @@ import {
   HOME_FIRST_TIME,
   SET_FOCUS,
   REPLACE_FOCUS,
+  RESET_STATE,
 } from './constants';
 
 export function padUp() {
@@ -184,6 +185,14 @@ export function confirm(popupId, acceptHandler, denyHandler) {
     popupId,
     acceptHandler,
     denyHandler,
+  };
+}
+
+export function resetState(stateKey, data) {
+  return {
+    type: RESET_STATE,
+    stateKey,
+    data,
   };
 }
 

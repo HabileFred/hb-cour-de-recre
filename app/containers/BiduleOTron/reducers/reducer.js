@@ -27,7 +27,8 @@ import {
   REMOVE_CONTROL_PANEL_FOCUS,
   HOME_FIRST_TIME,
   SET_FOCUS,
-  REPLACE_FOCUS
+  REPLACE_FOCUS,
+  RESET_STATE
 } from '../constants';
 
 import { SFX } from '../SoundManager';
@@ -347,6 +348,15 @@ const BiduleOTronReducer = (state = initialState, action) =>
 
       case REMOVE_CONTROL_PANEL_FOCUS:
         focus.controlPanel().removeFocus(action.focus);
+        break;
+
+      case RESET_STATE:
+        if (action.stateKey in draft) {
+          draft[action.stateKey] = {
+            ...draft[action.stateKey],
+            ...action.data,
+          };
+        }
         break;
 
       case HOME_FIRST_TIME:

@@ -43,3 +43,4 @@ export const SHOW_POPUP = 'BOT/SHOW_POPUP';
 export const COMPUTER_ON_OFF = 'BOT/COMPUTER_ON_OFF';
 
 export const HOME_FIRST_TIME = 'BOT/HOME_FIRST_TIME';
+export const RESET_STATE = 'BOT/RESET_STATE';
