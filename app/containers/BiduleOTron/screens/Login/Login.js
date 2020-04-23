@@ -7,12 +7,40 @@ import { compose } from 'redux';
 import styled, { keyframes } from 'styled-components';
 
 import { SFX } from 'BOT/SoundManager';
+import MailNotification from 'BOT/components/MailNotification/MailNotification';
 
 import { makeSelectLogin } from '../../selectors';
 import { gameStarted } from '../../actions';
 
 import { Digit } from 'BOT/components/Digits/Digits';
 import LoginBackground from './img/mot_de_passe.svg';
+import PasswordBorder from './img/encart_mdp.svg';
+
+const animation = keyframes`
+  from {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  to {
+    transform: scale(1);
+  }
+`;
+
+const digitsAnimation = keyframes`
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  80% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1);
+  }
+`;
 
 const Wrapper = styled.section`
   top: 0;
@@ -29,20 +57,19 @@ const Wrapper = styled.section`
     grid-template-columns: repeat(4, 44px);
     grid-gap: 40px;
   }
-`;
 
-const animation = keyframes`
-  from {
-    transform: scale(1);
+  .password-border {
+    position: absolute;
+    top: 192px;
+    left: 398px;
+    animation: ${animation} 1500ms ease-in-out infinite;
   }
-  50% {
-    transform: scale(1.05);
-  }
-  to {
-    transform: scale(1);
+
+  .digit {
+    transform-origin: bottom;
+    animation: ${digitsAnimation} 150ms linear;
   }
 `;
-
 
 function Login({ dispatch, login }) {
 
@@ -54,10 +81,12 @@ function Login({ dispatch, login }) {
   return (
     <Wrapper>
       <LoginBackground style={{ position: 'absolute', top: 0, left: 0, zIndex: -1 }} />
+      <MailNotification animated />
+      <PasswordBorder className="password-border" />
       <div className="digits">
         {login.password.map((d, i) => (
           d >= 0 && d <= 9
-            ? (<Digit key={`d${i}`} size={40} color="rgb(131,98,247)" d={d}/>)
+            ? (<Digit className="digit" key={`d${i}`} size={40} color="rgb(131,98,247)" d={d}/>)
             : null
         ))}
       </div>
