@@ -50,9 +50,13 @@ function ButtonGroupSubmitCancel({ dispatch }) {
     };
   });
 
+  function goToHabileBillWebsite() {
+    window.open('https://www.habilebill.fr');
+  }
+
   return (
     <React.Fragment>
-      <BillButton style={{ position: 'absolute', left: '1079px', top: '91px' }} />
+      <BillButton style={{ position: 'absolute', left: '1079px', top: '91px' }} onClick={goToHabileBillWebsite} />
       <Wrapper>
         <CancelButton onClick={() => dispatch(padCancel())} />
         <SubmitButton onClick={() => dispatch(padSubmit())} />
