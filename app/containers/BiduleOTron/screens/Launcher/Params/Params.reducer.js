@@ -67,11 +67,13 @@ class ReducerParams {
       if (value !== -1) {
         SFX.click();
         const { velocity: v } = params;
-        if (v.cursor === v.solution.length) {
-          v.values.splice(0, v.solution.length, 0, 0, 0, 0, 0, 0);
+        if (v.cursor >= v.solution.length) {
+          v.values.splice(0, v.solution.length, 0, 0, 0, 0);
           v.cursor = 0;
         } else {
           v.values[v.cursor] = value + 1;
+          v.values.length = 4;
+          v.solution.length = 4;
           v.SOLVED = arraysEqual(v.values, v.solution);
           this.checkSolved();
           v.cursor = cycleValue(v.cursor, 1, 0, v.solution.length);
