@@ -156,7 +156,7 @@ export function BiduleOTron({ nav, game, status }) {
       popup = (
         <Popup>
           <PopupScore />
-          <Digits size={20} color="#4B4B4B" style={{ position: 'absolute', left: '220px', top: '161px', transform: 'translateX(-50%)' }} value={minutes} />
+          <Digits size={20} color="#4B4B4B" style={{ position: 'absolute', left: '260px', top: '227px', transform: 'translateX(-50%)' }} value={minutes} />
         </Popup>
       );
       break;
