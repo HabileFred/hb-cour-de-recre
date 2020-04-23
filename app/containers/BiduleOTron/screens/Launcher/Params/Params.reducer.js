@@ -89,6 +89,7 @@ class ReducerParams {
     params.direction.values[params.direction.cursor] = value;
     params.direction.cursor = cycleValue(params.direction.cursor, 1, 0, params.direction.solution.length - 1);
     params.direction.SOLVED = arraysEqual(params.direction.values, params.direction.solution);
+    SFX.click();
     this.checkSolved();
   }
 
