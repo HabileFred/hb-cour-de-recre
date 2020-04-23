@@ -40,8 +40,8 @@ export class ReducerBidule {
         'ramasse_vide',
         'solution',
       ],
-      index: 6,
-      SOLVED: true, // FIXME PROD
+      index: 1,
+      SOLVED: false, // FIXME PROD
       ui: { canMoveLeft: true, canMoveRight: true },
     };
   }
