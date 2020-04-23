@@ -22,11 +22,12 @@ const Wrapper = styled.section`
 `;
 
 import { SubmitButton, CancelButton, MailboxButton, BillButton } from './Buttons';
+import { makeSelectGame } from '../../selectors';
 
 /**
  *
  */
-function ButtonGroupSubmitCancel({ dispatch }) {
+function ButtonGroupSubmitCancel({ dispatch, game }) {
 
   const keyListener = event => {
     if (event.isComposing || event.keyCode === 229) {
@@ -51,12 +52,14 @@ function ButtonGroupSubmitCancel({ dispatch }) {
   });
 
   function goToHabileBillWebsite() {
-    window.open('https://www.habilebill.fr');
+    if (game.completedAt) {
+      window.open('https://www.habilebill.fr');
+    }
   }
 
   return (
     <React.Fragment>
-      <BillButton style={{ position: 'absolute', left: '1079px', top: '91px' }} onClick={goToHabileBillWebsite} />
+      <BillButton style={{ position: 'absolute', left: '1079px', top: '91px' }} disabled={!game.completedAt} onClick={goToHabileBillWebsite} />
       <Wrapper>
         <CancelButton onClick={() => dispatch(padCancel())} />
         <SubmitButton onClick={() => dispatch(padSubmit())} />
@@ -67,6 +70,7 @@ function ButtonGroupSubmitCancel({ dispatch }) {
 }
 
 const mapStateToProps = createStructuredSelector({
+  game: makeSelectGame(),
 });
 
 function mapDispatchToProps(dispatch) {
