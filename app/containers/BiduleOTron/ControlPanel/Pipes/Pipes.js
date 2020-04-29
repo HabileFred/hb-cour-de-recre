@@ -71,11 +71,9 @@ function ButtonGroupPipes({ dispatch, pipes, focused }) {
     <Wrapper focused={focused}>
       {[
         pipes.pipes.map((v, i) =>
-          v === 9 ? (
+          v === 9
           ? (<div key={`pipe-button-${i}`}></div>)
-          : (
-            <Button key={`pipe-button-${i}`} onClick={() => rotatePipe(i)} />
-          )
+          : (<Button key={`pipe-button-${i}`} onClick={() => rotatePipe(i)} />)
         ),
       ]}
     </Wrapper>
