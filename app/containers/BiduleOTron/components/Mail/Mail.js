@@ -156,6 +156,7 @@ function Mail({ mailId, playTime }) {
       );
 
     case 'mail-end':
+      const minutes = Math.round(playTime / 60);
       return (
         <Popup>
           <PopupMail />
@@ -166,9 +167,10 @@ function Mail({ mailId, playTime }) {
               <br />
               <Bidule b={7} />
             </p>
-            <p>
-              Tu as accompli ta mission avec succes <nobr>en <strong>{Math.round(playTime / 60)} minutes</strong>.</nobr>
-            </p>
+            {minutes >= 240
+              ? (<p>Tu as accompli ta mission avec succes <nobr>en <strong>{minutes} minutes</strong>.</nobr></p>)
+              : (<p>Tu as accompli ta mission avec succes.</p>)
+            }
             <p>Tu passes de <em>"Petit Bill"</em> a <em>"Moyen Bill"</em>.</p>
             <p className="signature">
               Le Grand Bill
