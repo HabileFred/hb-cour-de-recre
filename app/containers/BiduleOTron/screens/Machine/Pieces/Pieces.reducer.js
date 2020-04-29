@@ -17,6 +17,15 @@ export class ReducerPieces {
     };
   }
 
+  reset() {
+    const { pieces } = getDraft();
+    Object.assign(pieces, {
+      cursor: 0,
+      current: [0, 0, 0, 0, 0],
+      SOLVED: false,
+    });
+  }
+
   checkPiecesSolved() {
     const draft = getDraft();
     for (let i = 0; i < draft.pieces.desired.length; i += 1) {

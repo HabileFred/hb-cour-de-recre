@@ -1,8 +1,12 @@
 
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { compose } from 'redux';
 
 import Icon from './icone_message.svg';
+import { makeSelectMailboxHasUnread } from 'BOT/selectors';
 
 const animation = keyframes`
 from {
@@ -21,16 +25,37 @@ const Wrapper = styled.div`
   top: 30px;
   right: 50px;
   z-index: 10;
+  opacity: 0.5;
+  transition: opacity 250ms ease;
 
   &.animated {
     animation: ${animation} 1s ease-out infinite;
+    opacity: 1;
   }
 `;
 
-export default function ({ animated }) {
+function MailNotification({ hasUnreadMessage }) {
   return (
-    <Wrapper className={animated !== false ? 'animated' : ''}>
+    <Wrapper className={hasUnreadMessage ? 'animated' : ''}>
       <Icon />
     </Wrapper>
   )
 }
+
+
+const mapStateToProps = createStructuredSelector({
+  hasUnreadMessage: makeSelectMailboxHasUnread(),
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    dispatch,
+  };
+}
+
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+
+export default compose(withConnect)(MailNotification);

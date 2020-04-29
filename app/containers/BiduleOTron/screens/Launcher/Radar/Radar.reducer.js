@@ -15,7 +15,6 @@ import { getDraft } from 'BOT/reducers/draft';
 class ReducerRadar {
   constructor() {
     initialState.radar = {
-      enabled: false,
       SOLVED: false,
       cursor: { x: 0, y: 0, hasMoved: false },
       solution: { x: 2, y: 2 },
@@ -29,7 +28,7 @@ class ReducerRadar {
 
   handlePadDown() {
     const draft = getDraft();
-    if (draft.bidule.SOLVED && draft.radar.enabled) {
+    if (draft.bidule.SOLVED) {
       const { y } = draft.radar.cursor;
       draft.radar.cursor.y = betweenValue(y, 1, 0, 3);
       this.updateHasMoved();
@@ -41,7 +40,7 @@ class ReducerRadar {
 
   handlePadUp() {
     const draft = getDraft();
-    if (draft.bidule.SOLVED && draft.radar.enabled) {
+    if (draft.bidule.SOLVED) {
       const { y } = draft.radar.cursor;
       draft.radar.cursor.y = betweenValue(y, -1, 0, 3);
       this.updateHasMoved();
@@ -53,7 +52,7 @@ class ReducerRadar {
 
   handlePadLeft() {
     const draft = getDraft();
-    if (draft.bidule.SOLVED && draft.radar.enabled) {
+    if (draft.bidule.SOLVED) {
       const { x } = draft.radar.cursor;
       draft.radar.cursor.x = betweenValue(x, -1, 0, 3);
       this.updateHasMoved();
@@ -65,7 +64,7 @@ class ReducerRadar {
 
   handlePadRight() {
     const draft = getDraft();
-    if (draft.bidule.SOLVED && draft.radar.enabled) {
+    if (draft.bidule.SOLVED) {
       const { x } = draft.radar.cursor;
       draft.radar.cursor.x = betweenValue(x, 1, 0, 3);
       this.updateHasMoved();
@@ -77,7 +76,7 @@ class ReducerRadar {
 
   handlePadSubmit() {
     const draft = getDraft();
-    if (draft.bidule.SOLVED && draft.radar.enabled) {
+    if (draft.bidule.SOLVED) {
       const { radar } = draft;
       radar.SOLVED =
         radar.cursor.x === radar.solution.x &&
@@ -95,16 +94,6 @@ class ReducerRadar {
       } else {
         SFX.wrong();
       }
-    } else {
-      SFX.wrong();
-    }
-  }
-
-  handlePadMailbox() {
-    const { bidule, radar } = getDraft();
-    if (bidule.SOLVED) {
-      radar.enabled = true;
-      focus.popup('mail-direction');
     } else {
       SFX.wrong();
     }

@@ -40,7 +40,7 @@ const PopupWrapper = styled.div`
   z-index: 100;
   cursor: not-allowed;
 
-  .contents {
+  .popup-contents {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -50,7 +50,7 @@ const PopupWrapper = styled.div`
 `;
 
 const ConfirmWrapper = styled(PopupWrapper)`
-  .contents {
+  .popup-contents {
     animation: ${confirmAnimation} 330ms ease;
   }
 `;
@@ -65,7 +65,7 @@ export function Popup({ children }) {
   return (
     <PopupWrapper>
       <PopupBackground style={absolute}/>
-      <div className="contents">
+      <div className="popup-contents">
         {children}
       </div>
     </PopupWrapper>
@@ -76,7 +76,7 @@ export function Confirm({ children }) {
   return (
     <ConfirmWrapper style={absolute}>
       <PopupBackground style={absolute}/>
-      <div className="contents">
+      <div className="popup-contents">
         {children}
       </div>
     </ConfirmWrapper>

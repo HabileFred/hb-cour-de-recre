@@ -28,13 +28,14 @@ import Home from './screens/Home/Home';
 import Credits from './screens/Credits/Credits';
 import Off from './screens/Off/Off';
 
+import Intro from 'BOT/components/Intro';
+
 import ConfirmChangeBidule from './img/popups/confirm_annule_bidule.svg';
 import ConfirmSwitchOff from './img/popups/confirm_extinction_machine.svg';
 import PopupBiduleBuild from './img/popups/fabrication_bidule.svg';
 import PopupBiduleReady from './img/popups/bidule_dans_bidulotheque.svg';
 import PopupBiduleSend from './img/popups/envoie_bidule.svg';
-import PopupMail from './img/popups/lettre_debutV2.svg';
-import PopupMailDestination from './img/popups/lettre_destinationV2.svg';
+import Mail from 'BOT/components/Mail/Mail';
 import PopupScore from './img/popups/scoring.svg';
 import PopupKonami from './img/popups/habile_bill.svg';
 import PopupBiduleError from './img/popups/erreur_bidule.svg';
@@ -101,6 +102,12 @@ export function BiduleOTron({ nav, game, status }) {
     ReactGA.pageview(window.location.pathname + window.location.search);
   }, []);
 
+  if (status === 'intro') {
+    return (
+      <Intro />
+    );
+  }
+
   let screen;
   switch (nav.screen) {
     case 'loading':
@@ -140,22 +147,6 @@ export function BiduleOTron({ nav, game, status }) {
         <Confirm>
           <ConfirmSwitchOff />
         </Confirm>
-      );
-      break;
-
-    case 'mail':
-      popup = (
-        <Popup>
-          <PopupMail />
-        </Popup>
-      );
-      break;
-
-    case 'mail-direction':
-      popup = (
-        <Popup>
-          <PopupMailDestination />
-        </Popup>
       );
       break;
 
@@ -202,33 +193,8 @@ export function BiduleOTron({ nav, game, status }) {
       );
       break;
 
-    case 'score':
-      const minutes = Math.ceil((game.completedAt - game.startedAt) / 60000);
-      ReactGA.event({
-        category: 'Bill-o-tron',
-        action: 'Partie terminée',
-        value: minutes,
-      });
-      popup = (
-        <Popup>
-          <PopupScore />
-          <Digits
-            size={20}
-            color="#4B4B4B"
-            style={{
-              position: 'absolute',
-              left: '277px',
-              top: '220px',
-              transform: 'translateX(-50%)',
-            }}
-            value={minutes}
-          />
-        </Popup>
-      );
-      break;
-
     default:
-      popup = null;
+      popup = (<Mail mailId={nav.popup.id} playTime={(game.completedAt - game.startedAt) / 1000} />);
   }
 
   return (

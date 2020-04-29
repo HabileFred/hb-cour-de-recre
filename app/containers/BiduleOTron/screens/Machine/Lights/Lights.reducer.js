@@ -107,8 +107,8 @@ export class ReducerLights {
         draft.lights.cheatCode += String(value);
       }
       if (draft.lights.cheatCode === '10121979') {
-        draft.lights.SOLVED = true;
-        this.postCheckLights();
+        Object.assign(draft.lights.values, draft.lights.solution);
+        this.checkLights();
       }
     }
   }

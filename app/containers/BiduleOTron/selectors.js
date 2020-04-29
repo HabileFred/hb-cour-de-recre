@@ -126,3 +126,8 @@ export const makeSelectError = () =>
     selectBiduleOTronDomain,
     substate => substate.error,
   );
+export const makeSelectMailboxHasUnread = () =>
+  createSelector(
+    selectBiduleOTronDomain,
+    substate => substate.mailbox.messages.findIndex(m => m.read === false) !== -1,
+  );

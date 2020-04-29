@@ -10,7 +10,7 @@ import { SFX } from 'BOT/SoundManager';
 import MailNotification from 'BOT/components/MailNotification/MailNotification';
 
 import { makeSelectLogin } from '../../selectors';
-import { gameStarted } from '../../actions';
+import { gameStarted, mailboxAddMessage } from '../../actions';
 
 import { Digit } from 'BOT/components/Digits/Digits';
 import LoginBackground from './img/mot_de_passe.svg';
@@ -73,15 +73,20 @@ const Wrapper = styled.section`
 
 function Login({ dispatch, login }) {
 
+  let mailTimer;
+
   useEffect(() => {
     SFX.play('boot');
     dispatch(gameStarted());
+
+    mailTimer = window.setTimeout(() => dispatch(mailboxAddMessage('mail-connection')), 3000);
+    return () => window.clearTimeout(mailTimer);
   }, []);
 
   return (
     <Wrapper>
       <LoginBackground style={{ position: 'absolute', top: 0, left: 0, zIndex: -1 }} />
-      <MailNotification animated />
+      <MailNotification />
       <PasswordBorder className="password-border" />
       <div className="digits">
         {login.password.map((d, i) => (

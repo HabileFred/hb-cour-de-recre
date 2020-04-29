@@ -24,18 +24,6 @@ export default function App() {
         <Route exact path="/bidule-o-tron/" component={BiduleOTron} />
         <Route component={NotFoundPage} />
       </Switch>
-      <div id="cookies_message">
-        En poursuivant votre navigation sur notre jeu, vous acceptez
-        l'utilisation des cookies qui nous permettent de récolter des
-        statistiques de visites.
-        <button
-          onClick={() =>
-            (document.getElementById('cookies_message').style.display = 'none')
-          }
-        >
-          OK
-        </button>
-      </div>
     </React.Fragment>
   );
 }

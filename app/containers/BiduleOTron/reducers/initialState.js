@@ -1,5 +1,8 @@
 export const initialState = {
-  status: 'off',
+  status: 'intro',
+  mailbox: {
+    messages: [],
+  },
   $game: {
     startedAt: null,
     completedAt: null,

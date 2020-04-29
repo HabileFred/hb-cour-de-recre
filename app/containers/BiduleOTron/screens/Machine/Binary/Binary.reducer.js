@@ -22,6 +22,15 @@ class ReducerBinary {
     };
   }
 
+  reset() {
+    const { binary } = getDraft();
+    Object.assign(binary, {
+      SOLVED: false,
+      index: 0,
+      values: ['', '', ''],
+    });
+  }
+
   check() {
     const draft = getDraft();
     draft.binary.SOLVED = arraysEqual(

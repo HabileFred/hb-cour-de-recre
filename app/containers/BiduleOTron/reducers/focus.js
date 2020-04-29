@@ -58,7 +58,7 @@ class Focus {
 
           'login/password': ['Keypad', 'Mailbox', 'Submit', 'Cancel'],
 
-          'home/menu': ['ColoredButtons', 'Submit', 'Cancel'],
+          'home/menu': ['ColoredButtons', 'Submit', 'Cancel', 'Mailbox'],
 
           'machine/bidule': ['Arrows', 'Submit', 'Cancel', 'Mailbox'],
           'machine/pieces': ['Arrows', 'ColoredButtons', 'Cancel', 'Mailbox'],
@@ -72,7 +72,7 @@ class Focus {
           'launcher/radar': ['Arrows', 'Submit', 'Cancel', 'Mailbox'],
           'launcher/params': ['Keypad', 'ColoredButtons', 'Simon', 'Cancel'],
 
-          'credits/credits': ['Submit', 'Cancel'],
+          'credits/credits': [],
         },
       },
     };
@@ -237,6 +237,9 @@ class Focus {
     } else if (nav.popup.reject) {
       nav.popup.reject.call(nav.popup.reject);
     }
+    if (nav.popup.id === 'mail-end') {
+      this.setScreen('credits');
+    }
     nav.popup.id = null;
   }
 
@@ -250,6 +253,9 @@ class Focus {
     }
     if (nav.popup.reject) {
       nav.popup.reject.call(nav.popup.reject);
+    }
+    if (nav.popup.id === 'mail-end') {
+      this.setScreen('credits');
     }
     nav.popup.id = null;
   }

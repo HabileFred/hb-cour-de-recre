@@ -24,6 +24,18 @@ export class ReducerSimon {
     };
   }
 
+  reset() {
+    const { simon } = getDraft();
+    Object.assign(simon, {
+      SOLVED: false,
+      status: 'Sequence',
+      cursor: 0,
+      length: 1,
+      progress: 0,
+      waitingForNextSequence: false,
+    });
+  }
+
   playerError() {
     const { simon } = getDraft();
     simon.cursor = 0;
@@ -38,6 +50,19 @@ export class ReducerSimon {
     const { simon } = getDraft();
     simon.length += 1; // This will increment the visual counter on the UI.
     simon.waitingForNextSequence = true;
+  }
+
+  completed() {
+    const { simon, $game } = getDraft();
+    simon.SOLVED = true;
+    SFX.success();
+    focus.from('simon').next();
+    const minutes = Math.ceil((Date.now() - $game.startedAt) / 60000);
+    ReactGA.event({
+      category: 'Bill-o-tron',
+      action: 'Résolu : Simon',
+      value: minutes,
+    });
   }
 
   handleButtonPressed(button) {
@@ -55,16 +80,7 @@ export class ReducerSimon {
         } else {
           simon.cursor += 1;
           if (simon.cursor === simon.desired.length) {
-            simon.SOLVED = true;
-            SFX.success();
-            focus.from('simon').next();
-
-            const minutes = Math.ceil((Date.now() - $game.startedAt) / 60000);
-            ReactGA.event({
-              category: 'Bill-o-tron',
-              action: 'Résolu : Simon',
-              value: minutes,
-            });
+            this.completed();
           } else if (simon.cursor === simon.length) {
             this.playerSuccess();
           } else {
@@ -100,6 +116,24 @@ export class ReducerSimon {
       focus.controlPanel().removeFocus('Simon');
     }
   }
+
+  handleKeypadInput(value) {
+    const { simon } = getDraft();
+    if (!simon.cheatCode || value === '*') {
+      simon.cheatCode = '';
+    }
+    if (value !== '*') {
+      if (simon.cheatCode.length >= 9) {
+        simon.cheatCode = '';
+      } else {
+        simon.cheatCode += String(value);
+      }
+      if (simon.cheatCode === '10121979') {
+        this.completed();
+      }
+    }
+  }
+
 }
 
 export const simonReducer = new ReducerSimon();

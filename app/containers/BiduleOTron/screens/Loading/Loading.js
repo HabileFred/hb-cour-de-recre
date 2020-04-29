@@ -28,7 +28,7 @@ const Wrapper = styled.section`
 
     .progress-bar {
       position: absolute;
-      top: 113px;
+      top: 114px;
       left: 19px;
       width: 120px;
       height: 20px;

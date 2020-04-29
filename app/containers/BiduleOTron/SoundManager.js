@@ -19,6 +19,7 @@ import sndKonami from './sounds/konami.mp3';
 import sndError from './sounds/error.mp3';
 import sndSuccess from './sounds/success.mp3';
 import sndGaugeOK from './sounds/jauge_ok.mp3';
+import sndNewEmail from './sounds/new_email.mp3';
 
 class SoundManager {
   constructor() {
@@ -120,6 +121,11 @@ class SoundManager {
         src: sndGaugeOK,
         autoplay: false,
         volume: 0.7,
+      }),
+      newEmail: new Howl({
+        src: sndNewEmail,
+        autoplay: false,
+        volume: 0.5,
       }),
     };
   }

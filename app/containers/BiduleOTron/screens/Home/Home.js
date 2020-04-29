@@ -9,12 +9,14 @@ import classnames from 'classnames';
 
 import { makeSelectHome } from 'BOT/selectors';
 import theme from 'BOT/Theme';
+import MailNotification from 'BOT/components/MailNotification/MailNotification';
 
 import Background from './img/menu.svg';
 import ImageMenuItem1 from './img/menu_selection_bidulo.svg';
 import ImageMenuItem2 from './img/menu_selection_lance.svg';
 import ImageSubmit from 'BOT/img/valider.svg';
-import { musicToggle, homeFirstTime } from '../../actions';
+import { musicToggle, homeFirstTime, mailboxAddMessage } from '../../actions';
+import { makeSelectBidule } from '../../selectors';
 
 const animation = keyframes`
   from {
@@ -74,15 +76,21 @@ const Wrapper = styled.section`
   }
 `;
 
-function Home({ dispatch, home }) {
+function Home({ dispatch, bidule, home }) {
 
   useEffect(() => {
     dispatch(homeFirstTime());
+    if (bidule.SOLVED) {
+      window.setTimeout(() => dispatch(mailboxAddMessage('mail-destination')), 3000);
+    } else {
+      window.setTimeout(() => dispatch(mailboxAddMessage('mail-bidule')), 3000);
+    }
   }, []);
 
   return (
     <Wrapper>
       <Background style={{ position: 'absolute', top: 0, left: 0 }} />
+      <MailNotification />
       <div className={classnames('menu-item', 'menu-item-1', { active: home.cursor === 0 })}>
         <ImageMenuItem1 />
       </div>
@@ -105,6 +113,7 @@ Home.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   home: makeSelectHome(),
+  bidule: makeSelectBidule(),
 });
 
 function mapDispatchToProps(dispatch) {

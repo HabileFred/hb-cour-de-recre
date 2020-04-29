@@ -58,12 +58,17 @@ import {
   REPLACE_FOCUS,
   RESET_STATE,
   CLEAR_ERROR,
+  INTRO_OK,
+  MAILBOX_NEW_MAIL,
+  MAILBOX_READ_MAIL,
 } from '../constants';
 
 /**
  * Pad button 'cancel' has been pressed.
  */
 function handlePadCancel() {
+  const draft = getDraft();
+
   if (focus.is('off/')) {
     return;
   }
@@ -73,13 +78,21 @@ function handlePadCancel() {
     return;
   }
 
+  if (focus.is('launcher/') && draft.bidule.SOLVED) {
+    return;
+  }
+
+
   if (focus.is('machine/')) {
     if (focus.is('machine/bidule')) {
       biduleReducer.handlePadCancel();
       focus.setScreen('home');
     } else {
-      const draft = getDraft();
       if (!draft.bidule.SOLVED) {
+        simonReducer.reset();
+        binaryReducer.reset();
+        piecesReducer.reset();
+        pipesReducer.reset();
         focus.confirm('confirm', () => focus.setScreen('machine'));
       } else {
         focus.setScreen('home');
@@ -191,14 +204,28 @@ const BiduleOTronReducer = (state = initialState, action) =>
         break;
 
       case PAD_MAILBOX:
-        if (focus.is('login/password')) {
-          loginReducer.handlePadMailbox();
-        } else if (focus.is('launcher/')) {
-          radarReducer.handlePadMailbox();
-        } else if (focus.is('machine/')) {
-          biduleReducer.handlePadMailbox();
+        let message = draft.mailbox.messages.find(m => !m.read);
+        if (message) {
+          message.read = true;
+          focus.popup(message.id);
+        } else if (draft.mailbox.lastMessageId) {
+          focus.popup(draft.mailbox.lastMessageId);
         } else {
           SFX.wrong();
+        }
+        break;
+
+      case MAILBOX_NEW_MAIL:
+        let existing = draft.mailbox.messages.findIndex(m => m.id === action.messageId);
+        if (existing === -1) {
+          draft.mailbox.messages.push({
+            id: action.messageId,
+            date: Date.now(),
+            read: false,
+          });
+          draft.mailbox.lastMessageId = action.messageId;
+          focus.controlPanel().setFocus('Mailbox');
+          SFX.play('newEmail');
         }
         break;
 
@@ -268,8 +295,15 @@ const BiduleOTronReducer = (state = initialState, action) =>
           // ... there is a cheat code for me :P
           if (focus.is('machine/lights')) {
             lightsReducer.handleKeypadInput(action.value);
-          } else if (focus.is('machine/pipes')) {
+          }
+          if (focus.is('machine/pipes')) {
             pipesReducer.handleKeypadInput(action.value);
+          }
+          if (focus.is('machine/fuses')) {
+            fusesReducer.handleKeypadInput(action.value);
+          }
+          if (focus.is('machine/simon')) {
+            simonReducer.handleKeypadInput(action.value);
           }
         }
         break;
@@ -338,13 +372,14 @@ const BiduleOTronReducer = (state = initialState, action) =>
 
       case GAME_COMPLETED:
         draft.$game.completedAt = Date.now();
+        focus.controlPanel().setFocus(null);
         break;
 
       case COMPUTER_ON_OFF:
         if (draft.status == 'on') {
           SFX.stopAll();
           localStorage.removeItem('state');
-          const newState = { ...initialState, status: 'off' };
+          const newState = { ...initialState, status: 'intro' };
           newState.nav.screen = 'off';
           newState.nav.focus = ['off'];
           newState.nav.controlPanel.focus = ['On'];
@@ -386,6 +421,10 @@ const BiduleOTronReducer = (state = initialState, action) =>
 
       case CLEAR_ERROR:
         draft.error = null;
+        break;
+
+      case INTRO_OK:
+        draft.status = 'off';
         break;
 
       default:

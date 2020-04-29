@@ -37,7 +37,7 @@ import imgBiduleOK from './img/bidule_ok.png';
 import imgBackground from 'BOT/img/fond_machine.png';
 import MailNotification from 'BOT/components/MailNotification/MailNotification';
 
-import { popup, gameCompleted, removeControlPanelFocus, focusNext, replaceFocus, resetState } from '../../actions';
+import { popup, gameCompleted, removeControlPanelFocus, focusNext, replaceFocus, resetState, mailboxAddMessage } from '../../actions';
 
 function BiduleName({ present, ...props }) {
   return present
@@ -132,11 +132,7 @@ function Launcher({ dispatch, params, bidule, radar }) {
     await wait(1000);
     setPropellantAnimation('stopping');
 
-    dispatch(popup(
-      { id: 'score', closeButton: 'Submit' },
-      () => focus.from('params').next()
-    ));
-    SFX.play('konami');
+    window.setTimeout(() => dispatch(mailboxAddMessage('mail-end')), 2000);
   };
 
   const popupOK = () => {
@@ -185,13 +181,10 @@ function Launcher({ dispatch, params, bidule, radar }) {
         <ImageLauncher />
       </div>
       <ImagePancarte className="pancarte" />
-      {bidule.SOLVED
-        ? (<MailNotification animated={!radar.enabled}/>)
-        : null
-      }
+      <MailNotification />
       <Barometer />
       <Antenna animated={bidule.SOLVED} />
-      <Radar radar={radar} focusId="radar" enabled={radar.enabled} />
+      <Radar radar={radar} focusId="radar" enabled />
       <Params params={params} focusId="params" />
       <ElectricWire w={1} animated={params.velocity.SOLVED} />
       <ElectricWire w={2} animated={params.direction.SOLVED} />

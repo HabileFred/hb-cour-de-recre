@@ -22,9 +22,24 @@ class ReducerFuses {
 
   checkWiresReadiness() {
     const draft = getDraft();
+    draft.wires.readiness.top = draft.fuses.SOLVED;
     if (draft.fuses.SOLVED && draft.lights.SOLVED) {
       focus.set('wires', ['fuses', 'lights']);
     }
+  }
+
+  completed() {
+    const { $game, fuses } = getDraft();
+    fuses.SOLVED = true;
+    SFX.success();
+    focus.from('fuses').next();
+    const minutes = Math.ceil((Date.now() - $game.startedAt) / 60000);
+    ReactGA.event({
+      category: 'Bill-o-tron',
+      action: 'Résolu : Fusibles',
+      value: minutes,
+    });
+    this.checkWiresReadiness();
   }
 
   checkFuses() {
@@ -41,16 +56,8 @@ class ReducerFuses {
     fuses.SOLVED = fbIndex === fuses.solution.length;
     wires.readiness.top = fuses.SOLVED;
     if (fuses.SOLVED) {
-      SFX.success();
-      focus.from('fuses').next();
-      const minutes = Math.ceil((Date.now() - $game.startedAt) / 60000);
-      ReactGA.event({
-        category: 'Bill-o-tron',
-        action: 'Résolu : Fusibles',
-        value: minutes,
-      });
+      this.completed();
     }
-    this.checkWiresReadiness();
   }
 
   handleFuseToggle(index) {
@@ -78,6 +85,24 @@ class ReducerFuses {
     } else if (action.type === 'FUSES_FEEDBACK_ANIMATION_STARTED') {
       fuses.feedback.status = 'isAnimating';
       focus.controlPanel().removeFocus('Fuses');
+    }
+  }
+
+
+  handleKeypadInput(value) {
+    const { fuses } = getDraft();
+    if (!fuses.cheatCode || value === '*') {
+      fuses.cheatCode = '';
+    }
+    if (value !== '*') {
+      if (fuses.cheatCode.length >= 9) {
+        fuses.cheatCode = '';
+      } else {
+        fuses.cheatCode += String(value);
+      }
+      if (fuses.cheatCode === '10121979') {
+        this.completed();
+      }
     }
   }
 }

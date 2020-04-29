@@ -35,6 +35,9 @@ import {
   REPLACE_FOCUS,
   RESET_STATE,
   CLEAR_ERROR,
+  INTRO_OK,
+  MAILBOX_NEW_MAIL,
+  MAILBOX_READ_MAIL,
 } from './constants';
 
 export function padUp() {
@@ -232,5 +235,25 @@ export function gameCompleted() {
 export function computerOnOff() {
   return {
     type: COMPUTER_ON_OFF,
+  };
+}
+
+export function introOK() {
+  return {
+    type: INTRO_OK,
+  };
+}
+
+export function mailboxAddMessage(messageId) {
+  return {
+    type: MAILBOX_NEW_MAIL,
+    messageId,
+  };
+}
+
+export function mailboxReadMessage(messageId) {
+  return {
+    type: MAILBOX_READ_MAIL,
+    messageId,
   };
 }

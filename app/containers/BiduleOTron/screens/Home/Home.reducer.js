@@ -48,6 +48,11 @@ export class ReducerHome {
     home.cursor = -1;
   }
 
+  handlePadMailbox() {
+    SFX.click();
+    focus.popup('mail-bidule');
+  }
+
 }
 
 export const homeReducer = new ReducerHome();

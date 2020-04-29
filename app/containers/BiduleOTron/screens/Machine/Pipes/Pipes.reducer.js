@@ -39,6 +39,31 @@ export class ReducerPipes {
     };
   }
 
+  reset() {
+    const { pipes } = getDraft();
+    Object.assign(pipes, {
+      pipes: [1, 1, 9, 1, 1, 1, 1, 1, 1, 9, 1, 9, 1, 1, 1, 1, 1, 1],
+      gauges: [
+        null,
+        {
+          SOLVED: false,
+          solution: [0, 0, 9, 3, 1, 0, 0, 0, 3, 9, 0, 9, 0, 3, 1, 0, 0, 0],
+        },
+        {
+          SOLVED: false,
+          solution: [3, 0, 9, 0, 0, 0, 2, 4, 0, 9, 0, 9, 0, 2, 4, 0, 0, 0],
+        },
+        {
+          SOLVED: false,
+          solution: [2, 4, 9, 0, 0, 0, 0, 2, 4, 9, 0, 9, 0, 0, 2, 4, 0, 0],
+        },
+        null,
+        null,
+      ],
+      SOLVED: false,
+    });
+  }
+
   handleKeypadInput(value) {
     const draft = getDraft();
     if (!draft.pipes.cheatCode || value === '*') {

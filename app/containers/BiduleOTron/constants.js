@@ -4,6 +4,11 @@
  *
  */
 
+export const INTRO_OK = 'BOT/INTRO_OK';
+
+export const MAILBOX_NEW_MAIL = 'BOT/MAILBOX_NEW_MAIL';
+export const MAILBOX_READ_MAIL = 'BOT/MAILBOX_READ_MAIL';
+
 export const GAME_STARTED = 'BOT/GAME_STARTED';
 export const GAME_COMPLETED = 'BOT/GAME_COMPLETED';
 

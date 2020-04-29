@@ -129,7 +129,7 @@ export class ReducerBidule {
   }
 
   handlePadMailbox() {
-    focus.popup('mail');
+    focus.popup('mail-bidule');
     const { bidule } = getDraft();
     bidule.messageRead = true;
   }

@@ -42,6 +42,12 @@ export default function configureStore(initialState = {}, history) {
       const serializedState = localStorage.getItem('state');
       if (serializedState !== null) {
         initialState = JSON.parse(serializedState);
+        if (!initialState.biduleOTron.mailbox) {
+          initialState.biduleOTron.mailbox = {
+            messages: [],
+          };
+          console.info(`Update 20200429: created "mailbox" entry in "biduleOnTron" Store.`);
+        }
       }
     } catch (err) {}
   }

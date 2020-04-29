@@ -64,7 +64,7 @@ export class ReducerLogin {
 
   handlePadMailbox() {
     SFX.click();
-    focus.popup('mail');
+    focus.popup('mail-connection');
   }
 }
 

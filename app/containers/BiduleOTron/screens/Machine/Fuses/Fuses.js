@@ -42,7 +42,7 @@ const MachineFuses = function({ dispatch, fuses, focused, solved }) {
     window.clearTimeout(timer);
     dispatch({ type: 'FUSES_FEEDBACK_ANIMATION_STARTED' });
     setFeedback([0, 0, 0, 0]);
-    await ms(1000);
+    await ms(700);
 
     for (let i = 0; i < 4; i++) {
       setFeedback([
@@ -51,7 +51,7 @@ const MachineFuses = function({ dispatch, fuses, focused, solved }) {
         i >= 2 ? (fuses.feedback.values[2] ? 1 : -1) : 0,
         i >= 3 ? (fuses.feedback.values[3] ? 1 : -1) : 0,
       ]);
-      await ms(500);
+      await ms(330);
     }
 
     dispatch({ type: 'FUSES_FEEDBACK_ANIMATION_STOPPED' });

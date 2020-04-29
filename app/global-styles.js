@@ -41,25 +41,6 @@ const GlobalStyle = createGlobalStyle`
     height: 100%;
   }
 
-  #cookies_message {
-    position: fixed;
-    bottom: 10px;
-    left: 10px;
-    right: 10px;
-    text-align: center;
-    color: white;
-    background: rgba(0,0,0,0.4);
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 10pt;
-  }
-  #cookies_message button {
-    background: white;
-    color: black;
-    border-radius: 3px;
-    margin-left: 10px;
-  }
-
   @media screen and (min-height: 780px) {
     #app {
       justify-content: center;
