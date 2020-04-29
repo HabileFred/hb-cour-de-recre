@@ -6,12 +6,13 @@
 import { objectsEqual } from 'BOT/utils';
 import { SFX } from 'BOT/SoundManager';
 
+import ReactGA from 'react-ga';
+
 import { initialState } from 'BOT/reducers/initialState';
 import { focus } from 'BOT/reducers/focus';
 import { getDraft } from 'BOT/reducers/draft';
 
 export class ReducerLights {
-
   constructor() {
     initialState.lights = {
       values: {
@@ -41,8 +42,20 @@ export class ReducerLights {
 
   checkLights() {
     const draft = getDraft();
-    draft.lights.SOLVED = objectsEqual(draft.lights.values, draft.lights.solution);
+    draft.lights.SOLVED = objectsEqual(
+      draft.lights.values,
+      draft.lights.solution,
+    );
     draft.wires.readiness.bottom = draft.lights.SOLVED;
+    if (draft.lights.SOLVED) {
+      SFX.success();
+      const minutes = Math.ceil((Date.now() - draft.$game.startedAt) / 60000);
+      ReactGA.event({
+        category: 'Bill-o-tron',
+        action: 'Résolu : Loupiottes',
+        value: minutes,
+      });
+    }
     this.checkWiresReadiness();
   }
 
@@ -52,7 +65,7 @@ export class ReducerLights {
   lightsToggle(colors) {
     SFX.click();
     const draft = getDraft();
-    colors.forEach(c => draft.lights.values[c] = !draft.lights.values[c]);
+    colors.forEach(c => (draft.lights.values[c] = !draft.lights.values[c]));
     this.checkLights();
   }
 
@@ -68,7 +81,7 @@ export class ReducerLights {
         this.lightsToggle(['blue', 'red', 'green']);
         break;
       case 'K':
-        this.lightsToggle(['red', 'yellow', 'purple']);
+        this.lightsToggle(['red', 'yellow', 'purple', 'blue']);
         break;
       case 'L':
         this.lightsToggle(['purple', 'green']);

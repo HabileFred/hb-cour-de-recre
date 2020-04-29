@@ -1,12 +1,12 @@
-import { SFX } from '../../../SoundManager';
-import { cycleValue } from '../../../utils';
+import ReactGA from 'react-ga';
 
 import { initialState } from 'BOT/reducers/initialState';
 import { focus } from 'BOT/reducers/focus';
 import { getDraft } from 'BOT/reducers/draft';
+import { cycleValue } from '../../../utils';
+import { SFX } from '../../../SoundManager';
 
 export class ReducerPieces {
-
   constructor() {
     initialState.pieces = {
       MAX_VALUE: 20,
@@ -33,7 +33,14 @@ export class ReducerPieces {
     } else {
       delete draft.error;
       draft.pieces.SOLVED = true;
+      SFX.success();
       focus.from('pieces').next();
+      const minutes = Math.ceil((Date.now() - draft.$game.startedAt) / 60000);
+      ReactGA.event({
+        category: 'Bill-o-tron',
+        action: 'Résolu : Pièces',
+        value: minutes,
+      });
     }
   }
 

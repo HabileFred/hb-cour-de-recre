@@ -6,12 +6,13 @@
 import { SFX } from 'BOT/SoundManager';
 import { arraysEqual, cycleValue } from 'BOT/utils';
 
+import ReactGA from 'react-ga';
+
 import { initialState } from 'BOT/reducers/initialState';
 import { focus } from 'BOT/reducers/focus';
 import { getDraft } from 'BOT/reducers/draft';
 
 class ReducerParams {
-
   constructor() {
     initialState.params = {
       SOLVED: false,
@@ -27,12 +28,12 @@ class ReducerParams {
         values: [0, 0, 0, 0, 0, 0],
         solution: [1, 2, 3, 4, 2, 3],
         buttonValues: {
-          'g': 4,
-          'h': 1,
-          'j': 3,
-          'k': 5,
-          'l': 2,
-        }
+          g: 4,
+          h: 1,
+          j: 3,
+          k: 5,
+          l: 2,
+        },
       },
       direction: {
         SOLVED: false,
@@ -44,8 +45,19 @@ class ReducerParams {
   }
 
   checkSolved() {
-    const { params } = getDraft();
-    params.SOLVED = params.velocity.SOLVED && params.stability.SOLVED && params.direction.SOLVED;
+    const { params, $game } = getDraft();
+    params.SOLVED =
+      params.velocity.SOLVED &&
+      params.stability.SOLVED &&
+      params.direction.SOLVED;
+    if (params.SOLVED) {
+      const minutes = Math.ceil((Date.now() - $game.startedAt) / 60000);
+      ReactGA.event({
+        category: 'Bill-o-tron',
+        action: 'Résolu : Paramètres Lance-bidule',
+        value: minutes,
+      });
+    }
   }
 
   handleButtonPressed(button) {
@@ -59,6 +71,9 @@ class ReducerParams {
       } else {
         s.values[s.cursor] = s.buttonValues[button];
         s.SOLVED = arraysEqual(s.values, s.solution);
+        if (s.SOLVED) {
+          SFX.success();
+        }
         this.checkSolved();
         s.cursor = cycleValue(s.cursor, 1, 0, s.solution.length);
       }
@@ -75,6 +90,9 @@ class ReducerParams {
           v.values.length = 4;
           v.solution.length = 4;
           v.SOLVED = arraysEqual(v.values, v.solution);
+          if (v.SOLVED) {
+            SFX.success();
+          }
           this.checkSolved();
           v.cursor = cycleValue(v.cursor, 1, 0, v.solution.length);
         }
@@ -86,13 +104,29 @@ class ReducerParams {
 
   handleKeypadInput(value) {
     const { params } = getDraft();
-    params.direction.values[params.direction.cursor] = value;
-    params.direction.cursor = cycleValue(params.direction.cursor, 1, 0, params.direction.solution.length - 1);
-    params.direction.SOLVED = arraysEqual(params.direction.values, params.direction.solution);
-    SFX.click();
-    this.checkSolved();
+    if (params.direction.cursor == params.direction.solution.length) {
+      params.direction.values = [];
+      params.direction.cursor = 0;
+    } else {
+      params.direction.values[params.direction.cursor] = value;
+      params.direction.SOLVED = arraysEqual(
+        params.direction.values,
+        params.direction.solution,
+      );
+      if (params.direction.SOLVED) {
+        SFX.success();
+      } else {
+        SFX.click();
+      }
+      this.checkSolved();
+      params.direction.cursor = cycleValue(
+        params.direction.cursor,
+        1,
+        0,
+        params.direction.solution.length,
+      );
+    }
   }
-
 }
 
 export const paramsReducer = new ReducerParams();

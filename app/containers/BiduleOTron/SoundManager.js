@@ -1,8 +1,7 @@
-
 import { Howl } from 'howler';
 import sndBackgroundMusic from './sounds/monstre_chambre.mp3';
 import sndButtonWrong from './sounds/button_wrong.mp3';
-import sndButtonClick from './sounds/button_click.mp3';
+import sndButtonClick from './sounds/button_click_1.mp3';
 import sndButtonClick2 from './sounds/button_click_2.mp3';
 import sndTool from './sounds/cliquet.mp3';
 import sndOpenBidule from './sounds/ouverture_bidule.mp3';
@@ -18,10 +17,12 @@ import sndBoot from './sounds/boot.mp3';
 import sndSparkle from './sounds/arc_electrique.mp3';
 import sndKonami from './sounds/konami.mp3';
 import sndError from './sounds/error.mp3';
+import sndSuccess from './sounds/success.mp3';
+import sndGaugeOK from './sounds/jauge_ok.mp3';
 
 class SoundManager {
   constructor() {
-    this.sfxEnabled = true;
+    this.sfxEnabled = false;
     this.sounds = {
       music: new Howl({
         src: sndBackgroundMusic,
@@ -104,11 +105,21 @@ class SoundManager {
       konami: new Howl({
         src: sndKonami,
         autoplay: false,
-        volume: 0.1,
+        volume: 0.4,
       }),
       error: new Howl({
         src: sndError,
         autoplay: false,
+      }),
+      success: new Howl({
+        src: sndSuccess,
+        autoplay: false,
+        volume: 0.3,
+      }),
+      gaugeOK: new Howl({
+        src: sndGaugeOK,
+        autoplay: false,
+        volume: 0.7,
       }),
     };
   }
@@ -141,17 +152,18 @@ const soundManager = new SoundManager();
 export default soundManager;
 
 export const SFX = {
-  play: (s) => soundManager.play(s),
-  stop: (s) => soundManager.stop(s),
+  play: s => soundManager.play(s),
+  stop: s => soundManager.stop(s),
   stopAll: () => soundManager.stopAll(),
-  enableSFX: (b) => soundManager.enableSFX(b),
+  enableSFX: b => soundManager.enableSFX(b),
 
   click: (n = '') => soundManager.play(`click${n}`),
   wrong: () => soundManager.play('wrong'),
-  tool: () => soundManager.play('tool'),
-  biduleBuilt: () => soundManager.play('biduleBuilt'),
+
+  error: () => soundManager.play('error'),
+  success: () => soundManager.play('success'),
+
   electricity: () => soundManager.play('electricity'),
-  toggleSwitch: () => soundManager.play('toggleSwitch'),
   popup: () => soundManager.play('popup'),
   music: (on = true) => {
     if (on) {
@@ -159,5 +171,5 @@ export const SFX = {
     } else {
       soundManager.stop('music');
     }
-  }
+  },
 };

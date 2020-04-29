@@ -6,12 +6,13 @@
 import { SFX } from 'BOT/SoundManager';
 import { betweenValue } from 'BOT/utils';
 
+import ReactGA from 'react-ga';
+
 import { initialState } from 'BOT/reducers/initialState';
 import { focus } from 'BOT/reducers/focus';
 import { getDraft } from 'BOT/reducers/draft';
 
 export class ReducerBidule {
-
   constructor() {
     initialState.bidule = {
       konami: {
@@ -70,17 +71,12 @@ export class ReducerBidule {
   updateUiCapabilities() {
     const { bidule } = getDraft();
     bidule.ui.canMoveLeft = bidule.index > 0;
-    bidule.ui.canMoveRight = bidule.index < (bidule.BIDULE_COUNT - 1);
+    bidule.ui.canMoveRight = bidule.index < bidule.BIDULE_COUNT - 1;
   }
 
   handlePadLeft() {
     const { bidule } = getDraft();
-    const v = betweenValue(
-      bidule.index,
-      -1,
-      0,
-      (bidule.BIDULE_COUNT - 1)
-    );
+    const v = betweenValue(bidule.index, -1, 0, bidule.BIDULE_COUNT - 1);
     if (v !== bidule.index) {
       bidule.index = v;
       bidule.submitted = false;
@@ -93,12 +89,7 @@ export class ReducerBidule {
 
   handlePadRight() {
     const { bidule } = getDraft();
-    const v = betweenValue(
-      bidule.index,
-      1,
-      0,
-      (bidule.BIDULE_COUNT - 1)
-    );
+    const v = betweenValue(bidule.index, 1, 0, bidule.BIDULE_COUNT - 1);
     if (v !== bidule.index) {
       bidule.index = v;
       bidule.submitted = false;
@@ -117,6 +108,13 @@ export class ReducerBidule {
     if (!bidule.submitted) {
       bidule.submitted = true;
     }
+
+    ReactGA.event({
+      category: 'Bill-o-tron',
+      action: 'Bidule sélectionné',
+      value: bidule.biduleNames[bidule.index],
+    });
+
     // bidule.SOLVED = true; // FIXME
     focus.from('bidule').next();
     SFX.click();
@@ -127,7 +125,7 @@ export class ReducerBidule {
    */
   handlePadCancel() {
     const { bidule } = getDraft();
-    bidule.submitted = false;
+    bidule.submitted = bidule.konami.SOLVED;
   }
 
   handlePadMailbox() {

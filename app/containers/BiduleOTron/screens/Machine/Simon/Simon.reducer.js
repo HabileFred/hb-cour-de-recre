@@ -9,8 +9,9 @@ import { focus } from 'BOT/reducers/focus';
 import { getDraft } from 'BOT/reducers/draft';
 import { SFX } from 'BOT/SoundManager';
 
-export class ReducerSimon {
+import ReactGA from 'react-ga';
 
+export class ReducerSimon {
   constructor() {
     initialState.simon = {
       SOLVED: false,
@@ -40,7 +41,7 @@ export class ReducerSimon {
   }
 
   handleButtonPressed(button) {
-    const { simon } = getDraft();
+    const { simon, $game } = getDraft();
     if (simon.status === 'Sequence' && simon.length > 1) {
       SFX.wrong();
     } else {
@@ -54,15 +55,20 @@ export class ReducerSimon {
         } else {
           simon.cursor += 1;
           if (simon.cursor === simon.desired.length) {
-            SFX.click(); // TODO Other sound when done?
             simon.SOLVED = true;
+            SFX.success();
             focus.from('simon').next();
+
+            const minutes = Math.ceil((Date.now() - $game.startedAt) / 60000);
+            ReactGA.event({
+              category: 'Bill-o-tron',
+              action: 'Résolu : Simon',
+              value: minutes,
+            });
+          } else if (simon.cursor === simon.length) {
+            this.playerSuccess();
           } else {
-            if (simon.cursor === simon.length) {
-              this.playerSuccess();
-            } else {
-              SFX.click(2);
-            }
+            SFX.click(2);
           }
         }
       }

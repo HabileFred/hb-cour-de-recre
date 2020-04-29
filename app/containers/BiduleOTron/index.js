@@ -11,7 +11,11 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import styled from 'styled-components';
 
+import ReactGA from 'react-ga';
+
 import { useInjectReducer } from 'utils/injectReducer';
+import { Digits } from 'BOT/components/Digits/Digits';
+import { Confirm, Popup } from 'BOT/components/Popups/Popups';
 import { makeSelectNav, makeSelectGame, makeSelectStatus } from './selectors';
 import reducer from './reducers/reducer';
 
@@ -24,16 +28,13 @@ import Home from './screens/Home/Home';
 import Credits from './screens/Credits/Credits';
 import Off from './screens/Off/Off';
 
-import { Digits } from 'BOT/components/Digits/Digits';
-import { Confirm, Popup } from 'BOT/components/Popups/Popups';
-
 import ConfirmChangeBidule from './img/popups/confirm_annule_bidule.svg';
 import ConfirmSwitchOff from './img/popups/confirm_extinction_machine.svg';
 import PopupBiduleBuild from './img/popups/fabrication_bidule.svg';
 import PopupBiduleReady from './img/popups/bidule_dans_bidulotheque.svg';
 import PopupBiduleSend from './img/popups/envoie_bidule.svg';
-import PopupMail from './img/popups/lettre_debut.svg';
-import PopupMailDestination from './img/popups/lettre_destination.svg';
+import PopupMail from './img/popups/lettre_debutV2.svg';
+import PopupMailDestination from './img/popups/lettre_destinationV2.svg';
 import PopupScore from './img/popups/scoring.svg';
 import PopupKonami from './img/popups/habile_bill.svg';
 import PopupBiduleError from './img/popups/erreur_bidule.svg';
@@ -52,7 +53,7 @@ const Shadow = styled.div`
   width: 1312px;
   height: 587px;
   z-index: -1;
-  display: ${props => props.on ? 'block' : 'none'};
+  display: ${props => (props.on ? 'block' : 'none')};
   background: url('${imgShadow}') top left no-repeat;
 `;
 
@@ -95,76 +96,133 @@ export function BiduleOTron({ nav, game, status }) {
   useInjectReducer({ key: 'biduleOTron', reducer });
 
   useEffect(() => {
-    document.title = "Bill-o-tron | Cour de récré | Habile Bill";
-  });
+    document.title = 'Bill-o-tron | Cour de récré | Habile Bill';
+    ReactGA.initialize('UA-146502417-1');
+    ReactGA.pageview(window.location.pathname + window.location.search);
+  }, []);
 
   let screen;
   switch (nav.screen) {
     case 'loading':
-      screen = (<Loading />);
+      screen = <Loading />;
       break;
     case 'machine':
-      screen = (<Machine />);
+      screen = <Machine />;
       break;
     case 'launcher':
-      screen = (<Launcher />);
+      screen = <Launcher />;
       break;
     case 'home':
-      screen = (<Home />);
+      screen = <Home />;
       break;
     case 'credits':
-      screen = (<Credits />);
+      screen = <Credits />;
       break;
     case 'off':
-      screen = (<Off />);
+      screen = <Off />;
       break;
     default:
-      screen = (<Login />);
+      screen = <Login />;
   }
 
   let popup;
   switch (nav.popup.id) {
     case 'confirm':
-      popup = (<Confirm><ConfirmChangeBidule /></Confirm>);
+      popup = (
+        <Confirm>
+          <ConfirmChangeBidule />
+        </Confirm>
+      );
       break;
 
     case 'confirm-off':
-      popup = (<Confirm><ConfirmSwitchOff /></Confirm>);
+      popup = (
+        <Confirm>
+          <ConfirmSwitchOff />
+        </Confirm>
+      );
       break;
 
     case 'mail':
-      popup = (<Popup><PopupMail /></Popup>);
+      popup = (
+        <Popup>
+          <PopupMail />
+        </Popup>
+      );
       break;
 
     case 'mail-direction':
-      popup = (<Popup><PopupMailDestination /></Popup>);
+      popup = (
+        <Popup>
+          <PopupMailDestination />
+        </Popup>
+      );
       break;
 
     case 'bidule-fabrication-debut':
-      popup = (<Popup><PopupBiduleBuild /></Popup>);
+      popup = (
+        <Popup>
+          <PopupBiduleBuild />
+        </Popup>
+      );
       break;
     case 'bidule-fabrication-fin':
-      popup = (<Popup><PopupBiduleReady /></Popup>);
+      popup = (
+        <Popup>
+          <PopupBiduleReady />
+        </Popup>
+      );
       break;
 
     case 'bidule-envoi-debut':
-      popup = (<Popup><PopupBiduleSend /></Popup>);
+      popup = (
+        <Popup>
+          <PopupBiduleSend />
+        </Popup>
+      );
       break;
 
     case 'erreur-bidule':
-      popup = (<Popup><PopupBiduleError /></Popup>);
+      popup = (
+        <Popup>
+          <PopupBiduleError />
+        </Popup>
+      );
       break;
 
     case 'konami':
-      popup = (<Popup><PopupKonami /></Popup>);
+      ReactGA.event({
+        category: 'Bill-o-tron',
+        action: 'Code Konami',
+      });
+      popup = (
+        <Popup>
+          <PopupKonami />
+        </Popup>
+      );
       break;
 
     case 'score':
       const minutes = Math.ceil((game.completedAt - game.startedAt) / 60000);
+      ReactGA.event({
+        category: 'Bill-o-tron',
+        action: 'Partie terminée',
+        value: minutes,
+      });
       popup = (
         <Popup>
           <PopupScore />
-          <Digits size={20} color="#4B4B4B" style={{ position: 'absolute', left: '277px', top: '220px', transform: 'translateX(-50%)' }} value={minutes} />
+          <Digits
+            size={20}
+            color="#4B4B4B"
+            style={{
+              position: 'absolute',
+              left: '277px',
+              top: '220px',
+              transform: 'translateX(-50%)',
+            }}
+            value={minutes}
+          />
         </Popup>
       );
       break;
@@ -176,13 +234,13 @@ export function BiduleOTron({ nav, game, status }) {
   return (
     <BiduleOTronContainer>
       <Wrapper>
-        <Shadow on={status === 'on'}/>
+        <Shadow on={status === 'on'} />
         <Computer>
           <ComputerScreen style={{ position: 'absolute', zIndex: -1 }} />
           {screen}
           {popup}
-        <ControlPanel />
-      </Computer>
+          <ControlPanel />
+        </Computer>
       </Wrapper>
     </BiduleOTronContainer>
   );

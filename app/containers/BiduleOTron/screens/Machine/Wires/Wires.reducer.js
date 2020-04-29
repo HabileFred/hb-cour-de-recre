@@ -5,11 +5,12 @@
  */
 import { SFX } from 'BOT/SoundManager';
 
+import ReactGA from 'react-ga';
+
 import { initialState } from 'BOT/reducers/initialState';
 import { getDraft } from 'BOT/reducers/draft';
 
 export class ReducerWires {
-
   constructor() {
     initialState.wires = {
       readiness: {
@@ -29,8 +30,8 @@ export class ReducerWires {
   handleSocketSelection(which, index) {
     const draft = getDraft();
     // On cherche si un fil a déjà été branché sur cette prise.
-    const i = draft.wires.values.findIndex(
-      v => which === 'top' ? (v[0] === String(index)) : (v[1] === String(index))
+    const i = draft.wires.values.findIndex(v =>
+      which === 'top' ? v[0] === String(index) : v[1] === String(index),
     );
     // Si oui, on retire ce fil.
     if (i !== -1) {
@@ -52,7 +53,10 @@ export class ReducerWires {
       // Calcul de l'identifiant du fil branché.
       const v = `${draft.wires.sockets.top}${draft.wires.sockets.bottom}`;
       // Si fil attendu, on le place dans les fils correctement branchés (values).
-      if (draft.wires.solution.indexOf(v) !== -1 && draft.wires.values.indexOf(v) === -1) {
+      if (
+        draft.wires.solution.indexOf(v) !== -1 &&
+        draft.wires.values.indexOf(v) === -1
+      ) {
         SFX.electricity();
         draft.wires.values.push(v);
         // Résolu si 3 fils correctement branchés.
@@ -61,6 +65,16 @@ export class ReducerWires {
           // On teste quand même encore ici si c'est le bidule attendu
           // qui a été choisi.
           draft.bidule.SOLVED = draft.bidule.index === draft.bidule.solution;
+
+          SFX.success();
+          const minutes = Math.ceil(
+            (Date.now() - draft.$game.startedAt) / 60000,
+          );
+          ReactGA.event({
+            category: 'Bill-o-tron',
+            action: 'Résolu : Câbles',
+            value: minutes,
+          });
         }
       }
       // Dès que deux prises ont été sélectionnées,

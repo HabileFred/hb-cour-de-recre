@@ -6,12 +6,13 @@
 import { SFX } from 'BOT/SoundManager';
 import { betweenValue } from 'BOT/utils';
 
+import ReactGA from 'react-ga';
+
 import { initialState } from 'BOT/reducers/initialState';
 import { focus } from 'BOT/reducers/focus';
 import { getDraft } from 'BOT/reducers/draft';
 
 class ReducerRadar {
-
   constructor() {
     initialState.radar = {
       enabled: false,
@@ -29,7 +30,7 @@ class ReducerRadar {
   handlePadDown() {
     const draft = getDraft();
     if (draft.bidule.SOLVED && draft.radar.enabled) {
-      const y = draft.radar.cursor.y;
+      const { y } = draft.radar.cursor;
       draft.radar.cursor.y = betweenValue(y, 1, 0, 3);
       this.updateHasMoved();
       SFX.play(draft.radar.cursor.y === y ? 'wrong' : 'radar');
@@ -41,7 +42,7 @@ class ReducerRadar {
   handlePadUp() {
     const draft = getDraft();
     if (draft.bidule.SOLVED && draft.radar.enabled) {
-      const y = draft.radar.cursor.y;
+      const { y } = draft.radar.cursor;
       draft.radar.cursor.y = betweenValue(y, -1, 0, 3);
       this.updateHasMoved();
       SFX.play(draft.radar.cursor.y === y ? 'wrong' : 'radar');
@@ -53,7 +54,7 @@ class ReducerRadar {
   handlePadLeft() {
     const draft = getDraft();
     if (draft.bidule.SOLVED && draft.radar.enabled) {
-      const x = draft.radar.cursor.x;
+      const { x } = draft.radar.cursor;
       draft.radar.cursor.x = betweenValue(x, -1, 0, 3);
       this.updateHasMoved();
       SFX.play(draft.radar.cursor.x === x ? 'wrong' : 'radar');
@@ -65,7 +66,7 @@ class ReducerRadar {
   handlePadRight() {
     const draft = getDraft();
     if (draft.bidule.SOLVED && draft.radar.enabled) {
-      const x = draft.radar.cursor.x;
+      const { x } = draft.radar.cursor;
       draft.radar.cursor.x = betweenValue(x, 1, 0, 3);
       this.updateHasMoved();
       SFX.play(draft.radar.cursor.x === x ? 'wrong' : 'radar');
@@ -78,10 +79,19 @@ class ReducerRadar {
     const draft = getDraft();
     if (draft.bidule.SOLVED && draft.radar.enabled) {
       const { radar } = draft;
-      radar.SOLVED = radar.cursor.x === radar.solution.x && radar.cursor.y === radar.solution.y;
+      radar.SOLVED =
+        radar.cursor.x === radar.solution.x &&
+        radar.cursor.y === radar.solution.y;
       if (radar.SOLVED) {
-        SFX.play('radar');
+        SFX.success();
         focus.from('radar').next();
+
+        const minutes = Math.ceil((Date.now() - draft.$game.startedAt) / 60000);
+        ReactGA.event({
+          category: 'Bill-o-tron',
+          action: 'Résolu : Radar',
+          value: minutes,
+        });
       } else {
         SFX.wrong();
       }

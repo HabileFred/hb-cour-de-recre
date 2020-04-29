@@ -5,39 +5,6 @@
  */
 import produce from 'immer';
 
-import {
-  PAD_UP, PAD_DOWN, PAD_LEFT, PAD_RIGHT, PAD_SUBMIT, PAD_CANCEL,
-  PIPE_ROTATE, PIPES_CHECK,
-  BUTTON_PRESSED,
-  KEYPAD_INPUT,
-  FUSE_TOGGLE,
-  MUSIC_TOGGLE, SFX_TOGGLE,
-  WIRE_SELECT_BOTTOM_SOCKET, WIRE_SELECT_TOP_SOCKET,
-  SET_SCREEN,
-  FOCUS_NEXT,
-  BUTTON_SIMON_PRESSED,
-  SHOW_POPUP,
-  PAD_MAILBOX,
-  GAME_STARTED,
-  GAME_COMPLETED,
-  TURN_OFF,
-  TURN_ON,
-  COMPUTER_ON_OFF,
-  SET_CONTROL_PANEL_FOCUS,
-  REMOVE_CONTROL_PANEL_FOCUS,
-  HOME_FIRST_TIME,
-  SET_FOCUS,
-  REPLACE_FOCUS,
-  RESET_STATE,
-  CLEAR_ERROR
-} from '../constants';
-
-import { SFX } from '../SoundManager';
-
-import { initialState } from './initialState';
-import { focus } from './focus';
-import { getDraft } from './draft';
-
 // Import reducers.
 import { loginReducer } from 'BOT/screens/Login/Login.reducer';
 import { homeReducer } from 'BOT/screens/Home/Home.reducer';
@@ -54,42 +21,84 @@ import { wiresReducer } from 'BOT/screens/Machine/Wires/Wires.reducer';
 // Launcher
 import { radarReducer } from 'BOT/screens/Launcher/Radar/Radar.reducer';
 import { paramsReducer } from 'BOT/screens/Launcher/Params/Params.reducer';
-
-import { setWorkingDraft } from './draft';
+import { focus } from './focus';
+import { getDraft, setWorkingDraft } from './draft';
+import { SFX } from '../SoundManager';
+import { initialState } from './initialState';
+import {
+  PAD_UP,
+  PAD_DOWN,
+  PAD_LEFT,
+  PAD_RIGHT,
+  PAD_SUBMIT,
+  PAD_CANCEL,
+  PIPE_ROTATE,
+  PIPES_CHECK,
+  BUTTON_PRESSED,
+  KEYPAD_INPUT,
+  FUSE_TOGGLE,
+  MUSIC_TOGGLE,
+  SFX_TOGGLE,
+  WIRE_SELECT_BOTTOM_SOCKET,
+  WIRE_SELECT_TOP_SOCKET,
+  SET_SCREEN,
+  FOCUS_NEXT,
+  BUTTON_SIMON_PRESSED,
+  SHOW_POPUP,
+  PAD_MAILBOX,
+  GAME_STARTED,
+  GAME_COMPLETED,
+  TURN_OFF,
+  TURN_ON,
+  COMPUTER_ON_OFF,
+  SET_CONTROL_PANEL_FOCUS,
+  REMOVE_CONTROL_PANEL_FOCUS,
+  HOME_FIRST_TIME,
+  SET_FOCUS,
+  REPLACE_FOCUS,
+  RESET_STATE,
+  CLEAR_ERROR,
+} from '../constants';
 
 /**
  * Pad button 'cancel' has been pressed.
  */
 function handlePadCancel() {
+  if (focus.is('off/')) {
+    return;
+  }
+
   if (focus.is('login/')) {
     loginReducer.handlePadCancel();
-  } else {
-    if (focus.is('machine/')) {
-      if (focus.is('machine/bidule')) {
-        biduleReducer.handlePadCancel();
-        focus.setScreen('home');
-      } else {
-        const draft = getDraft();
-        if (!draft.bidule.SOLVED) {
-          focus.confirm('confirm', () => focus.setScreen('machine'));
-        } else {
-          focus.setScreen('home');
-        }
-      }
+    return;
+  }
+
+  if (focus.is('machine/')) {
+    if (focus.is('machine/bidule')) {
+      biduleReducer.handlePadCancel();
+      focus.setScreen('home');
     } else {
-      if (focus.is('home/')) {
-        homeReducer.handlePadCancel();
-        SFX.wrong();
+      const draft = getDraft();
+      if (!draft.bidule.SOLVED) {
+        focus.confirm('confirm', () => focus.setScreen('machine'));
       } else {
         focus.setScreen('home');
       }
     }
+    return;
+  }
+
+  if (focus.is('home/')) {
+    homeReducer.handlePadCancel();
+    SFX.wrong();
+  } else {
+    focus.setScreen('home');
   }
 }
 
 /* eslint-disable default-case, no-param-reassign */
 const BiduleOTronReducer = (state = initialState, action) =>
-  produce(state, (draft) => {
+  produce(state, draft => {
     setWorkingDraft(draft);
 
     if (!draft.$game.startedAt) {
@@ -113,7 +122,6 @@ const BiduleOTronReducer = (state = initialState, action) =>
     }
 
     switch (action.type) {
-
       case PAD_UP:
         if (focus.is('machine/binary')) {
           binaryReducer.handlePadUp();
@@ -205,7 +213,10 @@ const BiduleOTronReducer = (state = initialState, action) =>
       case PIPE_ROTATE:
         if (focus.is('machine/pipes')) {
           pipesReducer.rotatePipe(action.index);
-        } else if (focus.is('machine/bidule') && (action.index === 0 || action.index === 16)) {
+        } else if (
+          focus.is('machine/bidule') &&
+          (action.index === 0 || action.index === 16)
+        ) {
           biduleReducer.handleKonami(action.index === 0 ? 'A' : 'B'); // for Konami code ;)
         } else {
           SFX.wrong();
@@ -290,11 +301,11 @@ const BiduleOTronReducer = (state = initialState, action) =>
         break;
 
       case WIRE_SELECT_BOTTOM_SOCKET:
-          if (focus.is('machine/wires')) {
-            wiresReducer.handleSocketSelection('bottom', action.index);
-          } else {
-            SFX.wrong();
-          }
+        if (focus.is('machine/wires')) {
+          wiresReducer.handleSocketSelection('bottom', action.index);
+        } else {
+          SFX.wrong();
+        }
         break;
 
       case SET_SCREEN:
@@ -311,7 +322,11 @@ const BiduleOTronReducer = (state = initialState, action) =>
 
       case SHOW_POPUP:
         if (action.acceptHandler) {
-          focus.confirm(action.popupId, action.acceptHandler, action.denyHandler);
+          focus.confirm(
+            action.popupId,
+            action.acceptHandler,
+            action.denyHandler,
+          );
         } else if (action.closeHandler) {
           focus.popup(action.popupId, action.closeHandler);
         }
@@ -335,12 +350,13 @@ const BiduleOTronReducer = (state = initialState, action) =>
           newState.nav.controlPanel.focus = ['On'];
           SFX.enableSFX(newState.sounds.sfx);
           return newState;
-        } else {
-          SFX.enableSFX(draft.sounds.sfx);
-          SFX.click();
-          draft.status = 'on';
-          focus.setScreen('loading');
         }
+        draft.sounds.sfx = true;
+        SFX.enableSFX(draft.sounds.sfx);
+        SFX.click();
+        draft.status = 'on';
+        focus.setScreen('loading');
+
         break;
 
       case SET_CONTROL_PANEL_FOCUS:
@@ -373,7 +389,10 @@ const BiduleOTronReducer = (state = initialState, action) =>
         break;
 
       default:
-        simonReducer.handleAction(action);
+        if (focus.is('simon')) {
+          simonReducer.handleAction(action);
+        }
+        fusesReducer.handleAction(action);
         break;
     }
   });

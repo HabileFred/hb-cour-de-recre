@@ -6,34 +6,37 @@
 import { SFX } from 'BOT/SoundManager';
 import { arraysEqual, cycleValue } from 'BOT/utils';
 
+import ReactGA from 'react-ga';
+
 import { initialState } from 'BOT/reducers/initialState';
 import { focus } from 'BOT/reducers/focus';
 import { getDraft } from 'BOT/reducers/draft';
 
 class ReducerBinary {
-
   constructor() {
     initialState.binary = {
       SOLVED: false,
       index: 0,
-      values: [
-        '',
-        '',
-        '',
-      ],
-      solution: [
-        '0001111',
-        '1100010',
-        '0011000',
-      ]
+      values: ['', '', ''],
+      solution: ['0001111', '1100010', '0011000'],
     };
   }
 
   check() {
     const draft = getDraft();
-    draft.binary.SOLVED = arraysEqual(draft.binary.values, draft.binary.solution);
+    draft.binary.SOLVED = arraysEqual(
+      draft.binary.values,
+      draft.binary.solution,
+    );
     if (draft.binary.SOLVED) {
+      SFX.success();
       focus.from('binary').next();
+      const minutes = Math.ceil((Date.now() - draft.$game.startedAt) / 60000);
+      ReactGA.event({
+        category: 'Bill-o-tron',
+        action: 'Résolu : Binaire',
+        value: minutes,
+      });
     }
   }
 

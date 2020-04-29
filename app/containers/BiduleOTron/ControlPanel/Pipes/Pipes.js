@@ -5,12 +5,14 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 
-import { makeSelectPipes } from '../../selectors';
+import { makeSelectPipes } from 'BOT/selectors';
 
 import {
   pipeRotate,
   pipesCheck,
 } from '../../actions';
+
+import Button from './Button';
 
 const buttonPipesLetters = 'AZ ERTQSD F WXCVBN'.split('');
 
@@ -25,8 +27,6 @@ const Wrapper = styled.section`
   left: 213px;
 `;
 
-import Button from './Button';
-
 /**
  *
  */
@@ -34,17 +34,16 @@ function ButtonGroupPipes({ dispatch, pipes, focused }) {
   let pipeCheckTimeout = null;
 
   function rotatePipe(index) {
-    dispatch(pipeRotate(index));
-    if (pipeCheckTimeout) {
-      window.clearTimeout(pipeCheckTimeout);
-    }
-    pipeCheckTimeout = window.setTimeout(
-      () => {
+    if (!pipes.SOLVED) {
+      dispatch(pipeRotate(index));
+      if (pipeCheckTimeout) {
+        window.clearTimeout(pipeCheckTimeout);
+      }
+      pipeCheckTimeout = window.setTimeout(() => {
         dispatch(pipesCheck());
         pipeCheckTimeout = null;
-      },
-      500,
-    );
+      }, 500);
+    }
   }
 
   const keyListener = event => {
@@ -70,13 +69,15 @@ function ButtonGroupPipes({ dispatch, pipes, focused }) {
 
   return (
     <Wrapper focused={focused}>
-      {[pipes.pipes.map((v, i) =>
-        v === 9
-        ? (<div key={`pipe-button-${i}`}></div>)
-        : (
-          <Button key={`pipe-button-${i}`} onClick={() => rotatePipe(i)} />
-        )
-      )]}
+      {[
+        pipes.pipes.map((v, i) =>
+          v === 9 ? (
+          ? (<div key={`pipe-button-${i}`}></div>)
+          : (
+            <Button key={`pipe-button-${i}`} onClick={() => rotatePipe(i)} />
+          )
+        ),
+      ]}
     </Wrapper>
   );
 }
