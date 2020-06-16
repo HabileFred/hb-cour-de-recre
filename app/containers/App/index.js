@@ -12,6 +12,7 @@ import { Switch, Route } from 'react-router-dom';
 
 import BiduleOTron from 'containers/BiduleOTron/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
+import VictoryChecker from 'containers/BiduleOTron/components/VictoryChecker/Loadable';
 
 import GlobalStyle from '../../global-styles';
 
@@ -21,7 +22,8 @@ export default function App() {
       <GlobalStyle />
       <Switch>
         <Route exact path="/" component={BiduleOTron} />
-        <Route exact path="/bidule-o-tron/" component={BiduleOTron} />
+        <Route exact path="/bill-o-tron/" component={BiduleOTron} />
+        <Route exact path="/victories/" component={VictoryChecker} />
         <Route component={NotFoundPage} />
       </Switch>
     </React.Fragment>

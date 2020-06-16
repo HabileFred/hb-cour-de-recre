@@ -157,21 +157,33 @@ function Mail({ mailId, playTime }) {
 
     case 'mail-end':
       const minutes = Math.round(playTime / 60);
+      let authCode = window.btoa(`bidule:${minutes}`);
+      let n = 0;
+      while (authCode.endsWith('=')) {
+        n++;
+        authCode = authCode.substr(0, authCode.length - 1);
+      }
+      authCode += `&${n}`;
       return (
         <Popup>
           <PopupMail />
           <ContentWrapper>
             <p>
-              <strong>Merci,</strong><br/><br/>
-              J'ai bien recu l'aspitruc :
+              Merci, j'ai bien recu l'aspitruc :
               <br />
               <Bidule b={7} />
             </p>
             {minutes >= 240
-              ? (<p>Tu as accompli ta mission avec succes <nobr>en <strong>{minutes} minutes</strong>.</nobr></p>)
-              : (<p>Tu as accompli ta mission avec succes.</p>)
+              ? (<p>Tu as accompli ta mission avec succes <nobr>en <strong>{minutes} minutes</strong>.</nobr>
+              Tu passes de <em>"Petit Bill"</em> a <em>"Moyen Bill"</em>.</p>)
+              : (<p>Tu as accompli ta mission avec succes. Tu passes de <em>"Petit Bill"</em> a <em>"Moyen Bill"</em>.</p>)
             }
-            <p>Tu passes de <em>"Petit Bill"</em> a <em>"Moyen Bill"</em>.</p>
+
+            <p style={{ fontSize: '80%', background: '#ddd', padding: '5px', borderRadius: '5px' }}>
+              Pour tenter de gagner une place dans l'une de nos <nobr><strong>5 rooms</strong></nobr> chez <nobr><a href="http://a-maze-in.com/">A Maze In</a></nobr>,
+              envoie-nous une copie de cet ecran a <nobr><a href="mailto:contact@a-maze-in.com?subject=Bill-o-tron">notre adresse de contact</a></nobr> !
+              <br/>Ta preuve de victoire pour le tirage au sort est : <kbd style={{ textTransform: 'none' }}>{authCode}</kbd>
+            </p>
             <p className="signature">
               Le Grand Bill
             </p>
