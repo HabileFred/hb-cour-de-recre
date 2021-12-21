@@ -157,13 +157,6 @@ function Mail({ mailId, playTime }) {
 
     case 'mail-end':
       const minutes = Math.round(playTime / 60);
-      let authCode = window.btoa(`bidule:${minutes}`);
-      let n = 0;
-      while (authCode.endsWith('=')) {
-        n++;
-        authCode = authCode.substr(0, authCode.length - 1);
-      }
-      authCode += `&${n}`;
       return (
         <Popup>
           <PopupMail />
@@ -173,16 +166,15 @@ function Mail({ mailId, playTime }) {
               <br />
               <Bidule b={7} />
             </p>
-            {minutes >= 240
+            {minutes <= 240
               ? (<p>Tu as accompli ta mission avec succes <nobr>en <strong>{minutes} minutes</strong>.</nobr>
               Tu passes de <em>"Petit Bill"</em> a <em>"Moyen Bill"</em>.</p>)
               : (<p>Tu as accompli ta mission avec succes. Tu passes de <em>"Petit Bill"</em> a <em>"Moyen Bill"</em>.</p>)
             }
 
             <p style={{ fontSize: '80%', background: '#ddd', padding: '5px', borderRadius: '5px' }}>
-              Pour tenter de gagner une place dans l'une de nos <nobr><strong>5 rooms</strong></nobr> chez <nobr><a href="http://a-maze-in.com/">A Maze In</a></nobr>,
-              envoie-nous une copie de cet ecran a <nobr><a href="mailto:contact@a-maze-in.com?subject=Bill-o-tron">notre adresse de contact</a></nobr> !
-              <br/>Ta preuve de victoire pour le tirage au sort est : <kbd style={{ textTransform: 'none' }}>{authCode}</kbd>
+              Si tu as aime ce jeu, n'hesite pas a en parler et a le partager sur les reseaux sociaux !<br/>
+              Tu peux aussi laisser un message sur la <a href="https://www.facebook.com/labillotron">page Facebook de ce jeu</a>, cela fera plaisir a l'equipe des Bills !
             </p>
             <p className="signature">
               Le Grand Bill
