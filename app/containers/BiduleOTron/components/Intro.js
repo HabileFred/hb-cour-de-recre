@@ -51,6 +51,11 @@ p {
   margin: auto;
   padding: 10px;
   width: 80%;
+
+  a:link, a:hover, a:visited, a:link:visited {
+    color: white;
+    text-decoration: underline;
+  }
 }
 p.cookies {
   width: 50%;
@@ -84,9 +89,8 @@ function Intro({ dispatch }) {
       </p>
       <p>
         Le <nobr>Bill-o-Tron</nobr> peut sembler un peu enigmatique au premier abord, mais ne t'inquiete pas,
-        nous avons un <strong><nobr>Bill-Bot</nobr></strong> en place. Si tu as des questions,&nbsp;
-        <strong><nobr>contacte-le</nobr> via la page Facebook <nobr>d'Habile Bill</nobr> et demande de l'aide par message</strong>.
-        Il pourra sans doute t'aider a comprendre l'ordinateur et les machines qu'il controle.
+        le Grand Bill a redige <nobr><a href="https://www.facebook.com/labillotron" target="_blank">quelques trucs et astuces</a></nobr>
+        &nbsp;pour t'aider si tu es bloque.
       </p>
       <p>
         Nous sommes heureux de t'accueillir dans notre grande famille et esperons que tu sauras monter en grade petit a petit.<br/>
