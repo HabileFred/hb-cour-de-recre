@@ -8,23 +8,14 @@
   <link rel="icon" href="/favicon.ico" />
 
   <meta name="description" content="Escape game en ligne par Habile Bill (environ 45 minutes de jeu). Ton boulot est simple : être aux commandes de l'énigmatique Bill-o-Tron pour fabriquer un bidule et l'envoyer au Grand Bill.">
+  <meta property="og:title" content="Bill-o-tron" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.habilebill.fr/cour-de-recre/" />
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="og:image" content="https://www.habilebill.fr/cour-de-recre/og-image.png" />
+  <meta property="og:description" content="Escape game en ligne par Habile Bill (environ 45 minutes de jeu). Ton boulot est simple : être aux commandes de l'énigmatique Bill-o-Tron pour fabriquer un bidule et l'envoyer au Grand Bill." />
 
   <title>Cour de récré | Habile Bill</title>
-  <script src="socket.io.js"></script>
-  <script src="uibuilderfe.dev.js"></script>
-  <script>
-      window.addEventListener('load', function() {
-          uibuilder.start();
-          uibuilder.onChange('msg', function(msg) {
-            console.info('[indexjs:uibuilder.onChange] msg received from Node-RED server:', msg);
-            if (msg.topic === 'triggerEvent' && msg.event) {
-              const event = new KeyboardEvent(msg.event.type, msg.event.data);
-              console.log('Will trigger event:', event);
-              document.dispatchEvent(event);              
-            }
-          })
-      })
-    </script>
 </head>
 <body>
   <noscript>

@@ -5,7 +5,7 @@ import { getDraft } from './draft';
 class Focus {
   constructor() {
     const initialScreen = 'off'; // FIXME 'login'
-    const initialFocus = ['off'];  // FIXME 'password'
+    const initialFocus = ['off']; // FIXME 'password'
 
     initialState.nav = {
       popup: {
@@ -78,7 +78,10 @@ class Focus {
     };
 
     // Update control panel focus according to initial focus.
-    initialState.nav.controlPanel.focus = initialState.nav.controlPanel.definition[`${initialScreen}/${initialFocus[0]}`];
+    initialState.nav.controlPanel.focus =
+      initialState.nav.controlPanel.definition[
+        `${initialScreen}/${initialFocus[0]}`
+      ];
   }
 
   /**
@@ -90,7 +93,10 @@ class Focus {
     const p = focusId.indexOf('/');
     if (p !== -1) {
       const [s, f] = focusId.split('/');
-      return s === draft.nav.screen && (!f.length || draft.nav.focus.indexOf(f) !== -1);
+      return (
+        s === draft.nav.screen &&
+        (!f.length || draft.nav.focus.indexOf(f) !== -1)
+      );
     }
     return draft.nav.focus.indexOf(focusId) !== -1;
   }
@@ -107,6 +113,7 @@ class Focus {
   updateControlPanelFocus() {
     const { nav } = getDraft();
     const cpf = new Set();
+    uibuilder.send({ topic: 'focus', payload: nav.focus.join(',') });
     nav.focus.forEach(f => {
       const key = `${nav.screen}/${f}`;
       const def = nav.controlPanel.definition[key];
@@ -153,7 +160,7 @@ class Focus {
         } else {
           this.set(n, current);
         }
-      }
+      },
     };
   }
 
@@ -228,7 +235,11 @@ class Focus {
     const { nav } = getDraft();
     const { controlPanel } = nav;
     if (this.prevControlPanelFocus) {
-      controlPanel.focus.splice(0, controlPanel.focus.length, ...this.prevControlPanelFocus);
+      controlPanel.focus.splice(
+        0,
+        controlPanel.focus.length,
+        ...this.prevControlPanelFocus,
+      );
     } else {
       controlPanel.focus.splice(0, controlPanel.focus.length);
     }
@@ -247,7 +258,11 @@ class Focus {
     const { nav } = getDraft();
     const { controlPanel } = nav;
     if (this.prevControlPanelFocus) {
-      controlPanel.focus.splice(0, controlPanel.focus.length, ...this.prevControlPanelFocus);
+      controlPanel.focus.splice(
+        0,
+        controlPanel.focus.length,
+        ...this.prevControlPanelFocus,
+      );
     } else {
       controlPanel.focus.splice(0, controlPanel.focus.length);
     }
@@ -262,7 +277,7 @@ class Focus {
 
   controlPanel() {
     return {
-      setFocus: (fid) => {
+      setFocus: fid => {
         const { nav } = getDraft();
         const { controlPanel } = nav;
         if (fid === null) {
@@ -271,7 +286,7 @@ class Focus {
           controlPanel.focus.push(fid);
         }
       },
-      removeFocus: (fid) => {
+      removeFocus: fid => {
         const { nav } = getDraft();
         const { controlPanel } = nav;
         if (Array.isArray(fid)) {
@@ -287,10 +302,9 @@ class Focus {
             controlPanel.focus.splice(p, 1);
           }
         }
-      }
-    }
+      },
+    };
   }
-
 }
 
 export const focus = new Focus();
