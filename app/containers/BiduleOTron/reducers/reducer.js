@@ -61,6 +61,7 @@ import {
   INTRO_OK,
   MAILBOX_NEW_MAIL,
   MAILBOX_READ_MAIL,
+  CHECK_ACCESS_CODE,
 } from '../constants';
 
 /**
@@ -391,7 +392,6 @@ const BiduleOTronReducer = (state = initialState, action) =>
         SFX.click();
         draft.status = 'on';
         focus.setScreen('loading');
-
         break;
 
       case SET_CONTROL_PANEL_FOCUS:
@@ -426,6 +426,9 @@ const BiduleOTronReducer = (state = initialState, action) =>
       case INTRO_OK:
         draft.status = 'off';
         break;
+
+      case CHECK_ACCESS_CODE:
+
 
       default:
         if (focus.is('simon')) {

@@ -5,6 +5,7 @@
  */
 
 export const INTRO_OK = 'BOT/INTRO_OK';
+export const CHECK_ACCESS_CODE = 'BOT/CHECK_ACCESS_CODE';
 
 export const MAILBOX_NEW_MAIL = 'BOT/MAILBOX_NEW_MAIL';
 export const MAILBOX_READ_MAIL = 'BOT/MAILBOX_READ_MAIL';

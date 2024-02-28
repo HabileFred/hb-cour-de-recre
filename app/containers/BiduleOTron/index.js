@@ -52,7 +52,7 @@ const Shadow = styled.div`
   left: -15px;
   top: -28px;
   width: 1312px;
-  height: 587px;
+  height: 587px;
   z-index: -1;
   display: ${props => (props.on ? 'block' : 'none')};
   background: url('${imgShadow}') top left no-repeat;
@@ -85,7 +85,7 @@ const Computer = styled.div`
 const BiduleOTronContainer = styled.div`
   position: relative;
   display: flex;
-  overflow: auto;
+  overflow: visible;
   flex-flow: column;
   align-items: center;
   justify-content: center;

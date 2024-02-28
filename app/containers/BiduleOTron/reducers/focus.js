@@ -113,7 +113,7 @@ class Focus {
   updateControlPanelFocus() {
     const { nav } = getDraft();
     const cpf = new Set();
-    uibuilder.send({ topic: 'focus', payload: nav.focus.join(',') });
+    //uibuilder.send({ topic: 'focus', payload: nav.focus.join(',') });
     nav.focus.forEach(f => {
       const key = `${nav.screen}/${f}`;
       const def = nav.controlPanel.definition[key];

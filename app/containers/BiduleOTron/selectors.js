@@ -121,6 +121,11 @@ export const makeSelectStatus = () =>
     selectBiduleOTronDomain,
     substate => substate.status,
   );
+export const makeSelectLang = () =>
+  createSelector(
+    selectBiduleOTronDomain,
+    substate => substate.lang,
+  );
 export const makeSelectError = () =>
   createSelector(
     selectBiduleOTronDomain,
